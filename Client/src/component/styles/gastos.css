@@ -1,0 +1,27 @@
+
+.gastos-container{
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1{
+
+    text-align: center;
+    margin: 2.2rem auto 3.3rem ;
+    font-weight: 600;
+}
+
+
+
+.productos{
+    border: 1px solid rgba(36, 36, 36, 0.489);
+    width: 100%;
+    overflow-x: auto;
+}
+
+.fila{
+    background-color: rgb(11, 105, 160);
+    color: rgb(245, 243, 239);
+}
+
