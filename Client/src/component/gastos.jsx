@@ -10,6 +10,7 @@ import { Buscador } from './buscador';
 import { Filtros } from './filtros';
 
 const serverFront = "http://localhost:3001";
+// const serverFront = 
 
 export function Gastos() {
     const [gastos, setGastos] = useState([]);
