@@ -10,8 +10,8 @@ import { Buscador } from './buscador';
 import { Filtros } from './filtros';
 
 // const serverFront = "http://localhost:3001";
-const serverFront =  'https://billetera-virtual-eight.vercel.app'
 
+const serverFront =  'https://billetera-virtual-eight.vercel.app'
 
 export function Gastos() {
     const [gastos, setGastos] = useState([]);
