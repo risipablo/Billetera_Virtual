@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://billetera-virtual-eight.vercel.app'],
     optionsSuccessStatus: 200
 };
 
