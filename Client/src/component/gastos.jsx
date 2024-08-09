@@ -10,7 +10,8 @@ import { Buscador } from './buscador';
 import { Filtros } from './filtros';
 
 // const serverFront = "http://localhost:3001";
-const serverFront = "https://backend-billetera.vercel.app/"
+const serverFront = 'https://billetera-virtual-kappa.vercel.app'
+
 
 export function Gastos() {
     const [gastos, setGastos] = useState([]);
@@ -138,7 +139,7 @@ export function Gastos() {
             }
         });
         
-        return total;
+        return total.toLocaleString('en-US');
     }
 
 
@@ -279,7 +280,7 @@ export function Gastos() {
                             <TableCell></TableCell>
                             <TableCell colSpan={1} align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif" }}>Total</TableCell>
                             <TableCell></TableCell>
-                            <TableCell  align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif" }}>${totalMonto(gastosFiltrados)}</TableCell>
+                            <TableCell  align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem' }}>${totalMonto(gastosFiltrados)}</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </tfoot>
