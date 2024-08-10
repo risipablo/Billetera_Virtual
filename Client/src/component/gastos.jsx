@@ -6,12 +6,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import "./styles/gastos.css"
-import { Buscador } from './buscador';
-import { Filtros } from './filtros';
+import { Buscador } from './buscador/buscador';
+import { Filtros } from './filtros/filtros';
+import toast, { Toaster } from 'react-hot-toast';
+import { ScrollTop } from './others/scrollTop';
+
 
 // const serverFront = "http://localhost:3001";
-
-
 const serverFront =  'https://billetera-virtual-psi.vercel.app';
 
 export function Gastos() {
@@ -54,6 +55,9 @@ export function Gastos() {
                 setProducto("");
                 setMonto("");
                 setCondicion("");
+                toast.success('Gasto agregado con éxito', {
+                    position: 'top-right',
+                });
             })
             .catch(err => console.log(err));
         }
@@ -63,6 +67,9 @@ export function Gastos() {
         axios.delete(`${serverFront}/delete-gasto/` + id)
         .then(response => {
             setGastos(gastos.filter((gasto) => gasto._id !== id));
+            toast.error('Gasto eliminado ', {
+                position: 'top-right',
+            });
         })
         .catch(err => console.log(err))
     }
@@ -87,6 +94,9 @@ export function Gastos() {
             setGastos(gastos.map(gasto => gasto._id === id ? response.data : gasto));
             setGastosFiltrados(gastosFiltrados.map(gasto => gasto._id === id ? response.data : gasto));
             cancelEdit();
+            toast.success('Cambios realizados ', {
+                position: 'top-right',
+            })
         })
         .catch(err => console.log(err))
     }
@@ -143,13 +153,10 @@ export function Gastos() {
         return total.toLocaleString('en-US');
     }
 
-
-
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
             <h1>Gastos Mensuales</h1>
             <Grid container spacing={2} className="inputs-gastos">
-                {/* Inputs de selección y texto */}
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
                         <InputLabel>Seleccionar Día</InputLabel>
@@ -205,20 +212,22 @@ export function Gastos() {
                 </Grid>
             </Grid>
 
-            <Grid container gap={"10px"} margin={"2.8rem auto"} className="botones" sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <Grid item marginRight={'2rem'}>
+            <Grid container gap={"10px"}  margin={"2.8rem auto"} className="botones" sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                <Grid item >
                     <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={addGastos}> Agregar </Button>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="secondary" className="limpiar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={() => {
                         setCondicion(''); setDia(''); setMes(''); setMetodo(''); setMonto(''); setProducto('');}}> Limpiar </Button>
                 </Grid>
-                <Buscador filtrarDatos={searchGastos} className="filtros" />
+                
             </Grid>
 
             <Filtros gastos={gastos} setGastosFiltrados={setGastosFiltrados} />
+
+            <Buscador filtrarDatos={searchGastos} className="filtros" />
                         
-            <TableContainer component={Paper} className="productos" sx={{ mt: 8, boxShadow: 4, fontFamily: "Montserrat, sans-serif" }}>
+            <TableContainer component={Paper} className="productos" sx={{ mt: 8, boxShadow: 4, fontFamily: "Montserrat, sans-serif" }} style={{ overflowX: 'auto' }}>
                 <Table>
                     <TableHead>  
                         <TableRow className='fila' sx={{ mt: 2 }}>
@@ -287,6 +296,8 @@ export function Gastos() {
                     </tfoot>
                 </Table>
             </TableContainer>
+            <Toaster/>
+            <ScrollTop/>
         </Box>
     );
 };

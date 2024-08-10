@@ -25,3 +25,20 @@ h1{
     color: rgb(245, 243, 239);
 }
 
+.btn-up{
+    position: fixed;
+    bottom: 20px;
+    background-color: #690ee3;
+    color: #faf7f7;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.btn-up:hover {
+    opacity: 1;
+}

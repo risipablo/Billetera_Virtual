@@ -24,7 +24,7 @@ export function Buscador({filtrarDatos}){
     }
 
     return(
-        <Grid item sx={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+        <Grid item sx={{  margin: '2rem 0 0.2rem auto' ,display: 'flex', alignItems: 'center' }}>
             <IconButton color="primary" aria-label="search" onClick={() => setShowSearch(!showSearch)} >
                 <SearchIcon />
             </IconButton>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Grid, MenuItem, Select, Button, Hidden } from "@mui/material";
+import {  Grid, Select, MenuItem, Button, Hidden } from "@mui/material";
 
 export function Filtros({ gastos, setGastosFiltrados }) {
     const [mes, setMes] = useState('');
@@ -34,7 +34,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
 
     return (
         <>
-            {/* Version escritorio */}
+            {/* Versión escritorio */}
             <Hidden smDown>
                 <Grid container spacing={2} alignItems="center">
                     <Grid item xs>
@@ -43,6 +43,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             value={mes}
                             onChange={(e) => setMes(e.target.value)}
                             displayEmpty
+                            size="small" 
                         >
                             <MenuItem value=""><em>Seleccionar Mes</em></MenuItem>
                             <MenuItem value="enero">Enero</MenuItem>
@@ -59,13 +60,14 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="diciembre">Diciembre</MenuItem>
                         </Select>
                     </Grid>
-
+    
                     <Grid item xs>
                         <Select
                             fullWidth
                             value={metodo}
                             onChange={(e) => setMetodo(e.target.value)}
                             displayEmpty
+                            size="small" 
                         >
                             <MenuItem value=""><em>Seleccionar Pago</em></MenuItem>
                             <MenuItem value="Débito">Débito</MenuItem>
@@ -74,34 +76,39 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Mercado Pago">Mercado Pago</MenuItem>
                         </Select>
                     </Grid>
-
+    
                     <Grid item xs>
                         <Select
                             fullWidth
                             value={condicion}
                             onChange={(e) => setCondicion(e.target.value)}
                             displayEmpty
+                            size="small" 
                         >
                             <MenuItem value=""><em>Estado</em></MenuItem>
                             <MenuItem value="Pagado">Pagado</MenuItem>
                             <MenuItem value="Impago">Impago</MenuItem>
-                            <MenuItem value="Cajero"> Cajero </MenuItem>
+                            <MenuItem value="Cuotas">Cuotas</MenuItem>
+                            <MenuItem value="Devolver"> Devolver</MenuItem>
+                            <MenuItem value="Me deben">Me deben</MenuItem>
+                            <MenuItem value="Cajero">Cajero</MenuItem>
                         </Select>
                     </Grid>
-
+    
                     <Grid item>
                         <Button
                             variant="contained"
-                            color="secondary"
                             onClick={ResetFilter}
+                            size="small" 
+                            style={{ padding: '6px 16px', backgroundColor: '#5a6ee9', color: '#ffff'}}
                         >
                             Limpiar
                         </Button>
                     </Grid>
                 </Grid>
             </Hidden>
-
-            {/* Vista de mobile*/}
+    
+            {/* Vista de mobile */}
             <Hidden smUp>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -110,6 +117,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             value={mes}
                             onChange={(e) => setMes(e.target.value)}
                             displayEmpty
+                            size="small" 
                         >
                             <MenuItem value=""><em>Seleccionar Mes</em></MenuItem>
                             <MenuItem value="enero">Enero</MenuItem>
@@ -126,13 +134,14 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="diciembre">Diciembre</MenuItem>
                         </Select>
                     </Grid>
-
+    
                     <Grid item xs={12}>
                         <Select
                             fullWidth
                             value={metodo}
                             onChange={(e) => setMetodo(e.target.value)}
                             displayEmpty
+                            size="small" 
                         >
                             <MenuItem value=""><em>Seleccionar Pago</em></MenuItem>
                             <MenuItem value="Débito">Débito</MenuItem>
@@ -141,26 +150,29 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Mercado Pago">Mercado Pago</MenuItem>
                         </Select>
                     </Grid>
-
+    
                     <Grid item xs={12}>
                         <Select
                             fullWidth
                             value={condicion}
                             onChange={(e) => setCondicion(e.target.value)}
                             displayEmpty
+                            size="small" 
                         >
                             <MenuItem value=""><em>Estado</em></MenuItem>
                             <MenuItem value="Pagado">Pagado</MenuItem>
                             <MenuItem value="Impago">Impago</MenuItem>
                         </Select>
                     </Grid>
-
+    
                     <Grid item xs={12}>
                         <Button
                             variant="contained"
                             color="secondary"
                             onClick={ResetFilter}
                             fullWidth
+                            size="small" 
+                            style={{ padding: '6px 16px', backgroundColor: '#5a6ee9', color: '#ffff'}}
                         >
                             Limpiar
                         </Button>
