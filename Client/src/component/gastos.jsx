@@ -9,7 +9,8 @@ import "./styles/gastos.css"
 import { Buscador } from './buscador';
 import { Filtros } from './filtros';
 
-const serverFront = "http://localhost:3001";
+// const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-psi.vercel.app";
 
 export function Gastos() {
     const [gastos, setGastos] = useState([]);
