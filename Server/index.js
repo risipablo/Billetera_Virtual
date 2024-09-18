@@ -14,27 +14,42 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const crudConnection = process.env.MONGODB;
-const readConnection = process.env.MONGOUSUARIO ;
+// Conexiones a la base de datos
+const crudConnection = process.env.MONGODB_CRUD;  // Usuario con permisos CRUD
+const readConnection = process.env.MONGODB_READ;  // Usuario con permisos de lectura
 
-mongoose
-    .connect(crudConnection)
-    .then(() => console.log("Conexión exitosa"))
-    .catch((err) => console.log("Error de conexión: " + err));
+// Helper function para conectar a la base de datos con permisos de lectura
+async function connectToReadDb() {
+    try {
+        await mongoose.connect(readConnection);
+        console.log("Conectado con permisos de solo lectura");
+    } catch (err) {
+        console.log("Error de conexión: " + err);
+    }
+}
 
-// Obtener gastos
+// Helper function para conectar a la base de datos con permisos CRUD
+async function connectToCrudDb() {
+    try {
+        await mongoose.connect(crudConnection);
+        console.log("Conectado con permisos CRUD");
+    } catch (err) {
+        console.log("Error de conexión: " + err);
+    }
+}
+
+// Obtener gastos (solo lectura)
 app.get('/gasto', async (req, res) => {
     try {
-        const readMongo = mongoose.createConnection(readConnection);
-        const readGastosModel = readMongo.model('Gastos',GastosModel.schema)
-        const gastos = await readGastosModel.find();
+        await connectToReadDb();  // Conectar con permisos de solo lectura
+        const gastos = await GastosModel.find();
         res.json(gastos);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Agregar gastos
+// Agregar gastos (requiere permisos CRUD)
 app.post('/add-gasto', async (req, res) => {
     const { dia, mes, producto, metodo, condicion, monto } = req.body;
     if (!dia || !mes || !producto || !metodo || !condicion || !monto) {
@@ -42,6 +57,7 @@ app.post('/add-gasto', async (req, res) => {
     }
 
     try {
+        await connectToCrudDb();  // Conectar con permisos CRUD
         const newGasto = new GastosModel({ dia, mes, producto, metodo, condicion, monto });
         const result = await newGasto.save();
         res.json(result);
@@ -50,10 +66,11 @@ app.post('/add-gasto', async (req, res) => {
     }
 });
 
-// Eliminar gastos
+// Eliminar gastos (requiere permisos CRUD)
 app.delete('/delete-gasto/:id', async (req, res) => {
     const { id } = req.params;
     try {
+        await connectToCrudDb();  // Conectar con permisos CRUD
         const result = await GastosModel.findByIdAndDelete(id);
         if (!result) {
             return res.status(404).json({ error: 'Gasto no encontrado' });
@@ -64,13 +81,21 @@ app.delete('/delete-gasto/:id', async (req, res) => {
     }
 });
 
-app.patch('/edit-gasto/:id', (req,res) => {
-    const {id} = req.params;
-    const {dia, mes, producto, metodo, condicion, monto } = req.body;
-    GastosModel.findByIdAndUpdate(id,{dia, mes, producto, metodo, condicion, monto },{new:true})
-    .then(result => res.json(result))
-    .catch(err => res.status(500).json({error: err.message}))
-})
+// Editar gastos (requiere permisos CRUD)
+app.patch('/edit-gasto/:id', async (req, res) => {
+    const { id } = req.params;
+    const { dia, mes, producto, metodo, condicion, monto } = req.body;
+    
+    try {
+        await connectToCrudDb();  // Conectar con permisos CRUD
+        const result = await GastosModel.findByIdAndUpdate(id, {
+            dia, mes, producto, metodo, condicion, monto
+        }, { new: true });
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // Manejo de errores global
 app.use((err, req, res, next) => {
@@ -78,6 +103,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Algo salió mal' });
 });
 
+// Iniciar el servidor
 app.listen(3001, () => {
     console.log("Servidor corriendo en el puerto 3001");
 });
