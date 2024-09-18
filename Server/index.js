@@ -28,14 +28,13 @@ const dbVisitorConnection = mongoose.createConnection(process.env.MONGODB_READ, 
     useUnifiedTopology: true,
 });
 
-// Verificación de conexión
-dbCreatorConnection.on('connected', () => console.log('Conexión exitosa para CRUD completo'));
-dbVisitorConnection.on('connected', () => console.log('Conexión exitosa para solo lectura'));
+const GastosCRUD = dbCreatorConnection.model('Gastos', GastosModel.schema);
+const GastosVisitor = dbVisitorConnection.model('Gastos', GastosModel.schema);
 
 // Obtener gastos (accesible para visitantes, usando conexión de solo lectura)
 app.get('/gasto', async (req, res) => {
     try {
-        const gastos = await dbVisitorConnection.model('Gastos', GastosModel.schema).find();
+        const gastos = await GastosVisitor.find(); // Uso correcto del modelo para lectura
         res.json(gastos);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -50,7 +49,6 @@ app.post('/add-gasto', async (req, res) => {
     }
 
     try {
-        const GastosCRUD = dbCreatorConnection.model('Gastos', GastosModel.schema);
         const newGasto = new GastosCRUD({ dia, mes, producto, metodo, condicion, monto });
         const result = await newGasto.save();
         res.json(result);
@@ -63,7 +61,6 @@ app.post('/add-gasto', async (req, res) => {
 app.delete('/delete-gasto/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const GastosCRUD = dbCreatorConnection.model('Gastos', GastosModel.schema);
         const result = await GastosCRUD.findByIdAndDelete(id);
         if (!result) {
             return res.status(404).json({ error: 'Gasto no encontrado' });
@@ -79,7 +76,6 @@ app.patch('/edit-gasto/:id', async (req, res) => {
     const { id } = req.params;
     const { dia, mes, producto, metodo, condicion, monto } = req.body;
     try {
-        const GastosCRUD = dbCreatorConnection.model('Gastos', GastosModel.schema);
         const result = await GastosCRUD.findByIdAndUpdate(id, { dia, mes, producto, metodo, condicion, monto }, { new: true });
         res.json(result);
     } catch (err) {
