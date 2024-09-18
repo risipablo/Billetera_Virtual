@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Configuración de CORS
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://billetera-virtual-original.vercel.app', 'https://billetera-virtual.onrender.com'],
+    origin: ['http://localhost:5173', 'https://billetera-virtual-lilac.vercel.app', 'https://billetera-virtual.onrender.com'],
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'DELETE', 'PATCH'],  // Métodos permitidos
 };
