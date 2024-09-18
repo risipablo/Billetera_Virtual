@@ -33,5 +33,5 @@ const gastosSchema = new mongoose.Schema({
     },
 })
 
-const GastosModel = mongoose.model('Gastos', gastosSchema);
+const GastosModel = mongoose.model('Gasto', gastosSchema);
 module.exports = GastosModel
