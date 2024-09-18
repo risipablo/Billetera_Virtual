@@ -175,7 +175,7 @@ export function Gastos() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                        <InputLabel>Seleccionar Mes</InputLabel>
+                        <InputLabel> Seleccionar Mes </InputLabel>
                         <Select value={mes} onChange={(e) => setMes(e.target.value)}>
                             <MenuItem value=""><em>Ninguno</em></MenuItem>
                             {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => (
