@@ -136,14 +136,17 @@ export function Gastos() {
     }
 
     const condicionPago = (condicion) => {
-        return  condicion.toLowerCase() === 'impago' || condicion.toLowerCase() ===  'me deben' ? 'rgba(218, 8, 25, 0.4)' : null  || condicion.toLowerCase() === 'cajero' ? 'rgba(206, 224, 14, 0.8)' : null || condicion.toLowerCase() === 'cuotas'  ? 'rgba(218, 135, 34, 0.8)' : null ;
+        return condicion.toLowerCase() === 'impago' || condicion.toLowerCase() ===  'me deben' ? 'rgba(218, 8, 25, 0.4)' : null 
+         || condicion.toLowerCase() === 'cajero' ? 'rgba(206, 224, 14, 0.8)' : null 
+         || condicion.toLowerCase() === 'cuotas'  ? 'rgba(218, 135, 34, 0.8)' : null 
+         || condicion.toLowerCase() === 'inversion' ? 'rgba(34, 228, 24, 0.8)' : null
     }
 
     const totalMonto = (gastos) => {
         let total = 0;
 
         gastos.forEach(product => {
-            if(product.condicion.toLowerCase() === 'impago' || product.condicion.toLowerCase() === 'cajero' || product.condicion.toLowerCase() === 'cuotas' || product.condicion.toLowerCase() === 'me deben'   ){
+            if(product.condicion.toLowerCase() === 'impago' || product.condicion.toLowerCase() === 'cajero' || product.condicion.toLowerCase() === 'cuotas' || product.condicion.toLowerCase() === 'deben' || product.condicion.toLowerCase() === 'inversion' ){
                 total == product.monto
             } else {
                 total += product.monto
@@ -152,6 +155,8 @@ export function Gastos() {
         
         return total.toLocaleString('en-US');
     }
+
+    // 
 
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
@@ -201,12 +206,9 @@ export function Gastos() {
                         <InputLabel>Seleccionar Estado</InputLabel>
                         <Select value={condicion} onChange={(e) => setCondicion(e.target.value)}>
                             <MenuItem value=""><em>Ninguno</em></MenuItem>
-                            <MenuItem value="Pagado">Pagado</MenuItem>
-                            <MenuItem value="Impago">Impago</MenuItem>
-                            <MenuItem value="Cuotas">Cuotas</MenuItem>
-                            <MenuItem value="Devolver"> Devolver</MenuItem>
-                            <MenuItem value="Me deben">Me deben</MenuItem>
-                            <MenuItem value="Cajero">Cajero</MenuItem>
+                            {["Pagado", "Impago" , "Deben" , " Cuotas " , "Devolver" , "Cajero" , "Inversion"].map(condicion => (
+                                <MenuItem key={condicion} value={condicion}>{condicion}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                 </Grid>

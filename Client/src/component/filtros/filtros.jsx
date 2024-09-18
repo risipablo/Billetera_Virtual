@@ -90,8 +90,9 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Impago">Impago</MenuItem>
                             <MenuItem value="Cuotas">Cuotas</MenuItem>
                             <MenuItem value="Devolver"> Devolver</MenuItem>
-                            <MenuItem value="Me deben">Me deben</MenuItem>
+                            <MenuItem value="Deben">Deben</MenuItem>
                             <MenuItem value="Cajero">Cajero</MenuItem>
+                            <MenuItem value="Inversion">Inversion</MenuItem>
                         </Select>
                     </Grid>
     

@@ -14,15 +14,20 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+const crudConnection = process.env.MONGODB;
+const readConnection = process.env.MONGOUSUARIO ;
+
 mongoose
-    .connect(process.env.MONGODB)
+    .connect(crudConnection)
     .then(() => console.log("Conexión exitosa"))
     .catch((err) => console.log("Error de conexión: " + err));
 
 // Obtener gastos
 app.get('/gasto', async (req, res) => {
     try {
-        const gastos = await GastosModel.find();
+        const readMongo = mongoose.createConnection(readConnection);
+        const readGastosModel = readMongo.model('Gastos',GastosModel.schema)
+        const gastos = await readGastosModel.find();
         res.json(gastos);
     } catch (err) {
         res.status(500).json({ error: err.message });
