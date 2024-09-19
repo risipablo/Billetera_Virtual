@@ -16,7 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET
 const corsOptions = {
     origin: ['http://localhost:5173', 'https://billetera-virtual-lilac.vercel.app', 'https://billetera-virtual.onrender.com'],
     optionsSuccessStatus: 200,
-    methods: ['GET'],  // Métodos permitidos
+    methods: ['GET','POST','UPDATE','DELETE'],  // Métodos permitidos
 };
 
 app.use(cors(corsOptions));
