@@ -88,7 +88,7 @@ export function Gastos() {
     }
 
     const saveEdit = (id) => {
-        console.log(`Cambios guardados: ${id}`);
+        console.log(`Cambios guardadoss: ${id}`);
         axios.patch(`${serverFront}/edit-gasto/${id}`, editingData)
         .then(response => {
             setGastos(gastos.map(gasto => gasto._id === id ? response.data : gasto));
