@@ -27,7 +27,7 @@ export function Gastos() {
 
 
     useEffect(() => {
-        axios.get(`${serverFront}/gasto`)
+        axios.get(`${serverFront}/api/gasto`)
             .then(response => {
                 setGastos(response.data);
                 setGastosFiltrados(response.data);
@@ -64,7 +64,7 @@ export function Gastos() {
     };
 
     const deleteGastos = (id) => {
-        axios.delete(`${serverFront}/delete-gasto/` + id)
+        axios.delete(`${serverFront}/api/delete-gasto/` + id)
         .then(response => {
             setGastos(gastos.filter((gasto) => gasto._id !== id));
             toast.error('Gasto eliminado ', {
@@ -89,7 +89,7 @@ export function Gastos() {
 
     const saveEdit = (id) => {
         console.log(`Cambios guardadoss: ${id}`);
-        axios.patch(`${serverFront}/edit-gasto/${id}`, editingData)
+        axios.patch(`${serverFront}/api/edit-gasto/${id}`, editingData)
         .then(response => {
             setGastos(gastos.map(gasto => gasto._id === id ? response.data : gasto));
             setGastosFiltrados(gastosFiltrados.map(gasto => gasto._id === id ? response.data : gasto));
