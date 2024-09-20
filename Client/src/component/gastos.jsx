@@ -37,7 +37,7 @@ export function Gastos() {
 
     const addGastos = () => {
         if (String(dia).trim() && String(mes).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
-            axios.post(`${serverFront}/add-gasto`, {
+            axios.post(`${serverFront}/api/add-gasto`, {
                 dia: dia,
                 mes: mes,
                 metodo: metodo,
