@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const gastoController = require('../Controllers/gastosController');
+const { getGastos, addGasto, deleteGasto, editGasto } = require('../controllers/gastosController');
 
-router.get('/gasto', gastoController.getGastos);
-router.post('/add-gasto', gastoController.addGasto);
-router.delete('/delete-gasto/:id', gastoController.deleteGasto);
-router.patch('/edit-gasto/:id', gastoController.editGasto);
+// Proteger rutas
+const {protect, isAdmin} = require ('../Middleware/authMiddleware')
+
+router.get('/gasto', getGastos);
+router.post('/add-gasto', protect, isAdmin, addGasto);
+router.delete('/delete-gasto/:id', protect, isAdmin, deleteGasto);
+router.patch('/edit-gasto/:id', protect, isAdmin, editGasto);
 
 module.exports = router;

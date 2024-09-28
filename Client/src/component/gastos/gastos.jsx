@@ -5,17 +5,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
-import "./styles/gastos.css"
-import { Buscador } from './buscador/buscador';
-import { Filtros } from './filtros/filtros';
+import "./gastos.css"
+import { Buscador } from '../buscador/buscador';
+import { Filtros } from '../filtros/filtros';
 import toast, { Toaster } from 'react-hot-toast';
-import { ScrollTop } from './others/scrollTop';
+import { ScrollTop } from '../others/scrollTop';
+import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'
 
+const serverFront = "http://localhost:3001";
+// const serverFront =  'https://billetera-virtual.onrender.com';
 
-// const serverFront = "http://localhost:3001";
-const serverFront =  'https://billetera-virtual.onrender.com';
-
-export function Gastos() {
+const Gastos = () => {
     const [gastos, setGastos] = useState([]);
     const [gastosFiltrados, setGastosFiltrados] = useState([]);
     const [dia, setDia] = useState("");
@@ -24,16 +25,36 @@ export function Gastos() {
     const [producto, setProducto] = useState("");
     const [monto, setMonto] = useState("");
     const [condicion, setCondicion] = useState("");
-
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate()
+    const [isAdmin, setIsAdmin] = useState(false);
+    
 
     useEffect(() => {
-        axios.get(`${serverFront}/api/gasto`)
+        // Verificar si el usuario es administrador desde el token almacenado
+        const storedIsAdmin = localStorage.getItem('isAdmin') === 'true';
+        setIsAdmin(storedIsAdmin);
+
+        // Obtener gastos solo si el token existe
+        if (token) {
+            axios.get(`${serverFront}/api/gasto`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
             .then(response => {
                 setGastos(response.data);
                 setGastosFiltrados(response.data);
             })
-            .catch(err => console.log(err));
-    }, []);
+            .catch(err => {
+                console.log(err);
+                if (err.response && err.response.status === 401) {
+                    toast.error('No autorizado, por favor inicia sesión', { position: 'top-right' });
+                }
+            });
+        } else {
+            navigate('/login');
+        }
+    }, [token]);
+
 
     const addGastos = () => {
         if (String(dia).trim() && String(mes).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
@@ -44,6 +65,11 @@ export function Gastos() {
                 producto: producto,
                 monto: monto,
                 condicion: condicion
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                withCredentials: true, // Añade esta línea
             })
             .then(response => {
                 const nuevoGasto = response.data;
@@ -64,7 +90,12 @@ export function Gastos() {
     };
 
     const deleteGastos = (id) => {
-        axios.delete(`${serverFront}/api/delete-gasto/` + id)
+        axios.delete(`${serverFront}/api/delete-gasto/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true, // Añade esta línea
+        })
         .then(response => {
             setGastos(gastos.filter((gasto) => gasto._id !== id));
             toast.error('Gasto eliminado ', {
@@ -89,7 +120,12 @@ export function Gastos() {
 
     const saveEdit = (id) => {
         console.log(`Cambios guardadoss: ${id}`);
-        axios.patch(`${serverFront}/api/edit-gasto/${id}`, editingData)
+        axios.patch(`${serverFront}/api/edit-gasto/${id}`, editingData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true, // Añade esta línea
+        })
         .then(response => {
             setGastos(gastos.map(gasto => gasto._id === id ? response.data : gasto));
             setGastosFiltrados(gastosFiltrados.map(gasto => gasto._id === id ? response.data : gasto));
@@ -156,11 +192,18 @@ export function Gastos() {
         return total.toLocaleString('en-US');
     }
 
-    // 
+    // Cerrar Sesión 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login')
+    }
 
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
             <h1>Gastos Mensuales</h1>
+            <Button variant="contained" color="error" onClick={handleLogout}>
+                Cerrar Sesión
+            </Button>
             <Grid container spacing={2} className="inputs-gastos">
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
@@ -213,11 +256,24 @@ export function Gastos() {
                     </FormControl>
                 </Grid>
             </Grid>
+            
+         
 
             <Grid container gap={"10px"}  margin={"2.8rem auto"} className="botones" sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <Grid item >
-                    <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={addGastos}> Agregar </Button>
+
+            {isAdmin && (
+                <Button variant="contained" color="primary" onClick={addGastos}>
+                    Agregar Gasto
+                </Button>
+            )}
+            
+                <Grid item>
+                    <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={addGastos}> 
+                        Agregar 
+                    </Button>
                 </Grid>
+            
+
                 <Grid item>
                     <Button variant="contained" color="secondary" className="limpiar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={() => {
                         setCondicion(''); setDia(''); setMes(''); setMetodo(''); setMonto(''); setProducto('');}}> Limpiar </Button>
@@ -304,4 +360,4 @@ export function Gastos() {
     );
 };
 
-
+export default Gastos;
