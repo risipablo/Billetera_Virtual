@@ -50,7 +50,7 @@ const Gastos = () => {
             .catch(err => {
                 console.log(err);
                 if (err.response && err.response.status === 401) {
-                    toast.error('No autorizado, por favor inicia sesión', { position: 'top-right' });
+                    toast.error('Usuario no autorizado, por favor inicia sesión', { position: 'top-right' });
                 }
             });
         } else {
