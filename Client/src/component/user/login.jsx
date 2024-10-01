@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import "./user.css"
 
 // const serverFront = "http://localhost:3001";
-const serverFront = process.env.REACT_APP_SERVER_URL || "http://localhost:3001";
-
+const serverFront =  'https://billetera-virtual.onrender.com';
 
 
 const Login = ({ setIsAuthenticated }) => {
