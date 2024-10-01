@@ -1,7 +1,7 @@
 
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import "./user.css"
 import { UserContext } from './userContext';
 
@@ -19,7 +19,7 @@ const Login = ({ setIsAuthenticated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${serverFront}/api/login`, { email, password });
+      const response = await axios.post(`${serverFront}/api/auth/login`, { email, password });
       document.cookie = `token=${response.data.token}; path=/;`;
 
        // Guardar el token en localStorage para evitar que la sesion se cierra cuando se hace un refresh
@@ -28,6 +28,7 @@ const Login = ({ setIsAuthenticated }) => {
        setUser({ email });
       setIsAuthenticated(true);
       navigate('/gasto')
+      
     } catch (error) {
       setMessage(error.response.data.error || 'Error en el login');
     }
@@ -54,6 +55,10 @@ const Login = ({ setIsAuthenticated }) => {
         <button type="submit">Iniciar sesión</button>
       </form>
       {message && <p className="message">{message}</p>}
+
+      <NavLink to="/register">
+        Crea una nueva cuenta
+      </NavLink>
     </div>
   );
 };

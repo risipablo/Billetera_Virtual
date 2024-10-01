@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://billetera-virtual-lilac.vercel.app', 'https://billetera-virtual.onrender.com'],
+    origin: ['http://localhost:5173', 'https://billetera-virtual-nine.vercel.app'],
     optionsSuccessStatus: 200,
     methods: 'GET,POST,DELETE,PATCH',
     credentials: true,
@@ -27,7 +27,7 @@ app.use(cors(corsOptions));
 connectDB();
 
 app.use('/api', gastoRoutes);
-app.use('/api', authRoutes)
+app.use('/api/auth', authRoutes)
 app.use(errorHandler);
 
 app.listen(3001, () => {

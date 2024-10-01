@@ -18,7 +18,7 @@ const Register = ({ setIsAuthenticated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${serverFront}/api/register`, { email, password });
+      const response = await axios.post(`${serverFront}/api/auth/register`, { email, password });
       setMessage(response.data.message);
       navigate('/login'); // Redirigir al login tras el registro
     } catch (error) {
