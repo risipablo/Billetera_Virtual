@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {Box,Button,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,TableCell,TableContainer,TableHead, TableRow, TextField, Paper, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,9 +12,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import { ScrollTop } from '../others/scrollTop';
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode'
+import LogoutIcon from '@mui/icons-material/Logout';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import { UserContext } from '../user/userContext';
 
-const serverFront = "http://localhost:3001";
-// const serverFront =  'https://billetera-virtual.onrender.com';
+// const serverFront = "http://localhost:3001";
+const serverFront =  'https://billetera-virtual.onrender.com';
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
@@ -28,6 +31,7 @@ const Gastos = () => {
     const token = localStorage.getItem('token');
     const navigate = useNavigate()
     const [isAdmin, setIsAdmin] = useState(false);
+    const {user} = useContext(UserContext)
     
 
     useEffect(() => {
@@ -200,10 +204,19 @@ const Gastos = () => {
 
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
+            
+            <div className='icon-contianer'>
+                <BarChartIcon/>
+                <Button color="error" onClick={handleLogout}>
+                    <LogoutIcon/>
+                </Button>
+                {user && <p> Hola, {user.email} </p>}
+            </div>
+
             <h1>Gastos Mensuales</h1>
-            <Button variant="contained" color="error" onClick={handleLogout}>
-                Cerrar Sesión
-            </Button>
+
+      
+
             <Grid container spacing={2} className="inputs-gastos">
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>

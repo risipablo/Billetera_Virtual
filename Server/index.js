@@ -27,7 +27,7 @@ app.use(cors(corsOptions));
 connectDB();
 
 app.use('/api', gastoRoutes);
-app.use('/api/auth', authRoutes)
+app.use('/api', authRoutes)
 app.use(errorHandler);
 
 app.listen(3001, () => {
