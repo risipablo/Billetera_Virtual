@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/login"
+          path="/"
           element={<Login setIsAuthenticated={setIsAuthenticated} />}
         />
         <Route
@@ -20,9 +20,9 @@ function App() {
         />
         <Route
           path="/gasto"
-          element={isAuthenticated ? <Gastos/> : <Navigate to="/login" />}
+          element={isAuthenticated ? <Gastos/> : <Navigate to="/" />}
         />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );
