@@ -15,8 +15,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { UserContext } from '../user/userContext';
 
-const serverFront = process.env.REACT_APP_SERVER_FRONT;
-
+const serverFront = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3001'
+    : 'https://billetera-virtual-1.onrender.com';
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
