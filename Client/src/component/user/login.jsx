@@ -7,11 +7,7 @@ import { UserContext } from './userContext';
 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 790cacf594a9547287d213dabf91ba2f67c5529f
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
@@ -23,15 +19,15 @@ const Login = ({ setIsAuthenticated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${serverFront}/api/auth/login`, { email, password });
-      document.cookie = `token=${response.data.token}; path=/;`;
+      const response = await axios.post(`${serverFront}/api/auth/login`, { email, password },  { withCredentials: true } );
+      // document.cookie = `token=${response.data.token}; path=/;`; solo para ambito de pruebas
 
        // Guardar el token en localStorage para evitar que la sesion se cierra cuando se hace un refresh
        
        localStorage.setItem('token', response.data.token);
-       setUser({ email });
-      setIsAuthenticated(true);
-      navigate('/gasto')
+        setUser({ email });
+        setIsAuthenticated(true);
+        navigate('/gasto')
 
     } catch (error) {
       setMessage(error.response.data.error || 'Error en el login');

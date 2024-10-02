@@ -15,9 +15,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { UserContext } from '../user/userContext';
 
-const serverFront = process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3001'
-    : 'https://billetera-virtual-1.onrender.com';
+
+// const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-1.onrender.com";
+
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
@@ -34,16 +35,16 @@ const Gastos = () => {
     const {user} = useContext(UserContext)
 
 
-
     useEffect(() => {
         // Verificar si el usuario es administrador desde el token almacenado
         const storedIsAdmin = localStorage.getItem('isAdmin') === 'true';
         setIsAdmin(storedIsAdmin);
-
+    
         // Obtener gastos solo si el token existe
         if (token) {
             axios.get(`${serverFront}/api/gasto`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,  // Agregar esta línea
             })
             .then(response => {
                 setGastos(response.data);
@@ -59,7 +60,6 @@ const Gastos = () => {
             navigate('/login');
         }
     }, [token]);
-
    
     
 
