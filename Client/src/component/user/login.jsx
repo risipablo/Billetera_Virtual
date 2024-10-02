@@ -7,8 +7,11 @@ import { UserContext } from './userContext';
 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 790cacf594a9547287d213dabf91ba2f67c5529f
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
