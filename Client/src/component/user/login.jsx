@@ -20,7 +20,7 @@ const Login = ({ setIsAuthenticated }) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${serverFront}/api/auth/login`, { email, password },  { withCredentials: true } );
-      // document.cookie = `token=${response.data.token}; path=/;`; solo para ambito de pruebas
+      // document.cookie = `token=${response.data.token}; path=/;`
 
        // Guardar el token en localStorage para evitar que la sesion se cierra cuando se hace un refresh
        

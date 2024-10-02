@@ -1,6 +1,7 @@
 // controllers/authController.js
 const UserModel = require('../Models/User')
 const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 
 exports.registerUser = async (req, res) => {
@@ -45,12 +46,10 @@ exports.loginUser = async (req, res) => {
 
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Solo para producción
-            sameSite: 'Lax', // O 'Strict' según tus necesidades
-        });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+
         res.json({ message: 'Inicio de sesión exitoso', token });
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

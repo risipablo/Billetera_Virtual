@@ -16,8 +16,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { UserContext } from '../user/userContext';
 
 
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
+const serverFront = "http://localhost:3001";
+// const serverFront = "https://billetera-virtual-1.onrender.com";
 
 
 const Gastos = () => {
@@ -31,6 +31,7 @@ const Gastos = () => {
     const [condicion, setCondicion] = useState("");
     const navigate = useNavigate()
     const token = localStorage.getItem('token');
+    console.log(token); 
     const [isAdmin, setIsAdmin] = useState(false);
     const {user} = useContext(UserContext)
 
