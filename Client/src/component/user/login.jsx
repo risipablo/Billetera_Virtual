@@ -5,7 +5,8 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import "./user.css"
 import { UserContext } from './userContext';
 
-const serverFront = "http://localhost:3001";
+// const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-1.onrender.com";
 
 
 
@@ -28,7 +29,7 @@ const Login = ({ setIsAuthenticated }) => {
        setUser({ email });
       setIsAuthenticated(true);
       navigate('/gasto')
-      
+
     } catch (error) {
       setMessage(error.response.data.error || 'Error en el login');
     }

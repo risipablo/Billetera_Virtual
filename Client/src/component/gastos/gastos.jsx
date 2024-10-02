@@ -11,12 +11,12 @@ import { Filtros } from '../filtros/filtros';
 import toast, { Toaster } from 'react-hot-toast';
 import { ScrollTop } from '../others/scrollTop';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'
 import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { UserContext } from '../user/userContext';
 
-const serverFront = "http://localhost:3001";
+const serverFront = process.env.REACT_APP_SERVER_FRONT;
+
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
@@ -27,11 +27,12 @@ const Gastos = () => {
     const [producto, setProducto] = useState("");
     const [monto, setMonto] = useState("");
     const [condicion, setCondicion] = useState("");
-    const token = localStorage.getItem('token');
     const navigate = useNavigate()
+    const token = localStorage.getItem('token');
     const [isAdmin, setIsAdmin] = useState(false);
     const {user} = useContext(UserContext)
-    
+
+
 
     useEffect(() => {
         // Verificar si el usuario es administrador desde el token almacenado
@@ -58,6 +59,8 @@ const Gastos = () => {
         }
     }, [token]);
 
+   
+    
 
     const addGastos = () => {
         if (String(dia).trim() && String(mes).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
@@ -72,7 +75,7 @@ const Gastos = () => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                withCredentials: true, // Añade esta línea
+                withCredentials: true, 
             })
             .then(response => {
                 const nuevoGasto = response.data;
@@ -97,7 +100,7 @@ const Gastos = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            withCredentials: true, // Añade esta línea
+            withCredentials: true, 
         })
         .then(response => {
             setGastos(gastos.filter((gasto) => gasto._id !== id));
@@ -127,7 +130,7 @@ const Gastos = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            withCredentials: true, // Añade esta línea
+            withCredentials: true, 
         })
         .then(response => {
             setGastos(gastos.map(gasto => gasto._id === id ? response.data : gasto));
@@ -204,12 +207,13 @@ const Gastos = () => {
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
             
-            <div className='icon-contianer'>
+            <div className='icon-container'>
                 <BarChartIcon/>
                 <Button color="error" onClick={handleLogout}>
                     <LogoutIcon/>
                 </Button>
-                {user && <p> Hola, {user.email} </p>}
+                <div className='user'> {user && <p> Hola, {user.email} </p>} </div>
+                
             </div>
 
             <h1>Gastos Mensuales</h1>
