@@ -3,6 +3,7 @@
     max-width: 100%;
     padding: 20px;
     box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
 }
 
 h1{
@@ -48,15 +49,42 @@ h1{
     display: flex;
     align-items: center;
     justify-content: space-between; 
-    padding: 10px; 
-  }
+    padding: 1rem; 
   
-  
-  .user {
+}
+
+.icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+
+.logout-icon:hover {
+    background-color: rgb(244, 12, 12, 0.8);
+}
+
+.logout-icon, .chart-icon svg {
+    color: rgb(43, 42, 42); 
+}
+
+
+.chart-icon:hover {
+    background-color: rgb(142, 8, 142,0.8);
+}
+
+.user {
     margin-left: auto; 
     font-size: 16px; 
-  }
-  
-  button {
-    margin-left: 10px; 
-  }
+    font-family: "Poppins", sans-serif;
+    
+}

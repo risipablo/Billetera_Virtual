@@ -19,7 +19,7 @@ exports.registerUser = async (req, res) => {
         const newUser = new UserModel({ email, password });
 
         // Condicional para asignar rol de admin o usuario
-        if (email === 'pablorisi22@gmail.com') {
+        if (email === process.env.USER_ADMIN) {
             newUser.role = 'admin';  // Asignar rol de admin a un email específico
         } else {
             newUser.role = 'user';  // Otros usuarios serán 'user'

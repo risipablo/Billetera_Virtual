@@ -4,6 +4,7 @@ import Login from './component/user/login';
 import Register from './component/user/register';
 import Gastos from './component/gastos/gastos'
 import { UserProvider } from './component/user/userContext';
+import { Charts } from './component/charts/charts';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -11,6 +12,7 @@ function App() {
   return (
     <UserProvider>
       <BrowserRouter>
+      
         <Routes>
           <Route
             path="/"
@@ -25,6 +27,9 @@ function App() {
             element={isAuthenticated ? <Gastos/> : <Navigate to="/" />}
           />
           <Route path="*" element={<Navigate to="/" />} />
+
+          <Route path='/charts' element={<Charts/>}/>
+
         </Routes>
       </BrowserRouter>
     </UserProvider>

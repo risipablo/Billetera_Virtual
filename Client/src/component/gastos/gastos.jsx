@@ -11,13 +11,7 @@ import { Filtros } from '../filtros/filtros';
 import toast, { Toaster } from 'react-hot-toast';
 import { ScrollTop } from '../others/scrollTop';
 import { useNavigate } from 'react-router-dom';
-import LogoutIcon from '@mui/icons-material/Logout';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import { UserContext } from '../user/userContext';
-
-
-const serverFront = "http://localhost:3001";
-// const serverFront = "https://billetera-virtual-1.onrender.com";
+import { Navbar } from '../nav/navbar';
 
 
 const Gastos = () => {
@@ -33,7 +27,11 @@ const Gastos = () => {
     const token = localStorage.getItem('token');
     console.log(token); 
     const [isAdmin, setIsAdmin] = useState(false);
-    const {user} = useContext(UserContext)
+ 
+    // const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-1.onrender.com";
+
+
 
 
     useEffect(() => {
@@ -200,27 +198,13 @@ const Gastos = () => {
         return total.toLocaleString('en-US');
     }
 
-    // Cerrar Sesión 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login')
-    }
-
+    
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
             
-            <div className='icon-container'>
-                <BarChartIcon/>
-                <Button color="error" onClick={handleLogout}>
-                    <LogoutIcon/>
-                </Button>
-                <div className='user'> {user && <p> Hola, {user.email} </p>} </div>
-                
-            </div>
+            <Navbar/>
 
             <h1>Gastos Mensuales</h1>
-
-      
 
             <Grid container spacing={2} className="inputs-gastos">
                 <Grid item xs={12} sm={4}>
