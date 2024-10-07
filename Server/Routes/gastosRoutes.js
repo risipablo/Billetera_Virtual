@@ -6,7 +6,7 @@ const { getGastos, addGasto, deleteGasto, editGasto } = require('../Controllers/
 const {protect, isAdmin} = require ('../Middleware/authMiddleware')
 
 router.get('/gasto', getGastos);
-router.post('/add-gasto', addGasto);
+router.post('/add-gasto', isAdmin,addGasto);
 router.delete('/delete-gasto/:id', protect, isAdmin, deleteGasto);
 router.patch('/edit-gasto/:id',protect,isAdmin,editGasto);
 
