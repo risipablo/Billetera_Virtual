@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Navbar } from "../nav/navbar";
 import GastoChart from "./gastoChart";
 import axios from "axios";
 import { FiltrosChart } from "./filtros/filtrosChart";
@@ -26,7 +25,7 @@ export function Charts(){
 
     return(
         <div className="gastos-container">
-            <Navbar/>
+           
             <h1> Estadisticas </h1>
             <FiltrosChart gastos={gastos} setGastosFiltrados={setGastosFiltrados}/>
             <GastoChart gastos={gastosFiltrados}/>

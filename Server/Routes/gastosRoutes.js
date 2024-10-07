@@ -8,6 +8,6 @@ const {protect, isAdmin} = require ('../Middleware/authMiddleware')
 router.get('/gasto', getGastos);
 router.post('/add-gasto', protect, isAdmin, addGasto);
 router.delete('/delete-gasto/:id', protect, isAdmin, deleteGasto);
-router.patch('/edit-gasto/:id', protect, isAdmin, editGasto);
+router.patch('/edit-gasto/:id',protect,isAdmin,editGasto);
 
 module.exports = router;

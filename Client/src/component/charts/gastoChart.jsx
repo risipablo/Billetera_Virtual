@@ -5,6 +5,8 @@ import "./chart.css"
 
 const GastoChart = ({ gastos }) => {
 
+    const isMobile = window.innerWidth <= 768; // ajusta de font size donuts para mobile
+
     const spentMonth = gastos.reduce((acc, gasto) => {
         const mes = gasto.mes;
         const monto = gasto.monto;
@@ -39,15 +41,14 @@ const GastoChart = ({ gastos }) => {
         scales: {
             y: {
                 beginAtZero: true,
+                suggestedMax: Math.max(...Object.values(spentMonth)) * 1.2, 
                 title: {
                     display: true,
                     text: 'Monto Total',
                     font: {
                         size: 18, 
                         family: 'Poppins, sans-serif',
-                        
                     },
-                    
                     color: '#333', 
                 },
                 ticks: {
@@ -60,7 +61,7 @@ const GastoChart = ({ gastos }) => {
             x: {
                 title: {
                     display: true,
-                   text: 'Mes',
+                    text: 'Mes',
                     font: {
                         size: 14,
                         family: 'Poppins, sans-serif',
@@ -99,7 +100,7 @@ const GastoChart = ({ gastos }) => {
                 borderWidth: 1,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return `Monto:  $ ${tooltipItem.raw.toLocaleString()} `; // Formato para la moneda
+                        return `Monto:  $ ${tooltipItem.raw.toLocaleString()} `;
                     }
                 }
             },
@@ -108,8 +109,10 @@ const GastoChart = ({ gastos }) => {
             duration: 1500, 
             easing: 'easeInOutCubic',
         },
+        barPercentage: 0.9,
+        categoryPercentage: 0.8,
     };
-
+    
 
     const spentProduct = gastos.reduce((acc,gasto) => {
 
@@ -156,7 +159,7 @@ const GastoChart = ({ gastos }) => {
                     color: 
                     Object.keys(spentProduct).map((producto) => producto === maxProducto ? 'rgba(209, 25, 25, 0.7)': 'rgba(0,0,0)') ,
                     font: {
-                        size: 18,
+                        size: isMobile ? 12 : 18, // Ajuste del tamaño a 12px en móviles
                     },
                     padding: 12, // Espacio entre etiquetas
                 }
@@ -225,9 +228,9 @@ const GastoChart = ({ gastos }) => {
                 labels: {
                     color: '#333', 
                     font: {
-                        size: 18,
+                        size: isMobile ? 12 : 18,
                     },
-                    padding: 20, 
+                    padding: isMobile ? 1  : 20, 
                 }
             },
             tooltip: {

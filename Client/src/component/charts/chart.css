@@ -41,6 +41,7 @@ h2 {
     .chart-container {
         flex-direction: column;
         align-items: center;
+        padding: 1rem;
     }
 
     .month-container, .product-container {
@@ -49,6 +50,6 @@ h2 {
     }
 
     .bar-container, .doughnut-container {
-        height: 350px; /* Altura reducida para pantallas pequeñas */
+        height: 250px; /* Altura reducida para pantallas pequeñas */
     }
 }

@@ -21,8 +21,13 @@ export function Navbar() {
     // Cerrar Sesión 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/login')
+        setIsAuthenticated(false); // Actualizar el estado de autenticación para evitar que aparezca en el login
+        navigate('/')
     }
+
+    const handleUserClick = () => {
+        navigate('/gasto');
+    };
 
 
     return(
@@ -49,8 +54,10 @@ export function Navbar() {
 
     
             </div>
+            <div className='user' onClick={handleUserClick} style={{ cursor: 'pointer' }}>
+                {user && <p>Hola, {user.email}</p>}
+            </div>
 
-            <div className='user'> {user && <p> Hola, {user.email} </p>} </div>
         </div>
 
     )

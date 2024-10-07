@@ -14,6 +14,11 @@ import { useNavigate } from 'react-router-dom';
 import { Navbar } from '../nav/navbar';
 
 
+ 
+// const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-1.onrender.com";
+
+
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
     const [gastosFiltrados, setGastosFiltrados] = useState([]);
@@ -27,12 +32,6 @@ const Gastos = () => {
     const token = localStorage.getItem('token');
     console.log(token); 
     const [isAdmin, setIsAdmin] = useState(false);
- 
-    // const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
-
-
-
 
     useEffect(() => {
         // Verificar si el usuario es administrador desde el token almacenado
@@ -201,8 +200,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
     
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
-            
-            <Navbar/>
+    
 
             <h1>Gastos Mensuales</h1>
 
