@@ -35,7 +35,7 @@ const Gastos = () => {
         setIsAdmin(storedIsAdmin);
 
         if (token) {
-            axios.get(`${serverFront}/api/gasto`, {
+            axios.get(`${serverFront}/api/gastos`, {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true, 
             })
