@@ -49,7 +49,11 @@ exports.loginUser = async (req, res) => {
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         // Establecer la cookie con el token
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Solo en producción
+            sameSite: 'None',  // Permitir compartir la cookie entre diferentes dominios
+        });
 
         res.json({ message: 'Inicio de sesión exitoso', token });
     } catch (err) {

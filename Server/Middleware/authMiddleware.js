@@ -2,23 +2,26 @@
 const jwt = require('jsonwebtoken');
 const UserModel = require('../Models/User')
 
-// Middleware para proteger rutas
+
+
 exports.protect = async (req, res, next) => {
-    // Obtener el token del header o de las cookies
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    const token = req.cookies.token || '';
 
     if (!token) {
         return res.status(401).json({ error: 'No autorizado. Token no proporcionado.' });
     }
 
     try {
+        // Verificar el token y obtener la información del usuario
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
+        req.user = decoded; // Almacenar la información del usuario en la solicitud
+        next(); // Continuar con la siguiente función de middleware
     } catch (err) {
+        // Manejar errores de verificación del token
         return res.status(401).json({ error: 'Token no válido. Acceso denegado.' });
     }
 };
+
 
 
 exports.isAdmin = async (req, res, next) => {
