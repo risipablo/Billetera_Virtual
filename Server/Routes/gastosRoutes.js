@@ -5,6 +5,7 @@ const { getGastos, addGasto, deleteGasto, editGasto } = require('../Controllers/
 // Proteger rutas
 const {protect} = require ('../Middleware/authMiddleware')
 
+
 router.get('/gasto',protect, getGastos);
 router.post('/add-gasto', protect,addGasto);
 router.delete('/delete-gasto/:id', protect, deleteGasto);
