@@ -4,8 +4,8 @@ import axios from "axios";
 import { FiltrosChart } from "./filtros/filtrosChart";
 
 export function Charts(){
-    const serverFront = "http://localhost:3001";
-    // const serverFront = "https://billetera-virtual-1.onrender.com";
+    // const serverFront = "http://localhost:3001";
+    const serverFront = "https://billetera-virtual-1.onrender.com";
     
     const [gastos,setGastos] = useState([])
     const [gastosFiltrados, setGastosFiltrados] = useState([])
