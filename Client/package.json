@@ -16,6 +16,7 @@
     "@mui/material": "^5.16.5",
     "axios": "^1.7.2",
     "chart.js": "^4.4.4",
+    "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",

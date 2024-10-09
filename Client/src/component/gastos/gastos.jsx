@@ -11,13 +11,9 @@ import { Filtros } from '../filtros/filtros';
 import toast, { Toaster } from 'react-hot-toast';
 import { ScrollTop } from '../others/scrollTop';
 import { useNavigate } from 'react-router-dom';
-import { Navbar } from '../nav/navbar';
 
-
- 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
-
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
@@ -49,8 +45,16 @@ const Gastos = () => {
             })
             .catch(err => {
                 console.log(err);
-                if (err.response && err.response.status === 401) {
-                    toast.error('Usuario no autorizado, por favor inicia sesión', { position: 'top-right' });
+                if (err.response) {
+                    if (err.response.status === 401) {
+                        toast.error('Usuario no autorizado, por favor inicia sesión', { position: 'top-right' });
+                    } else if (err.response.status === 404) {
+                        toast.error('Ruta no encontrada', { position: 'top-right' });
+                    } else if (err.response.status === 500) {
+                        toast.error('Error interno del servidor', { position: 'top-right' });
+                    }
+                } else {
+                    toast.error('Error de conexión, por favor intenta más tarde', { position: 'top-right' });
                 }
             });
         } else {
