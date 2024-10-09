@@ -1,52 +1,89 @@
 
 .container-login {
-    max-width: 400px;
-    margin: 50px auto; /* Centrar el contenedor */
-    padding: 20px;
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 3rem;
     background-color: #ffffff; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); 
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px; 
+    font-family: "Montserrat", system-ui;
+  }
+
+  @media (max-width: 768px){
+    .container-login{
+      max-width: 350px;
+      padding: 3rem .8rem;
+    }
+  
+
   }
   
   .container-login  h2 {
-    font-family: "Montserrat", system-ui;
+    font-size: 2rem;
+    letter-spacing: 2px;
     font-optical-sizing: auto;
     text-align: center; 
     color: #333;
   }
   
-  .container-login  input {
+  .container-login input {
     font-family: "Montserrat", system-ui;
+    font-size: 1rem;
     font-optical-sizing: auto;
     width: 100%;
     padding: 10px;
-    margin: 10px 0; 
-    border: 1px solid #ccc; 
-    border-radius: 4px; 
-    box-sizing: border-box; 
+    margin: 20px 0;
+    border: none; 
+    border-bottom: 1px solid #ccc; 
+    border-radius: 0; 
+    box-sizing: border-box;
+    outline: none; 
+  }
+  
+  .container-login input:focus {
+    border-bottom: 2px solid #9b09de; 
   }
   
   .container-login button {
     font-family: "Montserrat", system-ui;
-    font-optical-sizing: auto;
-    width: 100%;
+    width: 50%;
     padding: 10px;
-    background-color: #007bff; 
-    color: #ffffff; 
-    border: none;
+    margin: 1rem auto;
+    background-color: #ffffff; 
+    color: #060606; 
+    border: 1px groove rgba(0, 0, 0, 0.9);
     border-radius: 4px; 
     cursor: pointer; 
-    font-size: 16px; 
+    font-size: 1rem 
   }
   
   .container-login  button:hover {
-    background-color: #0056b3; 
+    color: #ffffff;
+    transition: .3s;
+    background-color: rgb(0, 86, 179,0.9); 
   }
   
-  .container-login  .message {
+  .message {
     color: #d9534f; 
     text-align: center;
-    margin-top: 10px; 
+    justify-content: center;
+    margin: 10px auto; 
     font-family: "Montserrat", system-ui;
     font-optical-sizing: auto;
+  }
+
+  .count{
+    margin: 1.2rem 0 .7rem;
+  }
+
+  .count p{
+    color: #0965de;
+    font-size: .9rem;
+    font-weight: 600;
+  }
+
+  .count p:hover{
+    transition: .3s;
+    color: #d9534f;
   }

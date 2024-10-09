@@ -12,8 +12,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { ScrollTop } from '../others/scrollTop';
 import { useNavigate } from 'react-router-dom';
 
-const serverFront = "http://localhost:3001";
-// const serverFront = "https://billetera-virtual-1.onrender.com";
+// const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-1.onrender.com";
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);

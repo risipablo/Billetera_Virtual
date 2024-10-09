@@ -5,8 +5,8 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import "./user.css"
 import { UserContext } from './userContext';
 
-const serverFront = "http://localhost:3001";
-// const serverFront = "https://billetera-virtual-1.onrender.com";
+// const serverFront = "http://localhost:3001";
+const serverFront = "https://billetera-virtual-1.onrender.com";
 
 
 const Login = ({ setIsAuthenticated }) => {
@@ -56,9 +56,14 @@ const Login = ({ setIsAuthenticated }) => {
       </form>
       {message && <p className="message">{message}</p>}
 
-      <NavLink to="/register">
-        Crea una nueva cuenta
-      </NavLink>
+      <div className="count" >
+        
+        <NavLink to="/register" >
+         <p> Crea una nueva cuenta</p> 
+        </NavLink>
+      </div>
+
+
     </div>
   );
 };
