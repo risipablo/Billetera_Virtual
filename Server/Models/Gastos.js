@@ -20,17 +20,22 @@ const gastosSchema = new mongoose.Schema({
     metodo:{
         type:String,
         required:true
-    }, // Metodo de pago
+    }, 
 
     condicion:{
         type:String,
         required:true
-    }, // Si entra este mes o en el proximo mes
+    }, 
 
     monto:{
         type: Number,
         required: true
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 })
 
 const GastosModel = mongoose.model('Gasto', gastosSchema);

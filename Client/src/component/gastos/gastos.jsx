@@ -37,12 +37,11 @@ const Gastos = () => {
         // Verificar si el usuario es administrador desde el token almacenado
         const storedIsAdmin = localStorage.getItem('isAdmin') === 'true';
         setIsAdmin(storedIsAdmin);
-    
-        // Obtener gastos solo si el token existe
+
         if (token) {
             axios.get(`${serverFront}/api/gasto`, {
                 headers: { Authorization: `Bearer ${token}` },
-                withCredentials: true,  // Agregar esta línea
+                withCredentials: true, 
             })
             .then(response => {
                 setGastos(response.data);
@@ -57,7 +56,7 @@ const Gastos = () => {
         } else {
             navigate('/login');
         }
-    }, [token]);
+    }, [token,navigate]);
    
     
 

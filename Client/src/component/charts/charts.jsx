@@ -10,17 +10,25 @@ export function Charts(){
     const [gastos,setGastos] = useState([])
     const [gastosFiltrados, setGastosFiltrados] = useState([])
 
-  
-
     useEffect(() => {
-        axios.get(`${serverFront}/api/gasto`)
-        .then(response => {
-            setGastos(response.data)
-            setGastosFiltrados(response.data)
-        })
-        .catch(err => console.log(err))
-    },[])
-    
+        const token = localStorage.getItem('token') // se guarda el token de cada usuario
+
+        const fechtGastos = async() => {
+            try{
+                const response = await axios.get(`${serverFront}/api/gasto`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
+                });
+                setGastos(response.data)
+                setGastosFiltrados(response.data) 
+            }
+            catch (err){
+                console.log(err)
+            }
+        }
+
+        fechtGastos();
+    },{})
     
 
     return(

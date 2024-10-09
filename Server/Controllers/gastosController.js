@@ -2,7 +2,7 @@ const GastosModel = require('../Models/Gastos');
 
 exports.getGastos = async (req, res) => {
     try {
-        const gastos = await GastosModel.find();
+        const gastos = await GastosModel.find({ userId: req.user.id }); 
         res.json(gastos);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -11,12 +11,22 @@ exports.getGastos = async (req, res) => {
 
 exports.addGasto = async (req, res) => {
     const { dia, mes, producto, metodo, condicion, monto } = req.body;
+
     if (!dia || !mes || !producto || !metodo || !condicion || !monto) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
     try {
-        const newGasto = new GastosModel({ dia, mes, producto, metodo, condicion, monto });
+        const newGasto = new GastosModel({
+            dia,
+            mes,
+            producto,
+            metodo,
+            condicion,
+            monto,
+            userId: req.user.id 
+        });
+
         const result = await newGasto.save();
         res.json(result);
     } catch (err) {
@@ -24,14 +34,18 @@ exports.addGasto = async (req, res) => {
     }
 };
 
+
 exports.deleteGasto = async (req, res) => {
     const { id } = req.params;
+
     try {
-        const result = await GastosModel.findByIdAndDelete(id);
-        if (!result) {
+        const gasto = await GastosModel.findOneAndDelete({ _id: id, userId: req.user.id }); 
+
+        if (!gasto) {
             return res.status(404).json({ error: 'Gasto no encontrado' });
         }
-        res.json(result);
+
+        res.json(gasto);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -40,9 +54,19 @@ exports.deleteGasto = async (req, res) => {
 exports.editGasto = async (req, res) => {
     const { id } = req.params;
     const { dia, mes, producto, metodo, condicion, monto } = req.body;
+
     try {
-        const result = await GastosModel.findByIdAndUpdate(id, { dia, mes, producto, metodo, condicion, monto }, { new: true });
-        res.json(result);
+        const gasto = await GastosModel.findOneAndUpdate(
+            { _id: id, userId: req.user.id }, 
+            { dia, mes, producto, metodo, condicion, monto },
+            { new: true }
+        );
+
+        if (!gasto) {
+            return res.status(404).json({ error: 'Gasto no encontrado' });
+        }
+
+        res.json(gasto);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

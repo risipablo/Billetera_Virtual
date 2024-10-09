@@ -2,43 +2,46 @@
 const jwt = require('jsonwebtoken');
 const UserModel = require('../Models/User')
 
-exports.protect = (req, res, next) => {
+// Middleware para proteger rutas
+exports.protect = async (req, res, next) => {
+    // Obtener el token del cookie
     const token = req.cookies.token || '';
+    
+    // Verificar si existe el token
     if (!token) {
-        return res.status(401).json({ error: 'No autorizado' });
+        return res.status(401).json({ error: 'No autorizado. Token no proporcionado.' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Token no válido' });
-        }
-        req.user = decoded;
-        next();
-    });
+    try {
+        // Verificar el token y obtener la información del usuario
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded; // Almacenar la información del usuario en la solicitud
+        next(); // Continuar con la siguiente función de middleware
+    } catch (err) {
+        // Manejar errores de verificación del token
+        return res.status(401).json({ error: 'Token no válido. Acceso denegado.' });
+    }
 };
 
 
-exports.isAdmin = (req, res, next) => {
-    const { role, id } = req.user || {};
+exports.isAdmin = async (req, res, next) => {
+    try {
+        const { role, id } = req.user;
 
-    // Asumimos que tienes acceso al modelo de usuario para validar el email
-    UserModel.findById(id).then((user) => {
+        // Busca el usuario en la base de datos
+        const user = await UserModel.findById(id);
+
         if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
+            return res.status(403).json({ error: 'Acceso denegado: usuario no encontrado' });
         }
 
-        // Verificamos el email del usuario con el de ADMIN en el archivo de configuración
-        if (user.email === process.env.USER_ADMIN) {
-            return next(); // Si el email coincide, pasamos directamente como admin
+        // Verifica si el usuario es el admin configurado o tiene el rol de admin
+        if (user.email === process.env.USER_ADMIN || role === 'admin') {
+            return next(); // El usuario es admin, continuar
         }
 
-        // Si el email no coincide, revisamos el rol almacenado en la base de datos
-        if (role !== 'admin') {
-            return res.status(403).json({ error: 'Acceso denegado: se requieren permisos de administrador.' });
-        }
-
-        next();
-    }).catch((err) => {
-        res.status(500).json({ error: 'Error al verificar el usuario.' });
-    });
+        return res.status(403).json({ error: 'Acceso denegado: se requieren permisos de administrador' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al verificar los permisos de administrador' });
+    }
 };

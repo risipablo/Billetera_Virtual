@@ -5,6 +5,7 @@ import { UserContext } from "../user/userContext";
 import { useContext, useState } from "react";
 import { Tooltip } from "@mui/material";
 
+
 export function Navbar() {
     const navigate = useNavigate()
     const {user} = useContext(UserContext)

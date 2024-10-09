@@ -3,11 +3,11 @@ const router = express.Router();
 const { getGastos, addGasto, deleteGasto, editGasto } = require('../Controllers/gastosController');
 
 // Proteger rutas
-const {protect, isAdmin} = require ('../Middleware/authMiddleware')
+const {protect} = require ('../Middleware/authMiddleware')
 
-router.get('/gasto', getGastos);
-router.post('/add-gasto', addGasto);
-router.delete('/delete-gasto/:id', protect, isAdmin, deleteGasto);
-router.patch('/edit-gasto/:id',protect,isAdmin,editGasto);
+router.get('/gasto', protect, getGastos);
+router.post('/add-gasto', protect,addGasto);
+router.delete('/delete-gasto/:id', protect, deleteGasto);
+router.patch('/edit-gasto/:id', protect ,editGasto);
 
 module.exports = router;
