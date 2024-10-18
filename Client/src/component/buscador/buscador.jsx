@@ -1,8 +1,9 @@
 
-import { Grid,IconButton,TextField,Box } from "@mui/material";
+import { Grid,IconButton,TextField,Box, Button } from "@mui/material";
+
 import SearchIcon from '@mui/icons-material/Search';
 import { styled } from '@mui/system';
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const SearchBox = styled(Box)(({ show }) => ({
     position: 'relative',
@@ -12,15 +13,38 @@ const SearchBox = styled(Box)(({ show }) => ({
     marginLeft: show ? '1rem' : '0',
 }));
 
+
+
+export function Debounce(func, delay) {
+    let timeoutId;
+
+    return (...args) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        timeoutId = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+}
+
+
 export function Buscador({filtrarDatos}){
     const [showSearch, setShowSearch] = useState(false);
     const [buscar,setBuscar] = useState('')
+
+    const filtrarDebounce = useMemo(() => Debounce((palabraClave) => {
+        filtrarDatos(palabraClave);
+    }, 300), [filtrarDatos]);
+
 
     const buscarChange = (event) => {
         const value = event.target.value;
         const palabraClave = value.trim().toLowerCase().split(/\s+/);
         setBuscar(value);
-        filtrarDatos(palabraClave);
+        // filtrarDatos(palabraClave);
+        filtrarDebounce(palabraClave)
     }
 
     return(
@@ -29,6 +53,7 @@ export function Buscador({filtrarDatos}){
                 <SearchIcon />
             </IconButton>
             <SearchBox show={showSearch} >
+                
             <TextField
                 label="Buscar"
                 variant="outlined"
@@ -36,6 +61,7 @@ export function Buscador({filtrarDatos}){
                 value={buscar}
                 onChange={buscarChange} 
             />
+         
             </SearchBox>
         </Grid>
     )

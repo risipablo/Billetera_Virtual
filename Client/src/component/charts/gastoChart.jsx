@@ -7,16 +7,28 @@ const GastoChart = ({ gastos }) => {
 
     const isMobile = window.innerWidth <= 768; // ajusta de font size donuts para mobile
 
+
     const spentMonth = gastos.reduce((acc, gasto) => {
         const mes = gasto.mes;
         const monto = gasto.monto;
+        const conditions = gasto.condicion.toLowerCase();
+
+        // verificar las condiciones del metodo de pago
+        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+
+        if (conditionsReduce.includes(conditions)) {
+            return acc;
+            // no suma en los gastos
+        }
 
         if (!acc[mes]) acc[mes] = 0;
         acc[mes] += monto;
 
         return acc;
-    }, {});
+    }, {})
 
+
+  
     const spentMonthMax = Object.keys(spentMonth).reduce((max,key) => {
         return spentMonth[key] > spentMonth[max] ? key : max;
     }, Object.keys(spentMonth)[0])
@@ -38,6 +50,7 @@ const GastoChart = ({ gastos }) => {
 
     const options = {
         responsive: true,
+        maintainAspectRatio: false, // Permite que el gráfico se adapte mejor a la pantalla
         scales: {
             y: {
                 beginAtZero: true,
@@ -112,12 +125,19 @@ const GastoChart = ({ gastos }) => {
         barPercentage: 0.9,
         categoryPercentage: 0.8,
     };
-    
 
     const spentProduct = gastos.reduce((acc,gasto) => {
 
         const producto = gasto.producto;
         const monto = gasto.monto;
+        const conditions = gasto.condicion.toLowerCase();
+
+        const conditionsReduce2 = ['cajero', 'inversion', 'deben', 'cuotas']
+
+        if(conditionsReduce2.includes(conditions)) {
+            return acc;
+        }
+
 
         if(!acc[producto])
             acc[producto] = 0
@@ -193,6 +213,12 @@ const GastoChart = ({ gastos }) => {
 
         const metodo = gasto.metodo;
         const monto = gasto.monto;
+        const conditions = gasto.condicion.toLowerCase();
+
+        const conditionsReduce2 = ['cajero', 'inversion', 'deben', 'cuotas']
+        if (conditionsReduce2.includes(conditions)){
+            return acc;
+        }
 
         if(!acc[metodo])
             acc[metodo] = 0

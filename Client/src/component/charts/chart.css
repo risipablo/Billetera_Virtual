@@ -45,11 +45,12 @@ h2 {
     }
 
     .month-container, .product-container {
-        max-width: 100%;
+        width: 100%;
         flex-basis: 100%;
     }
 
     .bar-container, .doughnut-container {
-        height: 250px; /* Altura reducida para pantallas pequeñas */
+        height: 450px; 
+        width: 100%; 
     }
 }

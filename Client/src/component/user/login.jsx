@@ -1,42 +1,49 @@
-
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, NavLink } from 'react-router-dom';
-import "./user.css"
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import "./user.css";
 import { UserContext } from './userContext';
 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
 
-
-const Login = ({ setIsAuthenticated }) => {
+const Login = ({ setIsAuthenticated, setLoading }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const {setUser} = useContext(UserContext)
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
+
+  const [show, setShow] = useState(false);
+  const switchButton = () => setShow(!show);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(`${serverFront}/api/auth/login`, { email, password },  { withCredentials: true } );
-      // document.cookie = `token=${response.data.token}; path=/;`
+    setLoading(true); 
 
-       // Guardar el token en localStorage para evitar que la sesion se cierra cuando se hace un refresh
-       
-       localStorage.setItem('token', response.data.token);
-        setUser({ email });
-        setIsAuthenticated(true);
-        navigate('/gasto')
+    try {
+      const response = await axios.post(`${serverFront}/api/auth/login`, { email, password }, { withCredentials: true });
+      localStorage.setItem('token', response.data.token);
+      
+      setUser({ email });
+      setIsAuthenticated(true);
+      setLoading(false);
+      navigate('/gasto');
 
     } catch (error) {
-      setMessage(error.response.data.error || 'Error en el login');
+      setLoading(false); 
+      console.error('Error de Axios:', error);
+      if (error.response) {
+        setMessage(error.response.data.error || 'Error en el login');
+      }
     }
   };
 
   return (
-    <div className='container-login'>
-      <h2>Login</h2>
+    <div className="container-login">
+      <h2>Iniciar Sesion</h2>
+
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -45,25 +52,29 @@ const Login = ({ setIsAuthenticated }) => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+
+        <div className="password-container">
+          <input
+            placeholder="Contraseña"
+            value={password}
+            type={show ? 'text' : 'password'}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <span className="password-icon" onClick={switchButton}>
+            {show ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+
         <button type="submit">Iniciar sesión</button>
       </form>
       {message && <p className="message">{message}</p>}
 
-      <div className="count" >
-        
-        <NavLink to="/register" >
-         <p> Crea una nueva cuenta</p> 
+      <div className="count">
+        <NavLink to="/register">
+          <p> ¿No tienes una cuenta? Crea una nueva cuenta</p>
         </NavLink>
       </div>
-
-
     </div>
   );
 };

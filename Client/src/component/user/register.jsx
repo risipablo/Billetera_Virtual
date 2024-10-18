@@ -1,7 +1,8 @@
 // src/component/Register.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { NavLink, useNavigate } from 'react-router-dom';
 import "./user.css"
 
 
@@ -14,11 +15,14 @@ const Register = ({ setIsAuthenticated }) => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+
+  const [show, setShow] = React.useState(false);
+  const switchButton = () => setShow(!show);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${serverFront}/api/auth/register`, { email, password });
+      const response = await axios.post(`${serverFront}/api/auth/register`, {  email, password });
       setMessage(response.data.message);
       navigate('/login'); // Redirigir al login tras el registro
     } catch (error) {
@@ -28,8 +32,10 @@ const Register = ({ setIsAuthenticated }) => {
 
   return (
     <div className='container-login'>
-      <h2>Registro</h2>
+      <h2> Registrarse </h2>
       <form onSubmit={handleSubmit}>
+
+
         <input
           type="email"
           placeholder="Correo electrónico"
@@ -37,16 +43,32 @@ const Register = ({ setIsAuthenticated }) => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+
+        <div className="password-container">
+
+          <input
+            placeholder="Contraseña"
+            value={password}
+            type={show ? 'text' : 'password'}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          
+          <span className="password-icon" onClick={switchButton}>
+            {show ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+
         <button type="submit">Registrar</button>
       </form>
       {message && <p>{message}</p>}
+      
+      <div className="count" >
+        <NavLink to="/login" >
+         <p> Ya tengo cuenta </p> 
+        </NavLink>
+      </div>
+
     </div>
   );
 };

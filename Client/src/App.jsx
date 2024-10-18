@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './component/user/login';
 import Register from './component/user/register';
@@ -6,24 +6,30 @@ import Gastos from './component/gastos/gastos'
 import { UserProvider } from './component/user/userContext';
 import { Charts } from './component/charts/charts';
 import { Navbar } from './component/nav/navbar';
+import Loader from './component/loader/loader';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState (false)
+
 
   return (
     <UserProvider>
       <BrowserRouter>
 
-      {isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated}/>}
+      {loading &&  <Loader />}
+     
+
+      { !loading && isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated}/>}
       
         <Routes>
           <Route
             path="/"
-            element={<Login setIsAuthenticated={setIsAuthenticated} />}
+            element={<Login setIsAuthenticated={setIsAuthenticated}  setLoading={setLoading} />}
           />
           <Route
             path="/register"
-            element={<Register setIsAuthenticated={setIsAuthenticated} />}
+            element={<Register setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />}
           />
           <Route
             path="/gasto"

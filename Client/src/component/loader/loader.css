@@ -1,0 +1,9 @@
+
+.loader{
+    scroll-behavior: smooth;
+    width: 100%;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
+}

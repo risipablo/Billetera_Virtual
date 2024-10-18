@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import {Box,Button,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,TableCell,TableContainer,TableHead, TableRow, TextField, Paper, IconButton } from '@mui/material';
+import {Box,Button,useMediaQuery,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,
+ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField, Paper, IconButton, ListItem,
+Collapse,} from '@mui/material';
+import { TransitionGroup } from 'react-transition-group';
+import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -28,8 +32,11 @@ const Gastos = () => {
     const token = localStorage.getItem('token');
     console.log(token); 
     const [isAdmin, setIsAdmin] = useState(false);
+    const [showInputs,setShowInputs] = useState(false)
+    const isMobile = useMediaQuery('(max-width:500px)');
 
     useEffect(() => {
+        
         // Verificar si el usuario es administrador desde el token almacenado
         const storedIsAdmin = localStorage.getItem('isAdmin') === 'true';
         setIsAdmin(storedIsAdmin);
@@ -54,6 +61,7 @@ const Gastos = () => {
         }
     }, [token,navigate]);
    
+    
     
 
     const addGastos = () => {
@@ -192,6 +200,15 @@ const Gastos = () => {
         return total.toLocaleString('en-US');
     }
 
+
+    const lastSpend = (gastos) => {
+        if (gastos.length === 0) {
+          return 'No hay gastos'; 
+        }
+        const ultimoGasto = gastos[gastos.length - 1];
+        return ` ${ultimoGasto.dia} de ${ultimoGasto.mes} ${ultimoGasto.producto} $${ultimoGasto.monto} `;
+      }
+
     
     return (
         <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
@@ -200,6 +217,7 @@ const Gastos = () => {
             <h1>Gastos Mensuales</h1>
 
             <Grid container spacing={2} className="inputs-gastos">
+
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
                         <InputLabel>Seleccionar Día</InputLabel>
@@ -211,6 +229,7 @@ const Gastos = () => {
                         </Select>
                     </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
                         <InputLabel> Seleccionar Mes </InputLabel>
@@ -222,6 +241,7 @@ const Gastos = () => {
                         </Select>
                     </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
                         <InputLabel>Seleccionar Método</InputLabel>
@@ -233,12 +253,15 @@ const Gastos = () => {
                         </Select>
                     </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={4}>
                     <TextField fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }} placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
                 </Grid>
+
                 <Grid item xs={12} sm={4}>
                     <TextField fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }} placeholder="Ingresar Monto" value={monto} onChange={(e) => setMonto(e.target.value)} />
                 </Grid>
+
                 <Grid item xs={12} sm={4}>
                     <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
                         <InputLabel>Seleccionar Estado</InputLabel>
@@ -279,8 +302,53 @@ const Gastos = () => {
             <Filtros gastos={gastos} setGastosFiltrados={setGastosFiltrados} />
 
             <Buscador filtrarDatos={searchGastos} className="filtros" />
-                        
-            <TableContainer component={Paper} className="productos" sx={{ mt: 8, boxShadow: 4, fontFamily: "Montserrat, sans-serif" }} style={{ overflowX: 'auto' }}>
+
+            
+            <Button
+                onClick={() => setShowInputs(!showInputs)}
+                startIcon={showInputs ? <ExpandLess /> : <ExpandMore />}
+                sx={{  margin: '2rem 0 0.2rem auto'}}
+            >
+                {showInputs ? '' : '' } 
+            </Button>
+
+            <TransitionGroup>
+                {!showInputs &&
+                    <Collapse>
+                        <Box
+                             display="flex"
+                             flexDirection={isMobile ? 'column' : 'row'} 
+                             justifyContent="center"
+                             sx={{ margin:'.7rem auto'}}
+                             >
+                                 <ListItem>
+                                 <ListItemText 
+                                    primaryTypographyProps={{
+                                     sx: {
+                                     fontWeight: 'bold',
+                                     fontFamily: "Montserrat, sans-serif",
+                                     fontSize: '1rem',
+                                     },
+                                 }}>
+                                     Último gasto agregado
+                                     <Typography >{lastSpend(gastosFiltrados)}</Typography>
+                                 </ListItemText>
+                                 </ListItem>
+         
+                             <ListItem sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem' }}>
+                                 Total de gasto: ${totalMonto(gastosFiltrados)}
+                             </ListItem>
+                        </Box>
+         
+                    </Collapse>
+  
+                }
+   
+            </TransitionGroup>
+
+    
+
+            <TableContainer component={Paper} className="productos" sx={{ mt: 6, boxShadow: 4, fontFamily: "Montserrat, sans-serif" }} style={{ overflowX: 'auto' }}>
                 <Table>
                     <TableHead>  
                         <TableRow className='fila' sx={{ mt: 2 }}>
