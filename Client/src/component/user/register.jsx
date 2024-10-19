@@ -1,5 +1,6 @@
 // src/component/Register.js
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -31,21 +32,41 @@ const Register = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className='container-login'>
-      <h2> Registrarse </h2>
-      <form onSubmit={handleSubmit}>
+    <motion.div 
+      className="container-login"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.h2 
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        Registrarse
+      </motion.h2>
 
-
-        <input
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.input
           type="email"
           placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          whileFocus={{ scale: 1.05 }}
         />
 
-        <div className="password-container">
-
+        <motion.div 
+          className="password-container"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
           <input
             placeholder="Contraseña"
             value={password}
@@ -53,23 +74,43 @@ const Register = ({ setIsAuthenticated }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          
           <span className="password-icon" onClick={switchButton}>
             {show ? <FaEyeSlash /> : <FaEye />}
           </span>
-        </div>
+        </motion.div>
 
-        <button type="submit">Registrar</button>
-      </form>
-      {message && <p>{message}</p>}
-      
-      <div className="count" >
-        <NavLink to="/login" >
-         <p> Ya tengo cuenta </p> 
+        <motion.button 
+          type="submit"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Iniciar sesión
+        </motion.button>
+      </motion.form>
+
+      {message && (
+        <motion.p 
+          className="message"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {message}
+        </motion.p>
+      )}
+
+      <motion.div 
+        className="count"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
+        <NavLink to="/login">
+          <p> Ya tengo cuenta </p>
         </NavLink>
-      </div>
+      </motion.div>
+    </motion.div>
 
-    </div>
   );
 };
 

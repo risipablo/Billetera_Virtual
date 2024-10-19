@@ -36,7 +36,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
         <>
             {/* Versión escritorio */}
             <Hidden smDown>
-                <Grid container spacing={2} alignItems="center">
+                <Grid container spacing={2} alignItems="center" marginTop={1} marginBottom={2}>
                     <Grid item xs>
                         <Select
                             fullWidth

@@ -18,11 +18,14 @@ function App() {
       <BrowserRouter>
 
       {loading &&  <Loader />}
-     
+    
 
       { !loading && isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated}/>}
       
+     
+
         <Routes>
+       
           <Route
             path="/"
             element={<Login setIsAuthenticated={setIsAuthenticated}  setLoading={setLoading} />}

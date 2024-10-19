@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
+import HelmetExport, { Helmet } from 'react-helmet';
 import "./gastos.css"
 import { Buscador } from '../buscador/buscador';
 import { Filtros } from '../filtros/filtros';
@@ -211,10 +212,14 @@ const Gastos = () => {
 
     
     return (
-        <Box className="gastos-container" sx={{ p: 2, fontFamily: "Montserrat, sans-serif" }}>
+        <Box className="gastos-container" sx={{ p: 3, marginTop:8, marginBottom:4 ,fontFamily: "Montserrat, sans-serif" }}>
     
 
-            <h1>Gastos Mensuales</h1>
+            {/* <h1></h1> */}
+
+            <Helmet>
+                <title> Gastos Mensuales</title>
+            </Helmet>
 
             <Grid container spacing={2} className="inputs-gastos">
 

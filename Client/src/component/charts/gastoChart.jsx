@@ -1,6 +1,7 @@
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,ArcElement } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
+import { motion } from 'framer-motion';
 import "./chart.css"
 
 const GastoChart = ({ gastos }) => {
@@ -288,27 +289,43 @@ const GastoChart = ({ gastos }) => {
 
     return (
         <div className="chart-container">
-            <div className="month-container">
+          
+            <motion.div 
+                className="month-container"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+            >
                 <h2>Gastos del mes</h2>
                 <div className="bar-container">
                     <Bar data={dataSpentMonth} options={options} />
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="product-container">
+            <motion.div 
+                className="product-container"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+            >
                 <h2>Productos por mes</h2>
                 <div className="doughnut-container">
                     <Doughnut data={dataSpentProduct} options={optionsDonut} />
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="product-container">
-                <h2>Metodos de pago </h2>
+            
+            <motion.div 
+                className="product-container"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+            >
+                <h2>Metodos de pago</h2>
                 <div className="doughnut-container">
                     <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
                 </div>
-            </div>
-
+            </motion.div>
         </div>
     );
 }

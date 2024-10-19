@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { UserContext } from "../user/userContext";
 import { useContext, useState } from "react";
 import { Tooltip } from "@mui/material";
@@ -53,7 +54,14 @@ export function Navbar() {
                     </Tooltip>
                 </NavLink>
 
-    
+                <NavLink to="/gasto" onMouseEnter={() => open('gastos')} onMouseLeave={close}>
+                    <Tooltip title={active === 'gastos' ? "Gastos" : " "}>
+                        <div className="icon gasto-icon">
+                        <MonetizationOnIcon/>
+                        </div>
+                    </Tooltip>
+                </NavLink>
+
             </div>
             <div className='user' onClick={handleUserClick} style={{ cursor: 'pointer' }}>
                 {user && <p>Hola, {user.email}</p>}
