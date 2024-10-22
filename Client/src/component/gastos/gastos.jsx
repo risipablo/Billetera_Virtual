@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import axios from 'axios';
 import {Box,Button,useMediaQuery,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,
 ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField, Paper, IconButton, ListItem,
@@ -9,7 +9,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
-import HelmetExport, { Helmet } from 'react-helmet';
+import  { Helmet } from 'react-helmet';
+import { Debounce } from '../others/debounce';
 import "./gastos.css"
 import { Buscador } from '../buscador/buscador';
 import { Filtros } from '../filtros/filtros';
@@ -19,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
+
 
 const Gastos = () => {
     const [gastos, setGastos] = useState([]);
@@ -61,12 +63,13 @@ const Gastos = () => {
             navigate('/login');
         }
     }, [token,navigate]);
-   
+
+
     
-    
+    const canAddGasto = dia.trim() !== "" && mes.trim() !== "" && metodo.trim() !== "" && producto.trim() !== "" && monto.trim() !== "" && condicion.trim() !== "";
 
     const addGastos = () => {
-        if (String(dia).trim() && String(mes).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
+        if (canAddGasto) {
             axios.post(`${serverFront}/api/add-gasto`, {
                 dia: dia,
                 mes: mes,
@@ -97,6 +100,9 @@ const Gastos = () => {
             .catch(err => console.log(err));
         }
     };
+
+    const handleAddGastoDebounced = useMemo(() => Debounce(addGastos, 100), [addGastos]);
+
 
     const deleteGastos = (id) => {
         axios.delete(`${serverFront}/api/delete-gasto/${id}`, {
@@ -212,14 +218,13 @@ const Gastos = () => {
 
     
     return (
-        <Box className="gastos-container" sx={{ p: 3, marginTop:8, marginBottom:4 ,fontFamily: "Montserrat, sans-serif" }}>
-    
-
-            {/* <h1></h1> */}
+        <Box className="gastos-container" sx={{ p: 3, marginTop:3, marginBottom:4 ,fontFamily: "Montserrat, sans-serif" }}>
 
             <Helmet>
-                <title> Gastos Mensuales</title>
+                <title>Gastos Mensuales</title>
             </Helmet>
+
+            <h1> Gastos Mensuales</h1> 
 
             <Grid container spacing={2} className="inputs-gastos">
 
@@ -264,7 +269,7 @@ const Gastos = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
-                    <TextField fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }} placeholder="Ingresar Monto" value={monto} onChange={(e) => setMonto(e.target.value)} />
+                    <TextField fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }} placeholder="Ingresar Monto" value={monto}  onChange={(e) => setMonto(e.target.value)}  />
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
@@ -284,21 +289,21 @@ const Gastos = () => {
 
             <Grid container gap={"10px"}  margin={"2.8rem auto"} className="botones" sx={{ fontFamily: "Montserrat, sans-serif" }}>
 
-            {isAdmin && (
+            {/* {isAdmin && (
                 <Button variant="contained" color="primary" onClick={addGastos}>
                     Agregar Gasto
                 </Button>
-            )}
+            )} */}
             
                 <Grid item>
-                    <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={addGastos}> 
+                    <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={handleAddGastoDebounced}> 
                         Agregar 
                     </Button>
                 </Grid>
             
 
                 <Grid item>
-                    <Button variant="contained" color="secondary" className="limpiar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={() => {
+                    <Button variant="contained" color="secondary" className="limpiar" sx={{ fontFamily: "Montserrat, sans-serif", marginLeft:3 }} onClick={() => {
                         setCondicion(''); setDia(''); setMes(''); setMetodo(''); setMonto(''); setProducto('');}}> Limpiar </Button>
                 </Grid>
                 

@@ -1,13 +1,13 @@
 
 .container-login {
     max-width: 630px;
-    margin: 4rem auto;
+    margin: 2rem auto;
     padding: 4rem 3rem;
     text-align: center;
     align-items: center;
     background-color: #ffffff; 
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); 
-    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); 
+    border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px; 
     font-family: "Montserrat", system-ui;
   }
@@ -46,7 +46,7 @@
   
   .container-login  h2 {
     margin: 1rem 0 2rem;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     letter-spacing: 2px;
     font-optical-sizing: auto;
     text-align: center; 

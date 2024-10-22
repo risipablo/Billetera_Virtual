@@ -7,9 +7,8 @@
 }
 
 h1{
-
     text-align: center;
-    margin: 2.2rem auto 3.3rem ;
+    margin: 2rem auto ;
     font-weight: 600;
 }
 
@@ -45,50 +44,3 @@ h1{
 }
 
 
-.icon-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    padding: 1rem 1.2rem; 
-  
-}
-
-.icons {
-    display: flex;
-    gap: 1.8rem;
-}
-
-.icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-}
-
-
-.logout-icon:hover {
-    background-color: rgb(244, 12, 12, 0.8);
-}
-
-.logout-icon, .chart-icon, .gasto-icon svg {
-    color: rgb(43, 42, 42); 
-}
-
-
-.chart-icon:hover {
-    background-color: rgb(142, 8, 142,0.8);
-}
-
-.gasto-icon:hover {
-    background-color: rgba(57, 194, 225, 0.8);
-}
-
-.user {
-    margin-left: auto; 
-    font-size: 16px; 
-    font-family: "Poppins", sans-serif;
-    
-}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import GastoChart from "./gastoChart";
 import axios from "axios";
 import { FiltrosChart } from "./filtros/filtrosChart";
+import  { Helmet } from 'react-helmet';
 
 export function Charts(){
     // const serverFront = "http://localhost:3001";
@@ -33,8 +34,11 @@ export function Charts(){
 
     return(
         <div className="gastos-container">
-           
-            {/* <h1> Estadisticas </h1> */}
+             <Helmet>
+                <title>Estadisticas Mensuales</title>
+            </Helmet>
+
+            <h1> Estadisticas </h1>
             <FiltrosChart gastos={gastos} setGastosFiltrados={setGastosFiltrados}/>
             <GastoChart gastos={gastosFiltrados}/>
 

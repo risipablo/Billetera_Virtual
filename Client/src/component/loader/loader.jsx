@@ -16,14 +16,15 @@ const Loader = ({ setLoading }) => {
   }, [navigate, setLoading]);
 
   return (
-    <div className="loader" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
-      <InfinitySpin
-        visible={true}
-        width="200"
-        color="#4fa94d"
-        ariaLabel="infinity-spin-loading"
-      />
-    </div>
+    <div className="loader" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <InfinitySpin
+      visible={true}
+      width="200"
+      color="#4fa94d"
+      ariaLabel="infinity-spin-loading"
+    />
+    <h2 style={{ color: '#ffff' }}>Espere un momento, por favor</h2>
+  </div>
   );
 }
 
