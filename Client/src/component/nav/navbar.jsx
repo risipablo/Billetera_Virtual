@@ -5,6 +5,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { UserContext } from "../user/userContext";
 import { useContext, useState } from "react";
 import { Tooltip } from "@mui/material";
+import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import "./navbar.css"
 
 export function Navbar() {
@@ -70,8 +71,15 @@ export function Navbar() {
                         </Tooltip>
                     </NavLink>
 
+                    <NavLink to="/convertidor" onMouseEnter={() => open('convertidor')} onMouseLeave={close}>
+                        <Tooltip title={active === 'convertidor' ? 'Convertidor' : ""}>
+                            <div className="icon change-icon">
+                                <CurrencyExchangeOutlinedIcon/>
+                                <span className="text"> Convertidor </span>
+                            </div>
+                        </Tooltip>
+                    </NavLink>
 
-                    
                     <NavLink onClick={handleLogout} onMouseEnter={() => open('cerrar sesión')} onMouseLeave={close} >
                         <Tooltip title={active === 'cerrar sesión' ? "Cerrar Sesión" : " "}>
                             <div className="icon logout-icon">

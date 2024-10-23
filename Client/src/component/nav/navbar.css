@@ -46,10 +46,11 @@
 }
 
 
-@media (max-width: 550px) {
+@media (max-width: 580px) {
 
     .icon-container {
         position: relative; 
+        padding: 1rem .8rem;
     }
 
     .menu {
@@ -94,7 +95,7 @@
 
     .text {
         display: flex;
-        font-size: 1.2rem;
+        font-size: 1rem;
         margin-left: 1rem;
         font-family: "Poppins", sans-serif;
         font-weight: 600;
@@ -131,7 +132,7 @@
 
 
 
-.logout-icon, .chart-icon, .gasto-icon svg {
+.logout-icon, .chart-icon, .gasto-icon, .change-icon svg {
     color: rgb(255, 255, 255); 
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
@@ -139,20 +140,21 @@
 
 .logout-icon:hover {
     /* background-color: rgb(244, 12, 12, 0.8); */
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .chart-icon:hover {
     /* background-color: rgb(142, 8, 142,0.8); */
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .gasto-icon:hover {
     /* background-color: rgba(57, 194, 225, 0.8); */
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .user {
+    display: block;
     margin-left: auto; 
     font-size: 1rem; 
     font-family: "Poppins", sans-serif;
@@ -160,5 +162,17 @@
     color: rgb(255, 255, 255);
 }
 
+.user:hover{
+    color: rgb(242, 242, 27);
+    transition: .6s;
+}
 
 
+
+@media (max-width: 350px) {
+    .user {
+        flex-wrap: wrap;
+        font-size: .7rem;
+    }
+
+}

@@ -10,13 +10,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import  { Helmet } from 'react-helmet';
-import { Debounce } from '../others/debounce';
 import "./gastos.css"
 import { Buscador } from '../buscador/buscador';
 import { Filtros } from '../filtros/filtros';
 import toast, { Toaster } from 'react-hot-toast';
-import { ScrollTop } from '../others/scrollTop';
 import { useNavigate } from 'react-router-dom';
+import { ScrollTop } from '../common/scrollTop';
+import { Debounce } from '../common/debounce';
 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
@@ -60,11 +60,9 @@ const Gastos = () => {
                 }
             });
         } else {
-            navigate('/login');
+            navigate('/');
         }
     }, [token,navigate]);
-
-
     
     const canAddGasto = dia.trim() !== "" && mes.trim() !== "" && metodo.trim() !== "" && producto.trim() !== "" && monto.trim() !== "" && condicion.trim() !== "";
 

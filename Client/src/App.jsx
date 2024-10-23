@@ -7,6 +7,7 @@ import { UserProvider } from './component/user/userContext';
 import { Charts } from './component/charts/charts';
 import { Navbar } from './component/nav/navbar';
 import Loader from './component/loader/loader';
+import { Convertidor } from './component/convertidor/convertidor';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,6 +40,8 @@ function App() {
             element={isAuthenticated ? <Gastos/> : <Navigate to="/" />}
           />
           <Route path="*" element={<Navigate to="/" />} />
+
+          <Route path="/convertidor" element={isAuthenticated ? <Convertidor/> : <Navigate to="/" />} />
 
           <Route path="/charts" element={isAuthenticated ? <Charts /> : <Navigate to="/" />} />
 
