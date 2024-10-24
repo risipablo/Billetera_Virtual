@@ -28,7 +28,7 @@ const GastoChart = ({ gastos }) => {
         return acc;
     }, {})
 
-
+  
   
     const spentMonthMax = Object.keys(spentMonth).reduce((max,key) => {
         return spentMonth[key] > spentMonth[max] ? key : max;
@@ -38,7 +38,7 @@ const GastoChart = ({ gastos }) => {
         labels: Object.keys(spentMonth),
         datasets: [
             {
-                label: 'Total de Ventas',
+                label: 'Total de Gastos',
                 data: Object.values(spentMonth), 
                 backgroundColor: Object.keys(spentMonth).map((producto) => producto === spentMonthMax ? 'rgba(209, 25, 25, 0.7)' : 'rgba(164, 11, 235,0.7)'),
                 borderWidth: 0.5, 
@@ -58,7 +58,7 @@ const GastoChart = ({ gastos }) => {
                 suggestedMax: Math.max(...Object.values(spentMonth)) * 1.2, 
                 title: {
                     display: true,
-                    text: 'Monto Total',
+                    text: 'Monto',
                     font: {
                         size: 18, 
                         family: 'Poppins, sans-serif',
@@ -126,6 +126,133 @@ const GastoChart = ({ gastos }) => {
         barPercentage: 0.9,
         categoryPercentage: 0.8,
     };
+
+
+      // Por año
+      const spentYear = gastos.reduce((acc,gasto) => {
+
+        const year = gasto.año;
+        const monto = gasto.monto;
+        const conditions = gasto.condicion.toLowerCase()
+
+        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+
+        if(conditionsReduce.includes(conditions)) {
+            return acc;
+        }
+
+        if(!acc[year])
+            acc[year] = 0
+        acc[year] += monto
+        return acc
+
+      },{}) 
+
+      // Año con mayor gasto
+      const spentYearMax = Object.keys(spentMonth).reduce((max,key) => {
+        return spentYear[key] > spentYear[max] ? key: max
+      }, Object.keys(spentYear)[0])
+      
+
+      
+      const dataSpentYear = {
+        labels: Object.keys(spentYear),
+        datasets: [
+          {
+            label: '',
+            data: Object.values(spentYear),
+            borderColor: Object.keys(spentYear).map((producto) => producto === spentYearMax ? 'rgba(82, 74, 230)' : 'rgba(82, 74, 230)'),
+            borderWidth: 2,
+            pointStyle: 'circle',
+            pointRadius: 2,
+            fill: false, 
+            hoverBackgroundColor: Object.keys(spentYear).map((producto) => producto === spentYearMax ? 'rgba(82, 74, 230)' : 'rgba(82, 74, 230)'),
+          }
+        ]
+      };
+      
+
+
+      const optionsYear = {
+        responsive: true,
+        maintainAspectRatio: false, 
+       
+        scales: {
+            y: {
+                beginAtZero: true,
+                suggestedMax: Math.max(...Object.values(spentYear)) * 1.2, 
+                title: {
+                    display: true,
+                    text: 'Monto',
+                    font: {
+                        size: 18, 
+                        family: 'Poppins, sans-serif',
+                    },
+                    color: '#333', 
+                },
+                ticks: {
+                    color: '#666', 
+                },
+                grid: {
+                    color: 'rgba(200, 200, 200, 0.3)',
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Año',
+                    font: {
+                        size: 14,
+                        family: 'Poppins, sans-serif',
+                    },
+                    color: '#333', 
+                },
+                ticks: {
+                    color: '#666', 
+                },
+                grid: {
+                    display: false, 
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    color: '#333', 
+                    font: {
+                        size: 18,
+                    },
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                titleFont: {
+                    size: 18,
+                    weight: 'bold',
+                },
+                bodyFont: {
+                    size: 14,
+                },
+                borderColor: '#666',
+                borderWidth: 1,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return `Monto:  $ ${tooltipItem.raw.toLocaleString()} `;
+                    }
+                }
+            },
+        },
+        animation: {
+            duration: 1500, 
+            easing: 'easeInOutCubic',
+        },
+        barPercentage: 0.9,
+        categoryPercentage: 0.8,
+    };
+
+
 
     const spentProduct = gastos.reduce((acc,gasto) => {
 
@@ -296,7 +423,7 @@ const GastoChart = ({ gastos }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                <h2>Gastos del mes</h2>
+                <h2>Gastos por mes</h2>
                 <div className="bar-container">
                     <Bar data={dataSpentMonth} options={options} />
                 </div>
@@ -326,6 +453,19 @@ const GastoChart = ({ gastos }) => {
                     <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
                 </div>
             </motion.div>
+
+            <motion.div 
+                className="month-container"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+            >
+                <h2>Gastos por año</h2>
+                <div className="bar-container">
+                    <Bar data={dataSpentYear} options={optionsYear} />
+                </div>
+            </motion.div>
+
         </div>
     );
 }

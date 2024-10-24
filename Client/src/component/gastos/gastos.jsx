@@ -30,6 +30,7 @@ const Gastos = () => {
     const [metodo, setMetodo] = useState("");
     const [producto, setProducto] = useState("");
     const [monto, setMonto] = useState("");
+    const [año,setAño] = useState("")
     const [condicion, setCondicion] = useState("");
     const navigate = useNavigate()
     const token = localStorage.getItem('token');
@@ -67,10 +68,11 @@ const Gastos = () => {
     
 
     const addGastos = () => {
-        if (String(dia).trim() && String(mes).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
+        if (String(dia).trim() && String(mes).trim() && String(año).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
             axios.post(`${serverFront}/api/add-gasto`, {
                 dia: dia,
                 mes: mes,
+                año: año,
                 metodo: metodo,
                 producto: producto,
                 monto: monto,
@@ -87,6 +89,7 @@ const Gastos = () => {
                 setGastosFiltrados(gastos => [...gastos,nuevoGasto]);
                 setDia("");
                 setMes("");
+                setAño("")
                 setMetodo("");
                 setProducto("");
                 setMonto("");
@@ -123,6 +126,7 @@ const Gastos = () => {
             return palabraClave.every(palabra =>
                 gasto.dia.toLowerCase().includes(palabra) ||
                 gasto.mes.toLowerCase().includes(palabra) ||
+                gasto.año.toLowerCase().includes(palabra) ||
                 gasto.metodo.toLowerCase().includes(palabra) ||
                 gasto.producto.toLowerCase().includes(palabra) ||
                 gasto.monto.toString().includes(palabra) ||
@@ -156,6 +160,7 @@ const Gastos = () => {
     const [editingData, setEditingData] = useState({
         dia: '',
         mes: '',
+        año:'',
         metodo: '',
         producto: '',
         monto: '',
@@ -167,6 +172,7 @@ const Gastos = () => {
         setEditingData({
             dia: gasto.dia,
             mes: gasto.mes,
+            año: gasto.año,
             metodo: gasto.metodo,
             producto: gasto.producto,
             monto: gasto.monto,
@@ -179,6 +185,7 @@ const Gastos = () => {
         setEditingData({
             dia: '',
             mes: '',
+            año: '',
             metodo: '',
             producto: '',
             monto: '',
@@ -227,85 +234,98 @@ const Gastos = () => {
             <h1> Gastos Mensuales</h1> 
 
             <Grid container spacing={2} className="inputs-gastos">
-
-                <Grid item xs={12} sm={4}>
-                    <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                        <InputLabel>Seleccionar Día</InputLabel>
-                        <Select value={dia} onChange={(e) => setDia(e.target.value)}>
-                            <MenuItem value=""><em>Ninguno</em></MenuItem>
-                            {[...Array(31)].map((_, index) => (
-                                <MenuItem key={index + 1} value={index + 1}>{index + 1}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                        <InputLabel> Seleccionar Mes </InputLabel>
-                        <Select value={mes} onChange={(e) => setMes(e.target.value)}>
-                            <MenuItem value=""><em>Ninguno</em></MenuItem>
-                            {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => (
-                                <MenuItem key={mes} value={mes}>{mes}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                        <InputLabel>Seleccionar Método</InputLabel>
-                        <Select value={metodo} onChange={(e) => setMetodo(e.target.value)}>
-                            <MenuItem value=""><em>Ninguno</em></MenuItem>
-                            {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => (
-                                <MenuItem key={metodo} value={metodo}>{metodo}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <TextField 
-                        fullWidth 
-                        sx={{ fontFamily: "Montserrat, sans-serif" }} 
-                        placeholder="Ingresar Productos" 
-                        value={producto} 
-                        onChange={(e) => setProducto(e.target.value)} 
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <TextField 
-                        fullWidth 
-                        sx={{ fontFamily: "Montserrat, sans-serif" }} 
-                        placeholder="Ingresar Monto" 
-                        value={monto}  
-                        onChange={(e) => setMonto(e.target.value)}  
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                        <InputLabel>Seleccionar Estado</InputLabel>
-                        <Select value={condicion} onChange={(e) => setCondicion(e.target.value)}>
-                            <MenuItem value=""><em>Ninguno</em></MenuItem>
-                            {["Pagado", "Impago" , "Deben" , " Cuotas " , "Devolver" , "Cajero" , "Inversion"].map(condicion => (
-                                <MenuItem key={condicion} value={condicion}>{condicion}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
+ 
+            <Grid item xs={12} sm={3}>
+                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                <InputLabel>Seleccionar Día</InputLabel>
+                <Select value={dia} onChange={(e) => setDia(e.target.value)}>
+                    <MenuItem value=""><em>Ninguno</em></MenuItem>
+                    {[...Array(31)].map((_, index) => (
+                    <MenuItem key={index + 1} value={index + 1}>{index + 1}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
             </Grid>
-            
-         
+
+            <Grid item xs={12} sm={3}>
+                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                <InputLabel>Seleccionar Mes</InputLabel>
+                <Select value={mes} onChange={(e) => setMes(e.target.value)}>
+                    <MenuItem value=""><em>Ninguno</em></MenuItem>
+                    {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => (
+                    <MenuItem key={mes} value={mes}>{mes}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={3}>
+                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                <InputLabel>Seleccionar Año</InputLabel>
+                <Select value={año} onChange={(e) => setAño(e.target.value)}>
+                    <MenuItem value=""><em>Ninguno</em></MenuItem>
+                    {['2024','2025','2026','2027','2028'].map(año => (
+                    <MenuItem key={año} value={año}>{año}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={3}>
+                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                <InputLabel>Seleccionar Método</InputLabel>
+                <Select value={metodo} onChange={(e) => setMetodo(e.target.value)}>
+                    <MenuItem value=""><em>Ninguno</em></MenuItem>
+                    {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => (
+                    <MenuItem key={metodo} value={metodo}>{metodo}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
+            </Grid>
+
+    
+            <Grid item xs={12} sm={4}>
+                <TextField 
+                fullWidth 
+                sx={{ fontFamily: "Montserrat, sans-serif" }} 
+                placeholder="Ingresar Productos" 
+                value={producto} 
+                onChange={(e) => setProducto(e.target.value)} 
+                />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+                <TextField 
+                fullWidth 
+                sx={{ fontFamily: "Montserrat, sans-serif" }} 
+                placeholder="Ingresar Monto" 
+                value={monto}  
+                onChange={(e) => setMonto(e.target.value)}  
+                />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                <InputLabel>Seleccionar Estado</InputLabel>
+                <Select value={condicion} onChange={(e) => setCondicion(e.target.value)}>
+                    <MenuItem value=""><em>Ninguno</em></MenuItem>
+                    {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversion"].map(condicion => (
+                    <MenuItem key={condicion} value={condicion}>{condicion}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
+            </Grid>
+            </Grid>
+                        
+                    
 
             <Grid container gap={"10px"}  margin={"2.8rem auto"} className="botones" sx={{ fontFamily: "Montserrat, sans-serif" }}>
 
-            {/* {isAdmin && (
+            {isAdmin && (
                 <Button variant="contained" color="primary" onClick={addGastos}>
                     Agregar Gasto
                 </Button>
-            )} */}
+            )}
             
                 <Grid item>
                     <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={handleAddGastoDebounced}> 
@@ -376,6 +396,7 @@ const Gastos = () => {
                         <TableRow className='fila' sx={{ mt: 2 }}>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Día</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Mes</TableCell>
+                            <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Año</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Producto</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Monto</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Método</TableCell>
@@ -391,6 +412,9 @@ const Gastos = () => {
                                 
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
                                     {editingId === element._id ? <input value={editingData.mes} onChange={(e) => setEditingData({...editingData, mes: e.target.value})} /> : element.mes}</TableCell>
+
+                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
+                                {editingId === element._id ? <input value={editingData.año} onChange={(e) => setEditingData({...editingData, año: e.target.value})} /> : element.año}</TableCell>
                                 
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
                                     {editingId === element._id ? <input value={editingData.producto} onChange={(e) => setEditingData({...editingData, producto: e.target.value})} /> : element.producto}</TableCell>
@@ -431,7 +455,7 @@ const Gastos = () => {
                     <tfoot>
                         <TableRow>
                             <TableCell></TableCell>
-                            <TableCell colSpan={1} align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif" }}>Total</TableCell>
+                            <TableCell colSpan={2} align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif" }}>Total</TableCell>
                             <TableCell></TableCell>
                             <TableCell  align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem' }}>${totalMonto(gastosFiltrados)}</TableCell>
                             <TableCell></TableCell>

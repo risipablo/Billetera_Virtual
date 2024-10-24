@@ -12,6 +12,11 @@ const gastosSchema = new mongoose.Schema({
         required: true
     },
 
+    año:{
+        type: String,
+        required: true
+    },
+
     producto:{
         type:String,
         required:true

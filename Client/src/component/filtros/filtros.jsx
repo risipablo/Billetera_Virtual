@@ -5,6 +5,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
     const [mes, setMes] = useState('');
     const [metodo, setMetodo] = useState('');
     const [condicion, setCondicion] = useState('');
+    const [año, setAño] = useState('')
 
     const filtros = () => {
         let gastosFiltrados = gastos;
@@ -18,6 +19,10 @@ export function Filtros({ gastos, setGastosFiltrados }) {
         if (condicion.trim() !== '') {
             gastosFiltrados = gastosFiltrados.filter(gasto => gasto.condicion.toLowerCase() === condicion.toLowerCase());
         }
+        if (año.trim() !== '') {
+            gastosFiltrados = gastosFiltrados.filter(gasto => gasto.año.toLowerCase() === año.toLowerCase());
+        }
+
 
         setGastosFiltrados(gastosFiltrados);
     };
@@ -26,15 +31,15 @@ export function Filtros({ gastos, setGastosFiltrados }) {
         setMes("");
         setMetodo("");
         setCondicion("");
+        setAño('')
     };
 
     useEffect(() => {
         filtros();
-    }, [mes, metodo, condicion]);
+    }, [mes, metodo, condicion, año]);
 
     return (
         <>
-            {/* Versión escritorio */}
             <Hidden smDown>
                 <Grid container spacing={2} alignItems="center" marginTop={1} marginBottom={2}>
                     <Grid item xs>
@@ -93,6 +98,23 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Deben">Deben</MenuItem>
                             <MenuItem value="Cajero">Cajero</MenuItem>
                             <MenuItem value="Inversion">Inversion</MenuItem>
+                        </Select>
+                    </Grid>
+
+                    <Grid item xs>
+                        <Select
+                            fullWidth
+                            value={año}
+                            onChange={(e) => setAño(e.target.value)}
+                            displayEmpty
+                            size="small" 
+                        >
+                            <MenuItem value=""><em>Seleccionar Año</em></MenuItem>
+                            <MenuItem value="2024">2024</MenuItem>
+                            <MenuItem value="2025">2025</MenuItem>
+                            <MenuItem value="2026">2026</MenuItem>
+                            <MenuItem value="2027">2027</MenuItem>
+                            <MenuItem value="2028">2028</MenuItem>
                         </Select>
                     </Grid>
     
