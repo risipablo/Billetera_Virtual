@@ -64,10 +64,10 @@ const Gastos = () => {
         }
     }, [token,navigate]);
     
-    const canAddGasto = dia.trim() !== "" && mes.trim() !== "" && metodo.trim() !== "" && producto.trim() !== "" && monto.trim() !== "" && condicion.trim() !== "";
+    
 
     const addGastos = () => {
-        if (canAddGasto) {
+        if (String(dia).trim() && String(mes).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
             axios.post(`${serverFront}/api/add-gasto`, {
                 dia: dia,
                 mes: mes,
@@ -101,7 +101,6 @@ const Gastos = () => {
 
     const handleAddGastoDebounced = useMemo(() => Debounce(addGastos, 100), [addGastos]);
 
-
     const deleteGastos = (id) => {
         axios.delete(`${serverFront}/api/delete-gasto/${id}`, {
             headers: {
@@ -110,7 +109,8 @@ const Gastos = () => {
             withCredentials: true, 
         })
         .then(response => {
-            setGastos(gastos.filter((gasto) => gasto._id !== id));
+            setGastos(gastos.filter((gasto) => gasto._id !== id))
+            setGastosFiltrados(gastosFiltrados.filter((gasto) => gasto._id !== id))
             toast.error('Gasto eliminado ', {
                 position: 'top-right',
             });
@@ -149,6 +149,8 @@ const Gastos = () => {
         })
         .catch(err => console.log(err))
     }
+
+    const handleSaveEditDebounced = useMemo(() => Debounce(saveEdit, 300), [saveEdit]);
 
     const [editingId, setEditingId] = useState(null);
     const [editingData, setEditingData] = useState({
@@ -263,11 +265,23 @@ const Gastos = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
-                    <TextField fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }} placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
+                    <TextField 
+                        fullWidth 
+                        sx={{ fontFamily: "Montserrat, sans-serif" }} 
+                        placeholder="Ingresar Productos" 
+                        value={producto} 
+                        onChange={(e) => setProducto(e.target.value)} 
+                    />
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
-                    <TextField fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }} placeholder="Ingresar Monto" value={monto}  onChange={(e) => setMonto(e.target.value)}  />
+                    <TextField 
+                        fullWidth 
+                        sx={{ fontFamily: "Montserrat, sans-serif" }} 
+                        placeholder="Ingresar Monto" 
+                        value={monto}  
+                        onChange={(e) => setMonto(e.target.value)}  
+                    />
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
@@ -397,7 +411,7 @@ const Gastos = () => {
                                         </IconButton>
                                         {editingId === element._id ? (
                                             <>
-                                                <IconButton className="check" sx={{ color: 'green', backgroundColor: 'lightgreen', borderRadius: '4px', padding: '5px' }} onClick={() => saveEdit(element._id)}>
+                                                <IconButton className="check" sx={{ color: 'green', backgroundColor: 'lightgreen', borderRadius: '4px', padding: '5px' }} onClick={() => handleSaveEditDebounced(element._id)}>
                                                     <CheckIcon />
                                                 </IconButton>
                                                 <IconButton className="cancel" sx={{ color: 'white', backgroundColor: 'red', borderRadius: '4px', padding: '5px' }} onClick={cancelEdit}>
