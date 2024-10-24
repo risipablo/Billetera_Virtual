@@ -220,7 +220,7 @@ const Gastos = () => {
           return 'No hay gastos'; 
         }
         const ultimoGasto = gastos[gastos.length - 1];
-        return ` ${ultimoGasto.dia} de ${ultimoGasto.mes} ${ultimoGasto.producto} $${ultimoGasto.monto} ${ultimoGasto.año}`;
+        return ` ${ultimoGasto.dia} de ${ultimoGasto.mes} ${ultimoGasto.año}  ${ultimoGasto.producto} $${ultimoGasto.monto} `;
       }
 
     
