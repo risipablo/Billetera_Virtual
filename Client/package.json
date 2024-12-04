@@ -1,0 +1,51 @@
+{
+  "name": "billetera-virtual",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.5",
+    "animate.css": "^4.1.1",
+    "animate.css-react": "^1.1.0",
+    "axios": "^1.7.2",
+    "chart.js": "^4.4.4",
+    "dotenv": "^16.4.5",
+    "framer-motion": "^11.11.9",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.3.0",
+    "react-loader-spinner": "^6.1.6",
+
+    "react-router-dom": "^6.26.2",
+    "react-scroll": "^1.9.0",
+    "reapop": "^4.2.2",
+    "use-sound": "^4.0.3",
+    "vercel": "^39.1.2"
+
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "vite": "^5.4.10"
+  }
+}

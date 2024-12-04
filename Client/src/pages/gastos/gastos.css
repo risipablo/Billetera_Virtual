@@ -1,0 +1,46 @@
+
+.gastos-container{
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+h1{
+    text-align: center;
+    margin: 2rem auto ;
+    font-weight: 600;
+}
+
+
+
+.productos{
+    border: 1px solid rgba(36, 36, 36, 0.489);
+    width: 100%;
+    overflow-x: auto;
+}
+
+.fila{
+    background-color: rgb(11, 105, 160);
+    color: rgb(245, 243, 239);
+}
+
+.btn-up{
+    position: fixed;
+    bottom: 20px;
+    background-color: #690ee3;
+    color: #faf7f7;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.btn-up:hover {
+    opacity: 1;
+}
+
+
