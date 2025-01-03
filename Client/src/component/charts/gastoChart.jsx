@@ -630,28 +630,28 @@ const GastoChart = ({ gastos }) => {
                     <h3>Promedio de gasto</h3>
                     <div className="content-row">
                       
-                        <p>${promedioGasto.toFixed(2)}</p>
+                        <p>${(promedioGasto || 0).toFixed(2)}</p>
                     </div>
                 </div>
                 <div>
                     <h3>Producto mayor gastado</h3>
                     <div className="content-row">
                         <p>{maxProducto}</p>
-                        <p>${totalProducto.toFixed(2)}</p>
+                        <p>${(totalProducto || 0).toFixed(2)}</p>
                     </div>
                 </div>
                 <div>
                     <h3>Método de pago más usado</h3>
                     <div className="content-row">
                         <p>{metodoMax}</p>
-                        <p>${totalMetodoMax.toFixed(2)}</p>
+                        <p>${(totalMetodoMax || 0).toFixed(2)}</p>
                     </div>
                 </div>
                 <div>
                     <h3>Mes más gastado</h3>
                     <div className="content-row">
                         <p>{spentMonthMax}</p>
-                        <p>${totalMes.toFixed(2)}</p>
+                        <p>${(totalMes || 0).toFixed(2)}</p>
                     </div>
                 </div>
             </motion.div>
