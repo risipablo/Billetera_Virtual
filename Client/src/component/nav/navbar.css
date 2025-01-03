@@ -155,12 +155,25 @@
 }
 
 .user {
-    display: block;
+    display: flex;
     margin-left: auto; 
     font-size: 1rem; 
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
     color: rgb(255, 255, 255);
+}
+
+.user svg{
+    color: rgb(255, 235, 18);
+}
+
+.user svg:hover{
+    color: rgb(250, 250, 250);
+    transition: .6s;
+}
+
+.user p{
+    margin-left: 22px;
 }
 
 .user:hover{

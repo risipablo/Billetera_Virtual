@@ -6,6 +6,7 @@ import { UserContext } from "../user/userContext";
 import { useContext, useState } from "react";
 import { Tooltip } from "@mui/material";
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import axios from 'axios'
 import "./navbar.css"
 
@@ -117,6 +118,7 @@ export function Navbar({setIsAuthenticated}) {
             </div>
             
             <div className='user' onClick={handleUserClick} style={{ cursor: 'pointer' }}>
+                <EmojiEmotionsIcon/>
                 {user && <p>Hola, {user.name}</p>}
             </div>
 

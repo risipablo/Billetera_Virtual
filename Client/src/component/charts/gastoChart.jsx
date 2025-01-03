@@ -128,6 +128,7 @@ const GastoChart = ({ gastos }) => {
         categoryPercentage: 0.8,
     };
 
+    const totalMes = spentMonth[spentMonthMax].toLocaleString('us-EN')
 
       // Por año
       const spentYear = gastos.reduce((acc,gasto) => {
@@ -254,7 +255,7 @@ const GastoChart = ({ gastos }) => {
     };
 
 
-
+    // Gasto de productos
     const spentProduct = gastos.reduce((acc,gasto) => {
 
         const producto = gasto.producto;
@@ -277,6 +278,8 @@ const GastoChart = ({ gastos }) => {
     const maxProducto = Object.keys(spentProduct).reduce((max,key) => {
         return spentProduct[key] > spentProduct[max] ? key : max;
     }, Object.keys(spentProduct)[0])
+
+    const totalProducto = spentProduct[maxProducto].toLocaleString('us-EN')
 
 
     const dataSpentProduct = {
@@ -337,7 +340,8 @@ const GastoChart = ({ gastos }) => {
         },
     };
 
-
+    
+    // Metodos de pagos
     const spentMetodo = gastos.reduce((acc,gasto) => {
 
         const metodo = gasto.metodo;
@@ -355,9 +359,13 @@ const GastoChart = ({ gastos }) => {
         return acc
     },{})
 
+
     const metodoMax = Object.keys(spentMetodo).reduce((max,key) => {
         return spentMetodo[key] > spentMetodo[max] ? key : max;
     }, Object.keys(spentMetodo)[0])
+
+
+    const totalMetodoMax = spentMetodo[metodoMax].toLocaleString('us-EN') // se obtiene el objeto spentMetode y metodoMax como clave 
 
     const dataSpentMetodo = {
         labels: Object.keys(spentMetodo),
@@ -412,7 +420,139 @@ const GastoChart = ({ gastos }) => {
         },
     };
 
-    
+
+
+    // Metodo de inversion
+
+    const inversion = gastos.reduce((acc,gasto) => {
+        const estado = gasto.mes;
+        const monto = gasto.monto;
+        const conditions = gasto.condicion.toLowerCase();
+
+        const conditionsReduce2 = ['pagado', 'impago', 'deben', 'cuotas', 'devolver', 'cajero']
+        if (conditionsReduce2.includes(conditions)){
+            return acc;
+        }
+        
+        if(!acc[estado])
+            acc[estado] = 0
+        acc[estado] += monto
+        return acc
+
+    },{})
+
+    const maxInversion = Object.keys(inversion).reduce((max,key) => {
+        return inversion[key] > inversion[max] ? key : max;
+    }, Object.keys(inversion)[0])
+
+
+    const dataSpentIncersion = {
+        labels: Object.keys(inversion),
+        datasets: [
+            {
+                label: 'Total de Ventas',
+                data: Object.values(inversion),
+                backgroundColor: Object.keys(inversion).map((producto) =>  producto === maxInversion ? 'rgba(42, 185, 64, 0.7)': 'rgba(215, 165, 39, 0.6)' || 'rgba(243, 124, 260, 0.6)' ) ,
+                borderColor: 'rgba(255, 255, 255)', 
+                borderWidth: 8, 
+                hoverOffset: 8, 
+            }
+        ]
+    }
+
+    const options2 = {
+        responsive: true,
+        maintainAspectRatio: false, // Permite que el gráfico se adapte mejor a la pantalla
+        scales: {
+            y: {
+                beginAtZero: true,
+                suggestedMax: Math.max(...Object.values(spentMonth)) * 1.2, 
+                title: {
+                    display: true,
+                    text: 'Monto',
+                    font: {
+                        size: 18, 
+                        family: 'Poppins, sans-serif',
+                    },
+                    color: '#333', 
+                },
+                ticks: {
+                    color: '#666', 
+                },
+                grid: {
+                    color: 'rgba(200, 200, 200, 0.3)',
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Mes',
+                    font: {
+                        size: 14,
+                        family: 'Poppins, sans-serif',
+                    },
+                    color: '#333', 
+                },
+                ticks: {
+                    color: '#666', 
+                },
+                grid: {
+                    display: false, 
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    color: '#333', 
+                    font: {
+                        size: 18,
+                    },
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                titleFont: {
+                    size: 18,
+                    weight: 'bold',
+                },
+                bodyFont: {
+                    size: 14,
+                },
+                borderColor: '#666',
+                borderWidth: 1,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return `Monto:  $ ${tooltipItem.raw.toLocaleString()} `;
+                    }
+                }
+            },
+        },
+        animation: {
+            duration: 1500, 
+            easing: 'easeInOutCubic',
+        },
+        barPercentage: 0.9,
+        categoryPercentage: 0.8,
+    };
+
+
+   const promedioGasto = gastos.reduce((acc, gasto) => {
+        const monto = gasto.monto;
+        const condiciones = gasto.condicion.toLowerCase()
+
+        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+        if (conditionsReduce.includes(condiciones)){
+            return acc
+        }
+            
+
+        const total = monto / 12 
+
+        return acc + total
+   },0).toLocaleString('en-GB', { maximumFractionDigits: 0 })
 
 
     return (
@@ -466,6 +606,57 @@ const GastoChart = ({ gastos }) => {
                     <Bar data={dataSpentYear} options={optionsYear} />
                 </div>
             </motion.div>
+
+            <motion.div 
+                className="product-container"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+            >
+                <h2>Inversion</h2>
+                <div className="doughnut-container">
+                    <Bar data={dataSpentIncersion} options={options2} />
+                </div>
+            </motion.div>
+
+
+            <motion.div 
+                className="promedios-container"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+            >
+                <div>
+                    <h3>Promedio de gasto</h3>
+                    <div className="content-row">
+                        <p>Gasto promedio</p>
+                        <p>${promedioGasto}</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Producto mayor gastado</h3>
+                    <div className="content-row">
+                        <p>{maxProducto}</p>
+                        <p>${totalProducto}</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Método de pago más usado</h3>
+                    <div className="content-row">
+                        <p>{metodoMax}</p>
+                        <p>${totalMetodoMax}</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>Mes más gastado</h3>
+                    <div className="content-row">
+                        <p>{spentMonthMax}</p>
+                        <p>${totalMes}</p>
+                    </div>
+                </div>
+            </motion.div>
+
+
 
         </div>
     );
