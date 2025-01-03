@@ -35,8 +35,8 @@ h2 {
 
 .promedios-container div {
     display: flex;
-    flex-direction: column; 
-    justify-content: flex-start;
+    /* flex-direction: column;  */
+    justify-content: space-between;
     align-items: flex-start; 
     padding: 10px 0;
     border-bottom: 1px solid #e0e0e0; 
@@ -83,6 +83,10 @@ h2 {
     .bar-container, .doughnut-container {
         height: 450px; 
         width: 100%; 
+    }
+
+    .promedios-container div {
+        flex-direction: column; 
     }
 }
 

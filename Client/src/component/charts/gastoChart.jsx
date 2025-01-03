@@ -128,7 +128,7 @@ const GastoChart = ({ gastos }) => {
         categoryPercentage: 0.8,
     };
 
-    const totalMes = spentMonth[spentMonthMax].toLocaleString('us-EN')
+    const totalMes = spentMonth[spentMonthMax]
 
       // Por año
       const spentYear = gastos.reduce((acc,gasto) => {
@@ -279,7 +279,7 @@ const GastoChart = ({ gastos }) => {
         return spentProduct[key] > spentProduct[max] ? key : max;
     }, Object.keys(spentProduct)[0])
 
-    const totalProducto = spentProduct[maxProducto].toLocaleString('us-EN')
+    const totalProducto = spentProduct[maxProducto]
 
 
     const dataSpentProduct = {
@@ -365,7 +365,7 @@ const GastoChart = ({ gastos }) => {
     }, Object.keys(spentMetodo)[0])
 
 
-    const totalMetodoMax = spentMetodo[metodoMax].toLocaleString('us-EN') // se obtiene el objeto spentMetode y metodoMax como clave 
+    const totalMetodoMax = spentMetodo[metodoMax]// se obtiene el objeto spentMetode y metodoMax como clave 
 
     const dataSpentMetodo = {
         labels: Object.keys(spentMetodo),
@@ -552,7 +552,7 @@ const GastoChart = ({ gastos }) => {
         const total = monto / 12 
 
         return acc + total
-   },0).toLocaleString('en-GB', { maximumFractionDigits: 0 })
+   },0)
 
 
     return (
@@ -629,29 +629,29 @@ const GastoChart = ({ gastos }) => {
                 <div>
                     <h3>Promedio de gasto</h3>
                     <div className="content-row">
-                        <p>Gasto promedio</p>
-                        <p>${promedioGasto}</p>
+                      
+                        <p>${promedioGasto.toFixed(2)}</p>
                     </div>
                 </div>
                 <div>
                     <h3>Producto mayor gastado</h3>
                     <div className="content-row">
                         <p>{maxProducto}</p>
-                        <p>${totalProducto}</p>
+                        <p>${totalProducto.toFixed(2)}</p>
                     </div>
                 </div>
                 <div>
                     <h3>Método de pago más usado</h3>
                     <div className="content-row">
                         <p>{metodoMax}</p>
-                        <p>${totalMetodoMax}</p>
+                        <p>${totalMetodoMax.toFixed(2)}</p>
                     </div>
                 </div>
                 <div>
                     <h3>Mes más gastado</h3>
                     <div className="content-row">
                         <p>{spentMonthMax}</p>
-                        <p>${totalMes}</p>
+                        <p>${totalMes.toFixed(2)}</p>
                     </div>
                 </div>
             </motion.div>
