@@ -269,90 +269,41 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
 
             <h1> Gastos Mensuales</h1> 
 
-            <Grid container spacing={2} className="inputs-gastos">
- 
-            <Grid item xs={12} sm={3}>
-                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <InputLabel>Seleccionar Día</InputLabel>
-                <Select value={dia} onChange={(e) => setDia(e.target.value)}>
-                    <MenuItem value=""><em>Ninguno</em></MenuItem>
+            <div className="form-container">
+                <select  value={dia} onChange={(e) => setDia(e.target.value)}>
+                    <option value="">Seleccionar Día</option>
                     {[...Array(31)].map((_, index) => (
-                    <MenuItem key={index + 1} value={index + 1}>{index + 1}</MenuItem>
+                    <option key={index + 1} value={index + 1}>{index + 1}</option>
                     ))}
-                </Select>
-                </FormControl>
-            </Grid>
+                </select>
 
-            <Grid item xs={12} sm={3}>
-                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <InputLabel>Seleccionar Mes</InputLabel>
-                <Select value={mes} onChange={(e) => setMes(e.target.value)}>
-                    <MenuItem value=""><em>Ninguno</em></MenuItem>
-                    {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => (
-                    <MenuItem key={mes} value={mes}>{mes}</MenuItem>
-                    ))}
-                </Select>
-                </FormControl>
-            </Grid>
+                <select  value={mes} onChange={(e) => setMes(e.target.value)}>
+                    <option value="">Seleccionar Mes</option>
+                    {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+                    .map(mes => <option key={mes} value={mes}>{mes}</option>)}
+                </select>
 
-            <Grid item xs={12} sm={3}>
-                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <InputLabel>Seleccionar Año</InputLabel>
-                <Select value={año} onChange={(e) => setAño(e.target.value)}>
-                    <MenuItem value=""><em>Ninguno</em></MenuItem>
-                    {['2024','2025','2026','2027','2028'].map(año => (
-                    <MenuItem key={año} value={año}>{año}</MenuItem>
-                    ))}
-                </Select>
-                </FormControl>
-            </Grid>
+                <select value={año} onChange={(e) => setAño(e.target.value)}>
+                    <option value="">Seleccionar Año</option>
+                    {["2024", "2025", "2026", "2027", "2028"].map(año => <option key={año} value={año}>{año}</option>)}
+                </select>
 
-            <Grid item xs={12} sm={3}>
-                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <InputLabel>Seleccionar Método</InputLabel>
-                <Select value={metodo} onChange={(e) => setMetodo(e.target.value)}>
-                    <MenuItem value=""><em>Ninguno</em></MenuItem>
-                    {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => (
-                    <MenuItem key={metodo} value={metodo}>{metodo}</MenuItem>
-                    ))}
-                </Select>
-                </FormControl>
-            </Grid>
+                <select value={metodo} onChange={(e) => setMetodo(e.target.value)}>
+                    <option value="">Seleccionar Método</option>
+                    {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => <option key={metodo} value={metodo}>{metodo}</option>)}
+                </select>
 
-    
-            <Grid item xs={12} sm={4}>
-                <TextField 
-                fullWidth 
-                sx={{ fontFamily: "Montserrat, sans-serif" }} 
-                placeholder="Ingresar Productos" 
-                value={producto} 
-                onChange={(e) => setProducto(e.target.value)} 
-                />
-            </Grid>
+                <select  value={condicion} onChange={(e) => setCondicion(e.target.value)}>
+                    <option value="">Seleccionar Estado</option>
+                    {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversión"].map(condicion => <option key={condicion} value={condicion}>{condicion}</option>)}
+                </select>
 
-            <Grid item xs={12} sm={4}>
-                <TextField 
-                fullWidth 
-                sx={{ fontFamily: "Montserrat, sans-serif" }} 
-                placeholder="Ingresar Monto" 
-                value={monto}  
-                onChange={(e) => setMonto(e.target.value)}  
-                />
-            </Grid>
+                <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
 
-            <Grid item xs={12} sm={4}>
-                <FormControl fullWidth sx={{ fontFamily: "Montserrat, sans-serif" }}>
-                <InputLabel>Seleccionar Estado</InputLabel>
-                <Select value={condicion} onChange={(e) => setCondicion(e.target.value)}>
-                    <MenuItem value=""><em>Ninguno</em></MenuItem>
-                    {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversion"].map(condicion => (
-                    <MenuItem key={condicion} value={condicion}>{condicion}</MenuItem>
-                    ))}
-                </Select>
-                </FormControl>
-            </Grid>
-            </Grid>
-                        
+                <input type="text"  placeholder="Ingresar Monto" value={monto} onChange={(e) => setMonto(e.target.value)} />
+
+  
+            </div>    
                     
 
             <Grid container gap={"10px"}  margin={"2.8rem auto"} className="botones" sx={{ fontFamily: "Montserrat, sans-serif" }}>
