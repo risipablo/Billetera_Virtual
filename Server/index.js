@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./Config/dataBase');
 const cors = require('cors'); 
 const gastoRoutes = require('./Routes/gastosRoutes');
+const notaRoutes = require('./Routes/notaRoutes');
 const authRoutes = require('./Routes/authRoutes')
 const errorHandler = require('./Middleware/gastosMiddleware');
 const cookieParser = require('cookie-parser')
@@ -26,6 +27,7 @@ app.use(cors(corsOptions));
 connectDB();
 
 app.use('/api', gastoRoutes);
+app.use('/api', notaRoutes);
 app.use('/api/auth', authRoutes)
 app.use(errorHandler);
 

@@ -20,6 +20,7 @@ import { Debounce } from '../../component/common/debounce';
 import useSound from 'use-sound'
 import Cash from "../../assets/cash.mp3"
 import Ok from '../../assets/ok.mp3'
+import { Notas } from '../../component/notas/notas';
 
 
 // const serverFront = "http://localhost:3001";
@@ -480,6 +481,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
                     </tfoot>
                 </Table>
             </TableContainer>
+            <Notas/>
             <Toaster/>
             <ScrollTop/>
         </Box>
