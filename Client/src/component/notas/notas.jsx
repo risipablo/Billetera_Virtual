@@ -54,7 +54,8 @@ export function Notas(){
         axios.get(`${serverFront}/api/notas`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}` 
-            }
+            },
+            withCredentials: true, 
         })
         .then(response => {
             setNotas(response.data)
