@@ -176,7 +176,7 @@
     margin-left: 22px;
 }
 
-p:hover{
+span:hover{
     color: rgb(242, 242, 27);
     transition: .6s;
 }

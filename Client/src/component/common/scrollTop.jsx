@@ -13,7 +13,7 @@ export function ScrollTop(){
     }
 
     const toggleVisibility = () => {
-        if (window.pageYOffset > window.innerHeight / 2) {
+        if (window.pageYOffset > window.innerHeight / 1) {
             setVisible(true)
         } else {
             setVisible(false)

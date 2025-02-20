@@ -27,22 +27,22 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
     setLoading(true); 
 
     try {
-      const response = await axios.post(`${serverFront}/api/auth/login`, { email, password,name }, { withCredentials: true });
-      localStorage.setItem('token', response.data.token);
-      
-      setUser({ name });
-      setIsAuthenticated(true);
-      setLoading(false);
-      navigate('/gasto');
+        const response = await axios.post(`${serverFront}/api/auth/login`, { email, password, name }, { withCredentials: true });
+        localStorage.setItem('token', response.data.token);
+        
+        setUser({ name });
+        setIsAuthenticated(true);
+        setLoading(false);
+        navigate('/gasto');
 
     } catch (error) {
-      setLoading(false); 
-      console.error('Error de Axios:', error);
-      if (error.response) {
-        setMessage(error.response.data.error || 'Error en el login');
-      }
+        setLoading(false); 
+        console.error('Error de Axios:', error);
+        if (error.response) {
+            setMessage(error.response.data.error || 'Error en el login');
+        }
     }
-  };
+};
 
   return (
     <motion.div 

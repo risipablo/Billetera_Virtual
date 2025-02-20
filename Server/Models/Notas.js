@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const notaSchema = new mongoose.Schema({
-    notas:{
+    titulo:{
         type: String,
         required: true
     },

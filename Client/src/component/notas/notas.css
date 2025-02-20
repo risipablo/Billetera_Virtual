@@ -1,14 +1,19 @@
 .notas-container {
     position: fixed;
-    bottom: 80px;
-    left: 10px;
+    bottom: 70px;
+    left: -8px;
     border-radius: 100%;
     padding: 10px 20px;
     cursor: pointer;
-    color: rgb(20, 20, 20);
+}
+
+.notas-container svg{
+    font-size: 2.2rem;
+    color: #242424;
 }
 
 .dialog-content {
+    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,6 +22,26 @@
     text-align: center;
 }
 
+.input-notas input {
+    font-family: "Montserrat", system-ui;
+    font-size: 1rem;
+    /* width: 90%; */
+    padding: 12px;
+    margin: 12px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    box-sizing: border-box;
+    outline: none;
+  }
+  
+  .input-notas input:focus {
+    border-bottom: 2px solid #9b09de;
+  }
+
+.input-notas{
+    margin: 1.2rem auto;
+}
 
 .notas-container button:hover {
     opacity: 1; 
@@ -32,6 +57,27 @@
 .icon-noti button {
     border: none;
     background-color: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer; 
 }
+.notas-table {
+    width: 100%;
+    text-align: center;
+}
+
+.nota-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.nota-row td {
+    flex: 1;
+}
+
+.nota-row td:last-child {
+    display: flex;
+    justify-content: flex-end;
+}
+
