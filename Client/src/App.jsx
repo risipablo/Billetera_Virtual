@@ -8,6 +8,8 @@ import Convertidor from './pages/convertidor/convertidor'
 import Charts from "./pages/chartPage/charts"
 import Gastos from "./pages/gastos/gastos"
 import {Navbar} from "./component/nav/navbar"
+import { NotasPage } from './pages/notas/notasPage';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -44,6 +46,8 @@ function App() {
           <Route path="/convertidor" element={isAuthenticated ? <Convertidor/>  : <Navigate to="/" />} />
 
           <Route path="/charts" element={isAuthenticated ? <Charts /> : <Navigate to="/" />} />
+
+          <Route path='/notas' element={isAuthenticated ? <NotasPage/> : <Navigate to='/'/>} />
 
         </Routes>
       </BrowserRouter>

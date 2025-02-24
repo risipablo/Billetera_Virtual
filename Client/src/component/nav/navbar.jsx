@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import { UserContext } from "../user/userContext";
 import { useContext, useState } from "react";
 import { Tooltip } from "@mui/material";
@@ -97,6 +98,15 @@ export function Navbar({setIsAuthenticated}) {
                                 <span className="text"> Convertidor </span>
                             </div>
                         </Tooltip>
+                    </NavLink>
+
+                    <NavLink to="/notas" onMouseEnter={() => open('notas')} onMouseLeave={close}>
+                        <Tooltip title={active === 'notas' ? 'Notas' : ""}>
+                            <div className="icon gasto-icon">
+                                <EditNoteIcon />
+                                <span className="text">Notas</span> 
+                            </div>
+                            </Tooltip>
                     </NavLink>
 
                     <NavLink onClick={handleLogout} onMouseEnter={() => open('cerrar sesión')} onMouseLeave={close}>

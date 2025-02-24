@@ -219,7 +219,6 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
         return ` ${ultimoGasto.dia} de ${ultimoGasto.mes} ${ultimoGasto.año} ${ultimoGasto.producto} $${ultimoGasto.monto} `;
       }
       
-
       const totalMonto = (gastos) => {
         let total = 0;
     
@@ -234,8 +233,10 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
         return total.toLocaleString('en-US');
       };
 
+
+
       const limiteSpend = (gastos) => {
-        const conditionsOptions = ['cajero', 'inversion', 'deben', 'cuotas']
+        const conditionsOptions = ['cajero', 'inversion', 'deben', 'cuotas',]
 
         const gastosFiltrados = gastos.filter(gasto => 
             !conditionsOptions.includes(gasto.condicion.toLowerCase())
@@ -260,6 +261,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
         localStorage.setItem('limiteGasto', limite);
       }, [limite]);
     
+
     
     return (
         <Box className="gastos-container" sx={{ p: 3, marginTop:3, marginBottom:4 ,fontFamily: "Montserrat, sans-serif" }}>
@@ -366,23 +368,22 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
                                  </ListItem>
          
                             <ListItem>
-                                <ListItemText                                    
+                                <ListItemText
                                     primaryTypographyProps={{
-                                     sx: {
-                                     fontWeight: 'bold',
-                                     fontFamily: "Montserrat, sans-serif",
-                                     fontSize: '1rem',
-                                     },
-                                 }}>
-                                     Total de gasto:
-                                     <Typography sx={{ color: limiteSpend(gastosFiltrados).color, fontWeight:'bold', fontFamily: "Montserrat, sans-serif",
-                                     fontSize: '1rem', }}>
-                                        ${totalMonto(gastosFiltrados)}
+                                        sx: {
+                                            fontWeight: 'bold',
+                                            fontFamily: "Montserrat, sans-serif",
+                                            fontSize: '1rem',
+                                        },
+                                    }}>
+                                    Total de gasto:
+                                    <Typography sx={{ color: limiteSpend(gastosFiltrados).color, fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem', }}>
+                                    $ {totalMonto(gastosFiltrados)}
                                     </Typography>
-
                                 </ListItemText>
                             </ListItem>
-                  
+
+
                 
                             <ListItem sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem' }}>
 
@@ -426,10 +427,14 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
                         {gastosFiltrados.map((element, index) => (
                             <TableRow key={index} style={{ background: condicionPago(element.condicion || '') }}>
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <input value={editingData.dia} onChange={(e) => setEditingData({...editingData, dia: e.target.value})} /> : element.dia}</TableCell>
-                                
+                                    {editingId === element._id ? <select value={editingData.dia} onChange={(e) => setEditingData({...editingData, dia: e.target.value})}>
+                                        {[...Array(31)].map((_, index) => (
+                                            <option key={index + 1} value={index + 1}>{index + 1}</option>
+                                            ))} </select> : element.dia}</TableCell>
+                                    
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <input value={editingData.mes} onChange={(e) => setEditingData({...editingData, mes: e.target.value})} /> : element.mes}</TableCell>
+                                    {editingId === element._id ? <select value={editingData.mes} onChange={(e) => setEditingData({...editingData, mes: e.target.value})}> 
+                                        {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => <option key={mes} value={mes}>{mes}</option>)} </select> : element.mes}</TableCell>
 
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
                                 {editingId === element._id ? <input value={editingData.año} onChange={(e) => setEditingData({...editingData, año: e.target.value})} /> : element.año}</TableCell>
@@ -441,10 +446,10 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
                                     {editingId === element._id ? <input value={editingData.monto} onChange={(e) => setEditingData({...editingData, monto: e.target.value})} /> : element.monto}</TableCell>
                                 
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <input value={editingData.metodo} onChange={(e) => setEditingData({...editingData, metodo: e.target.value})} /> : element.metodo}</TableCell>
+                                    {editingId === element._id ? <select value={editingData.metodo} onChange={(e) => setEditingData({...editingData, metodo: e.target.value})} >  {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => <option key={metodo} value={metodo}>{metodo}</option>)} </select>  : element.metodo}</TableCell>
                                 
                                 <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" , fontWeight: '600' }}> 
-                                    {editingId === element._id ? <input value={editingData.condicion} onChange={(e) => setEditingData({...editingData, condicion: e.target.value})} /> : element.condicion}</TableCell>
+                                    {editingId === element._id ? <select value={editingData.condicion} onChange={(e) => setEditingData({...editingData, condicion: e.target.value})} > {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversión"].map(condicion => <option key={condicion} value={condicion}>{condicion}</option>)} </select> : element.condicion}</TableCell>
                                
                                 <TableCell align="center">
                                     <Box className="actions" sx={{ display: 'flex', gap: 1, justifyContent: 'center', fontFamily: "Montserrat, sans-serif" }}>
