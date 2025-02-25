@@ -1,0 +1,25 @@
+                <div className="row">
+                    {note.map((nota,index) => {
+                        return(
+                            <div className="col-4" key={index}>
+                                <div className="card">
+                                    <button onClick={() => deleteNote(nota._id)}>eliminar</button>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{nota.titulo}</h5>
+                                        <p className="card-text">{nota.descripcion}</p>
+                                    </div>
+                                </div>
+                                {editingId === nota._id ? (
+                                    <div>
+                                        <input type="text" value={editingData.titulo} onChange={(e) => setEditingData({...editingData, titulo: e.target.value})}/>
+                                        <input type="text" value={editingData.descripcion} onChange={(e) => setEditingData({...editingData, descripcion: e.target.value})}/>
+                                        <button onClick={() => saveEditNote(nota._id)}>Guardar</button>
+                                        <button onClick={() => setEditingId(null)}>cancelar</button>
+                                    </div>
+                                ) : (
+                                    <button onClick={() => editNote(nota)}>Editar</button>
+                                )}
+                            </div>
+                        )
+                    })}
+                </div>

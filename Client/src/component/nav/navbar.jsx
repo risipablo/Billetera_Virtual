@@ -12,8 +12,8 @@ import axios from 'axios'
 import "./navbar.css"
 
 
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
+const serverFront = "http://localhost:3001";
+// const serverFront = "https://billetera-virtual-1.onrender.com";
 
 export function Navbar({setIsAuthenticated}) {
     const navigate = useNavigate()
@@ -102,7 +102,7 @@ export function Navbar({setIsAuthenticated}) {
 
                     <NavLink to="/notas" onMouseEnter={() => open('notas')} onMouseLeave={close}>
                         <Tooltip title={active === 'notas' ? 'Notas' : ""}>
-                            <div className="icon gasto-icon">
+                            <div className="icon notas-icon">
                                 <EditNoteIcon />
                                 <span className="text">Notas</span> 
                             </div>

@@ -57,7 +57,7 @@ export function FiltrosChart({ gastos, setGastosFiltrados }) {
             <Grid container spacing={2} alignItems="center">
             
             <Grid item xs={12} sm={12} md={12}>
-    <Grid container spacing={5} alignItems="center">
+        <Grid container spacing={5} alignItems="center">
 
         <Grid item xs={12} sm={2.6}>
             <motion.div
@@ -169,7 +169,7 @@ export function FiltrosChart({ gastos, setGastosFiltrados }) {
                 </IconButton>
             </motion.div>
         </Grid>
-    </Grid>
+        </Grid>
 </Grid>
 
 

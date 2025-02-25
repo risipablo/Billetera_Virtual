@@ -133,7 +133,7 @@
 
 
 
-.logout-icon, .chart-icon, .gasto-icon, .change-icon svg {
+.logout-icon, .chart-icon, .gasto-icon, .change-icon, .notas-icon svg {
     color: rgb(255, 255, 255); 
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
@@ -145,6 +145,11 @@
 }
 
 .chart-icon:hover {
+    /* background-color: rgb(142, 8, 142,0.8); */
+    transform: scale(1.1);
+}
+
+.notas-icon:hover {
     /* background-color: rgb(142, 8, 142,0.8); */
     transform: scale(1.1);
 }

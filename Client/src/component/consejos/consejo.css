@@ -1,0 +1,19 @@
+.consejo-container{
+    margin: 3rem auto;
+    max-width: 1200px;
+    padding: 1rem 1.2rem;
+}
+
+.accordion-container{
+    margin: 2rem auto;
+}
+
+.ahorro-container{
+    margin: .9rem auto;
+    padding: 0 1rem;
+}
+
+.ahorro-container p {
+    flex-wrap: wrap;
+    padding: 0 1rem 0 2rem;
+}

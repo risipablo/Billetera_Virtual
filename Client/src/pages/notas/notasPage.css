@@ -1,0 +1,7 @@
+.note-card {
+    width: 100%;
+    height: auto; /* Ajusta la altura según sea necesario */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

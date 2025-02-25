@@ -10,17 +10,17 @@ exports.getNotes = async (req, res) => {
     }
 }
 
-exports.addNote = async (req, res) => {
-    const { title, description } = req.body;
+exports.addNotes = async (req, res) => {
+    const { titulo, descripcion } = req.body;
 
-    if (!title || !description) {
+    if (!titulo || !descripcion) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
         const newNote = new noteModel({
-            title,
-            description,
+            titulo,
+            descripcion,
             userId: req.user.id,
         });
         const result = await newNote.save();
@@ -30,3 +30,35 @@ exports.addNote = async (req, res) => {
     }
 };
 
+
+exports.deleteNote = async (req, res) => {
+    const {id} = req.params;
+    try{
+        const note = await noteModel.findOneAndDelete({_id: id, userId: req.user.id});
+        if(!note){
+            return res.status(404).json({error: 'Note not found'});
+        }
+        res.json(note);
+    } catch(err){
+        res.status(500).json({error: err.message});
+    }
+}
+
+exports.editNote = async (req, res) => {
+    const {id} = req.params;
+    const {titulo, descripcion} = req.body;
+    try{
+        const note  = await noteModel.findOneAndUpdate(
+            {_id: id, userId: req.user.id},
+            {titulo, descripcion},
+            {new: true}
+        );
+        if(!note){
+            return res.status(404).json({error: 'Note not found'});
+        }
+        res.json(note);
+    }
+    catch(err){
+        res.status(500).json({error: err.message});
+    }
+}

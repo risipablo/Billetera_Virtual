@@ -1,6 +1,6 @@
 
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import { Button, IconButton, Input } from '@mui/material';
+import { Box, Button, IconButton, Input } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -147,7 +147,7 @@ export function Notas(){
                     <Button onClick={close}  color="primary"><Cancel/></Button>
                 </DialogActions>
 
-                <DialogTitle>Notas</DialogTitle>
+                <DialogTitle>Notas Adicionales </DialogTitle>
                 <DialogContent>
                     
                     <div className="input-notas">
@@ -161,6 +161,9 @@ export function Notas(){
                             {notas.map((nota, index) => (
                                 <tr key={index} className="nota-row">
                                     <td>{editingId === nota._id ? <input value={editingData.titulo} onChange={(e) => setEditingData({...editingData, titulo: e.target.value})} /> : nota.titulo}</td>
+                                    
+                                    <div className="actions">
+
                                     
                                     {editingId === nota._id ? (
                                             <>
@@ -180,6 +183,7 @@ export function Notas(){
                                         <IconButton className="trash" sx={{ color: 'red', fontFamily: "Montserrat, sans-serif" }} onClick={() => deleteNota(nota._id)}>
                                             <DeleteIcon />
                                         </IconButton>
+                                    </div>
                                     
                                 </tr>
                             ))}

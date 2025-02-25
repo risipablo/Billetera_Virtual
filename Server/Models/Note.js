@@ -9,10 +9,10 @@ const noteSchema = new moongose.Schema({
         type: String,
         required: true
     },  
-    fecha: {
-        type: Date,
-        required: true
-    },
+    // fecha: {
+    //     type: Date,
+    //     required: true
+    // },
     userId: {
         type: moongose.Schema.Types.ObjectId,
         ref: 'User',
