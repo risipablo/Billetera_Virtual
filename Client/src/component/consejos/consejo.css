@@ -4,9 +4,13 @@
     padding: 1rem 1.2rem;
 }
 
+@media (max-width: 600px){
 .accordion-container{
-    margin: 2rem auto;
+    margin: 1.2rem auto;
 }
+}
+
+
 
 .ahorro-container{
     margin: .9rem auto;

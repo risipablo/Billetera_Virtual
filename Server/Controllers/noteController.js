@@ -11,9 +11,9 @@ exports.getNotes = async (req, res) => {
 }
 
 exports.addNotes = async (req, res) => {
-    const { titulo, descripcion } = req.body;
+    const { titulo, descripcion,fecha } = req.body;
 
-    if (!titulo || !descripcion) {
+    if (!titulo || !descripcion || !fecha) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -21,6 +21,7 @@ exports.addNotes = async (req, res) => {
         const newNote = new noteModel({
             titulo,
             descripcion,
+            fecha,
             userId: req.user.id,
         });
         const result = await newNote.save();
@@ -46,11 +47,11 @@ exports.deleteNote = async (req, res) => {
 
 exports.editNote = async (req, res) => {
     const {id} = req.params;
-    const {titulo, descripcion} = req.body;
+    const {titulo, descripcion, fecha} = req.body;
     try{
         const note  = await noteModel.findOneAndUpdate(
             {_id: id, userId: req.user.id},
-            {titulo, descripcion},
+            {titulo, descripcion, fecha},
             {new: true}
         );
         if(!note){

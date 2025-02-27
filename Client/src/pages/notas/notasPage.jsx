@@ -14,6 +14,9 @@ export function NotasPage() {
     const [note, setNote] = useState([]);
     const [titulo, setTitulo] = useState("");
     const [descripcion, setDescripcion] = useState("");
+    const [fecha, setFecha] = useState(() => {
+        return localStorage.getItem('fecha') || "0000-00-00";
+    });
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -40,7 +43,8 @@ export function NotasPage() {
             const token = localStorage.getItem('token');
             axios.post(`${serverFront}/api/note`, {
                 titulo: titulo,
-                descripcion: descripcion
+                descripcion: descripcion,
+                fecha: fecha
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -49,6 +53,7 @@ export function NotasPage() {
             })
             .then(response => {
                 setNote([...note, response.data]);
+                setFecha('');
                 setTitulo('');
                 setDescripcion('');
             })
@@ -79,14 +84,16 @@ export function NotasPage() {
     const [editingId, setEditingId] = useState(null);
     const [editingData, setEditingData] = useState({
         titulo: '',
-        descripcion: ''
+        descripcion: '',
+        fecha: ''
     });
 
     const editNote = (nota) => {
         setEditingId(nota._id);
         setEditingData({
             titulo: nota.titulo,
-            descripcion: nota.descripcion
+            descripcion: nota.descripcion,
+            fecha:nota.fecha
         });
     };
 
@@ -94,7 +101,8 @@ export function NotasPage() {
         const token = localStorage.getItem('token');
         axios.patch(`${serverFront}/api/note/${id}`, {
             titulo: editingData.titulo,
-            descripcion: editingData.descripcion
+            descripcion: editingData.descripcion,
+            fecha:editingData.fecha
         }, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -114,6 +122,11 @@ export function NotasPage() {
         });
     };
 
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
+
     return (
         <div className="gastos-container">
             <Helmet>
@@ -124,7 +137,7 @@ export function NotasPage() {
 
             <Container>
                 <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={5}>
+                    <Grid item xs={12} sm={4}>
                         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
                             <TextField 
                                 fullWidth
@@ -135,7 +148,7 @@ export function NotasPage() {
                             />
                         </motion.div>
                     </Grid>
-                    <Grid item xs={12} sm={5}>
+                    <Grid item xs={12} sm={4}>
                         <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }}>
                             <TextField 
                                 fullWidth
@@ -146,7 +159,21 @@ export function NotasPage() {
                             />
                         </motion.div>
                     </Grid>
-                    <Grid item xs={12} sm={2} style={{ display: "flex", justifyContent: "center" }}>
+                    <Grid item xs={12} sm={4}>
+                        <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }}>
+                            <TextField
+                                fullWidth
+                                label="Establecer fecha límite"
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value={fecha}
+                                onChange={(e) => setFecha(e.target.value)}
+                            />
+                        </motion.div>
+                    </Grid>
+                    <Grid item xs={12} sm={2} style={{ marginTop:4 }}>
                         <Button 
                             variant="contained" 
                             color="primary" 
@@ -182,8 +209,11 @@ export function NotasPage() {
                                                 </IconButton>
                                             </div>
                                         </div>
-                                        <Typography variant="h8" style={{ marginTop: 12 }}>
+                                        <Typography variant="body1" style={{ marginTop: 12, marginBottom:18 }}>
                                             {nota.descripcion}
+                                        </Typography>
+                                        <Typography variant="caption" style={{textTransform: 'lowercase' }}>
+                                            {formatDate(nota.fecha)}
                                         </Typography>
                                         {editingId === nota._id && (
                                             <div style={{ marginTop: 12 }}>
@@ -204,7 +234,18 @@ export function NotasPage() {
                                                     onChange={(e) => setEditingData({ ...editingData, descripcion: e.target.value })}
                                                     style={{ marginTop: 8 }}
                                                 />
-                                                <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
+
+                                                <TextField 
+                                                    fullWidth
+                                                    size="small"
+                                                    label="Editar fecha"
+                                                    variant="outlined"
+                                                    value={editingData.fecha}
+                                                    onChange={(e) => setEditingData({ ...editingData, fecha: e.target.value })}
+                                                    style={{ marginTop: 8 }}
+                                                />
+
+                                                <div style={{ display: "flex", justifyContent: "center", gap: 22, marginTop: 8 }}>
                                                     <Button 
                                                         variant="contained" 
                                                         color="success" 
