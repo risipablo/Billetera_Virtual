@@ -4,11 +4,12 @@ import { TextField, Select, MenuItem, IconButton, Grid, InputLabel, FormControl,
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { motion } from 'framer-motion';
 
-export function FiltrosChart({ gastos, setGastosFiltrados }) {
+export function FiltrosChart({ gastos, setGastosFiltrados}) {
     const [filterMonth, setFilterMonth] = useState('');
     const [filterProduct, setFilterProduct] = useState('');
     const [filterMetodo, serfilterMetodo] = useState('');
     const [filterAño, setFilterAño] = useState('')
+    
 
     const filtros = () => {
         let gastosFiltrados = gastos;
@@ -157,6 +158,8 @@ export function FiltrosChart({ gastos, setGastosFiltrados }) {
             </motion.div>
         </Grid>
 
+
+
         <Grid item xs={12} sm={1} textAlign={{ xs: "center" }}>
             <motion.div
                 custom={3}
@@ -170,8 +173,7 @@ export function FiltrosChart({ gastos, setGastosFiltrados }) {
             </motion.div>
         </Grid>
         </Grid>
-</Grid>
-
+    </Grid>
 
             </Grid>
         </Box>

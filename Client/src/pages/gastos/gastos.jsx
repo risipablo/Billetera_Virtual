@@ -205,7 +205,9 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
     }
 
     const condicionPago = (condicion) => {
-        return condicion.toLowerCase() === 'impago' || condicion.toLowerCase() ===  'me deben' ? 'rgba(218, 8, 25, 0.4)' : null 
+        return condicion.toLowerCase() === 'devolver' ? 'rgba(22, 206, 176, 0.8)' : null
+         || condicion.toLowerCase() ===  'deben' ? 'rgba(218, 8, 162, 0.4)' : null 
+         || condicion.toLowerCase() === 'impago' ? 'rgba(235, 122, 122, 0.93)' : null
          || condicion.toLowerCase() === 'cajero' ? 'rgba(206, 224, 14, 0.8)' : null 
          || condicion.toLowerCase() === 'cuotas'  ? 'rgba(218, 135, 34, 0.8)' : null 
          || condicion.toLowerCase() === 'inversion' ? 'rgba(34, 228, 24, 0.8)' : null
@@ -223,7 +225,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
         let total = 0;
     
         gastos.forEach(producto => {
-          if (['impago', 'cajero', 'cuotas', 'deben', 'inversion'].includes(producto.condicion.toLowerCase())) {
+          if ([ 'cajero', 'cuotas', 'deben', 'inversion'].includes(producto.condicion.toLowerCase())) {
 
           } else {
             total += producto.monto;

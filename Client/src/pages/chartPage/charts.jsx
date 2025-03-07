@@ -4,6 +4,7 @@ import axios from "axios";
 import { FiltrosChart } from "../../component/charts/filtrosChart/filtrosChart";
 import  { Helmet } from 'react-helmet';
 
+
 function Charts(){
     // const serverFront = "http://localhost:3001";
     const serverFront = "https://billetera-virtual-1.onrender.com";
@@ -39,8 +40,14 @@ function Charts(){
             </Helmet>
 
             <h1> Estadisticas </h1>
-            <FiltrosChart gastos={gastos} setGastosFiltrados={setGastosFiltrados}/>
-            <GastoChart gastos={gastosFiltrados}/>
+            <FiltrosChart 
+                gastos={gastos} 
+                setGastosFiltrados={setGastosFiltrados}
+            />
+
+            <GastoChart 
+                gastos={gastosFiltrados}
+            />
 
         </div>
     )

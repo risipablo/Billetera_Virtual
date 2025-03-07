@@ -4,12 +4,14 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 import { motion } from 'framer-motion';
 import "./chart.css"
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-const GastoChart = ({ gastos }) => {
+const GastoChart = ({ gastos}) => {
+    
 
     const isMobile = window.innerWidth <= 768; // ajusta de font size donuts para mobile
 
-
+    // Gastos por mes
     const spentMonth = gastos.reduce((acc, gasto) => {
         const mes = gasto.mes;
         const monto = gasto.monto;
@@ -29,8 +31,6 @@ const GastoChart = ({ gastos }) => {
         return acc;
     }, {})
 
-  
-  
     const spentMonthMax = Object.keys(spentMonth).reduce((max,key) => {
         return spentMonth[key] > spentMonth[max] ? key : max;
     }, Object.keys(spentMonth)[0])
@@ -173,8 +173,6 @@ const GastoChart = ({ gastos }) => {
         ]
       };
       
-
-
       const optionsYear = {
         responsive: true,
         maintainAspectRatio: false, 
@@ -340,6 +338,7 @@ const GastoChart = ({ gastos }) => {
         },
     };
 
+
     
     // Metodos de pagos
     const spentMetodo = gastos.reduce((acc,gasto) => {
@@ -421,7 +420,6 @@ const GastoChart = ({ gastos }) => {
     };
 
 
-
     // Metodo de inversion
 
     const inversion = gastos.reduce((acc,gasto) => {
@@ -450,7 +448,7 @@ const GastoChart = ({ gastos }) => {
         labels: Object.keys(inversion),
         datasets: [
             {
-                label: 'Total de Ventas',
+                label: 'Total de Inversion',
                 data: Object.values(inversion),
                 backgroundColor: Object.keys(inversion).map((producto) =>  producto === maxInversion ? 'rgba(42, 185, 64, 0.7)': 'rgba(215, 165, 39, 0.6)' || 'rgba(243, 124, 260, 0.6)' ) ,
                 borderColor: 'rgba(255, 255, 255)', 
@@ -539,6 +537,21 @@ const GastoChart = ({ gastos }) => {
     };
 
 
+
+    const totalInversion = gastos.reduce((acc,gasto) => {
+        const conditions = gasto.condicion.toLowerCase();
+
+            const conditionsReduce2 = ['pagado', 'impago', 'deben', 'cuotas', 'devolver', 'cajero']
+            if (conditionsReduce2.includes(conditions)){
+                return acc;
+            }
+
+           return  acc + gasto.monto
+            
+        },0
+    )
+
+
    const promedioGasto = gastos.reduce((acc, gasto) => {
         const monto = gasto.monto;
         const condiciones = gasto.condicion.toLowerCase()
@@ -549,11 +562,26 @@ const GastoChart = ({ gastos }) => {
         }
             
 
-        const total = monto / 12 
+        const total = monto / 12
 
         return acc + total
    },0)
 
+   const totalGasto = gastos.reduce((acc,gasto) => {
+    let total = 0;
+        const monto = gasto.monto
+
+        const condiciones = gasto.condicion.toLowerCase()
+        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+        if (conditionsReduce.includes(condiciones)){
+            return acc
+        }
+
+        total += monto
+
+        return acc + total
+        
+   },0)
 
     return (
         <div className="chart-container">
@@ -626,34 +654,57 @@ const GastoChart = ({ gastos }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
+
+                <div>
+                    <h3>Total de gastos</h3>
+                    <div className="content-row">
+                      
+                        <p>$ {(totalGasto || 0).toLocaleString('en-US')}</p>
+                    </div>
+                </div>
+               
+
                 <div>
                     <h3>Promedio de gasto</h3>
                     <div className="content-row">
                       
-                        <p>${(promedioGasto || 0).toLocaleString('en-US')}</p>
+                        <p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p>
                     </div>
                 </div>
+               
                 <div>
                     <h3>Producto mayor gastado</h3>
                     <div className="content-row">
                         <p>{maxProducto}</p>
-                        <p>${(totalProducto || 0).toLocaleString('en-US')}</p>
+                        <p>$ {(totalProducto || 0).toLocaleString('en-US')}</p>
                     </div>
                 </div>
+                
                 <div>
                     <h3>Método de pago más usado</h3>
                     <div className="content-row">
                         <p>{metodoMax}</p>
-                        <p>${(totalMetodoMax || 0).toLocaleString('en-US')}</p>
+                        <p>$ {(totalMetodoMax || 0).toLocaleString('en-US')}</p>
                     </div>
                 </div>
+               
                 <div>
                     <h3>Mes más gastado</h3>
                     <div className="content-row">
                         <p>{spentMonthMax}</p>
-                        <p>${(totalMes || 0).toLocaleString('en-US')}</p>
+                        <p>$ {(totalMes || 0).toLocaleString('en-US')}</p>
                     </div>
                 </div>
+
+                
+                <div>
+                    <h3>Dinero Invertido</h3>
+                    <div className="content-row">
+                        <p>$ {(totalInversion || 0).toLocaleString('en-US')}</p>
+                        
+                    </div>
+                </div>
+                
             </motion.div>
 
 
@@ -663,3 +714,145 @@ const GastoChart = ({ gastos }) => {
 }
 
 export default GastoChart;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const condicionMetodo = gastos.reduce((acc,gasto) => {
+//     const mes = gasto.mes;
+//     const monto = gasto.monto;
+//     const conditions = gasto.condicion.toLowerCase()
+
+//     const conditionsReduce = ['pagado', 'impago','inversion']
+//     if (conditionsReduce.includes(conditions)){
+//         return acc;
+//     }
+
+//     if(!acc[mes])
+//         acc[mes] = 0
+//     acc[mes] += monto
+//     return acc
+    
+// },{})
+
+// const condicionMetodoMax = Object.keys(condicionMetodo).reduce((max,key) => {
+//     return condicionMetodo[key] > condicionMetodo[max] ? key : max;
+// },Object.keys(condicionMetodo)[0])
+
+
+// const dataCondicionMetodo = {
+//     labels: Object.keys(condicionMetodo),
+//     datasets: [
+//         {
+//             label: 'Total de Valores',
+//             data: Object.values(condicionMetodo),
+//             backgroundColor: Object.keys(condicionMetodo).map((producto) =>  producto === condicionMetodoMax ? 'rgba(71, 42, 185, 0.7)': 'rgba(171, 39, 215, 0.6)' || 'rgba(243, 124, 260, 0.6)' ) ,
+//             borderColor: 'rgba(255, 255, 255)', 
+//             borderWidth: 8, 
+//             hoverOffset: 8, 
+//         }
+//     ]
+// }
+
+// const options3 = {
+//     responsive: true,
+//     maintainAspectRatio: false, // Permite que el gráfico se adapte mejor a la pantalla
+//     scales: {
+//         y: {
+//             beginAtZero: true,
+//             suggestedMax: Math.max(...Object.values(spentMonth)) * 1.2, 
+//             title: {
+//                 display: true,
+//                 text: 'Monto',
+//                 font: {
+//                     size: 18, 
+//                     family: 'Poppins, sans-serif',
+//                 },
+//                 color: '#333', 
+//             },
+//             ticks: {
+//                 color: '#666', 
+//             },
+//             grid: {
+//                 color: 'rgba(200, 200, 200, 0.3)',
+//             }
+//         },
+//         x: {
+//             title: {
+//                 display: true,
+//                 text: 'Mes',
+//                 font: {
+//                     size: 14,
+//                     family: 'Poppins, sans-serif',
+//                 },
+//                 color: '#333', 
+//             },
+//             ticks: {
+//                 color: '#666', 
+//             },
+//             grid: {
+//                 display: false, 
+//             }
+//         }
+//     },
+//     plugins: {
+//         legend: {
+//             display: true,
+//             position: 'top',
+//             labels: {
+//                 color: '#333', 
+//                 font: {
+//                     size: 18,
+//                 },
+//             }
+//         },
+//         tooltip: {
+//             backgroundColor: 'rgba(0, 0, 0, 0.7)',
+//             titleFont: {
+//                 size: 18,
+//                 weight: 'bold',
+//             },
+//             bodyFont: {
+//                 size: 14,
+//             },
+//             borderColor: '#666',
+//             borderWidth: 1,
+//             callbacks: {
+//                 label: function(tooltipItem) {
+//                     return `Monto:  $ ${tooltipItem.raw.toLocaleString()} `;
+//                 }
+//             }
+//         },
+//     },
+//     animation: {
+//         duration: 1500, 
+//         easing: 'easeInOutCubic',
+//     },
+//     barPercentage: 0.9,
+//     categoryPercentage: 0.8,
+// };

@@ -48,7 +48,7 @@ import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
         const numero = parseFloat(valor)
 
         
-        // Si le valor no es un numero o no existen ciertas tasas la funcion devuelve con 0
+        // Si el valor no es un numero o no existen ciertas tasas la funcion devuelve con 0
         if(!isNaN || !tasaCambio[monedaDestino] || !tasaCambio[monedaOrigen]){
             return setResultado(0)
         }
@@ -200,7 +200,7 @@ import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
                 {tasaCambio[monedaDestino] && (
                     <p className="moneda">$ 1 {monedaOrigen} = $ {tasaCambio[monedaDestino]} {monedaDestino}</p>
                 )}
-                <p className="fecha">Última fecha de actualización del tipo de cambio en el mercado: {fechaActualizada}</p>
+                <p className="fecha">Última fecha de actualización del tipo de cambio en el mercado oficial : {fechaActualizada}</p>
             </motion.div>
         </div>
     );
