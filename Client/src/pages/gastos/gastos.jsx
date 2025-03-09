@@ -300,7 +300,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
 
                 <select  value={condicion} onChange={(e) => setCondicion(e.target.value)}>
                     <option value="">Seleccionar Estado</option>
-                    {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversión"].map(condicion => <option key={condicion} value={condicion}>{condicion}</option>)}
+                    {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversion"].map(condicion => <option key={condicion} value={condicion}>{condicion}</option>)}
                 </select>
 
                 <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />

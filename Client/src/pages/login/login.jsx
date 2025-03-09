@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import "./user.css"
-
 import { UserContext } from '../../component/user/userContext';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -101,6 +100,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
           <span className="password-icon" onClick={switchButton}>
             {show ? <FaEyeSlash /> : <FaEye />}
           </span>
+
         </motion.div>
 
         <motion.button 

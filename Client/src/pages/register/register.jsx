@@ -117,7 +117,7 @@ const Register = ({ setIsAuthenticated }) => {
         transition={{ delay: 0.5, duration: 0.5 }}
       >
         <NavLink to="/login">
-          <p> Ya tengo cuenta </p>
+          <p> ¡Ya tengo cuenta! </p>
         </NavLink>
       </motion.div>
     </motion.div>

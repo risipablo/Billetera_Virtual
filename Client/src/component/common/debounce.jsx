@@ -6,6 +6,4 @@ export function Debounce(func, delay) {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(context, args), delay);
     };
-
-
   }

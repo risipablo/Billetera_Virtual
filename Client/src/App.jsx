@@ -9,6 +9,8 @@ import Charts from "./pages/chartPage/charts"
 import Gastos from "./pages/gastos/gastos"
 import {Navbar} from "./component/nav/navbar"
 import { NotasPage } from './pages/notas/notasPage';
+import { ChangePassword } from './component/password/changePassword';
+
 
 
 function App() {
@@ -48,6 +50,8 @@ function App() {
           <Route path="/charts" element={isAuthenticated ? <Charts /> : <Navigate to="/" />} />
 
           <Route path='/notas' element={isAuthenticated ? <NotasPage/> : <Navigate to='/'/>} />
+          
+          <Route path='/change-password' element={isAuthenticated ? <ChangePassword/> : <Navigate to='/'/>} />
 
         </Routes>
       </BrowserRouter>

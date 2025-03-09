@@ -72,3 +72,50 @@ exports.logoutUser = (req, res) => {
     });
     res.json({ message: 'Cierre de sesión exitoso' });
 };
+
+
+// Logica de cambio de contraseña
+const User = require('../Models/User')
+const bcrypt = require('bcrypt')
+
+exports.verifyEmail = async (req, res) => {
+    const {email} = req.body
+
+    try{
+         // Verificar que el correo coincida con el del usuario logueado
+
+        const user = await User.findOne({email, _id: req.user.id})
+        if (!user){
+            return res.status(404).json({message: 'Correo Incorrecto'})
+        }
+        res.status(200).json({message: 'Correo verificado', userId: user._id})
+    } catch (error) {
+        res.status(500).json({message: 'Error del servidor'})
+    }
+}
+
+exports.changePassword = async (req,res) => {
+    const { newPassword} = req.body
+
+    try{
+        const user = await User.findById(req.user.id)
+        if (!user) {
+            return res.status(404).json({ message: 'Correo Incorrecto'})
+        }
+
+        // Verificar que la contraseña nueva no sea igual a la actual
+        const samePassword = await user.comparePassword(newPassword)
+        if (samePassword) {
+            return res.status(404).json({message: 'La nueva contraseña no puede ser igual a la contraseña actual'})
+        }
+
+        const salt = await bcrypt.genSalt(12)
+        user.password = await bcrypt.hash(newPassword, salt)
+        await user.save()
+
+        res.status(200).json({ message: 'Contraseña cambiada exitosamente' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error del servidor' });
+    }
+}
+

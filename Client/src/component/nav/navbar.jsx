@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import { Tooltip } from "@mui/material";
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import SettingsIcon from '@mui/icons-material/Settings';
 import axios from 'axios'
 import "./navbar.css"
 
@@ -68,6 +69,12 @@ export function Navbar({setIsAuthenticated}) {
     return(
 
         <div className='icon-container'>
+            <div onClick={toggleMenu} className={`menu-icon ${isOpen ? 'open' : ''}`}>             
+                <span></span>
+                <span></span>
+                <span></span>          
+            </div>
+
             <div className={`icons ${isOpen ? 'open' : ''}`} onClick={closeMenu}>
                 <div className={`menu ${isOpen ? 'open' : ''}`}> 
 
@@ -109,23 +116,32 @@ export function Navbar({setIsAuthenticated}) {
                             </Tooltip>
                     </NavLink>
 
-                    <NavLink onClick={handleLogout} onMouseEnter={() => open('cerrar sesión')} onMouseLeave={close}>
-                        <Tooltip title={active === 'cerrar sesión' ? "Cerrar Sesión" : " "}>
+                    <NavLink to="/change-password" onMouseEnter={() => open('configuraciones')} onMouseLeave={close} >
+                        <Tooltip title={active === 'configuraciones' ? 'Configuraciones' : ''}>
                             <div className="icon logout-icon">
-                                <LogoutIcon />
-                                <span className="text">Cerrar Sesión</span> 
+                                <SettingsIcon/>
+                                <span className="text">Configuraciones</span>
                             </div>
-                        </Tooltip>
+                        </Tooltip>   
                     </NavLink>
 
+                    
+        
+
+                        <NavLink onClick={handleLogout} onMouseEnter={() => open('cerrar sesión')} onMouseLeave={close}>
+                            <Tooltip title={active === 'cerrar sesión' ? "Cerrar Sesión" : " "}>
+                                <div className="icon logout-icon">
+                                    <LogoutIcon />
+                                    <span className="text">Cerrar Sesión</span> 
+                                </div>
+                            </Tooltip>
+                        </NavLink>
+
+ 
                 </div>
             </div>
 
-            <div onClick={toggleMenu} className={`menu-icon ${isOpen ? 'open' : ''}`}>             
-                        <span></span>
-                        <span></span>
-                        <span></span>          
-            </div>
+   
             
             <div className='user' onClick={handleUserClick} style={{ cursor: 'pointer' }}>
                 <EmojiEmotionsIcon/>

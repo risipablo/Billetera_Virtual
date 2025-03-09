@@ -1,4 +1,6 @@
 
+// Logica para el componente notasPage
+
 const noteModel = require('../Models/Note');
 
 exports.getNotes = async (req, res) => {
