@@ -1,6 +1,5 @@
 import React, {  useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { UserProvider } from './component/user/userContext';
 import Loader from "./component/loader/loader"
 import Login from './pages/login/login'
 import Register from "./pages/register/register"
@@ -10,6 +9,8 @@ import Gastos from "./pages/gastos/gastos"
 import {Navbar} from "./component/nav/navbar"
 import { NotasPage } from './pages/notas/notasPage';
 import { ChangePassword } from './component/password/changePassword';
+import { UserProvider } from './component/user/userContext';
+import { ChangeUser } from './component/user/changeUser';
 
 
 
@@ -21,19 +22,14 @@ function App() {
   return (
     <UserProvider>
       <BrowserRouter>
-
-      {loading && <Loader/>}
-    
-
-      { !loading && isAuthenticated && < Navbar setIsAuthenticated={setIsAuthenticated}/>}
-      
-     
-
+        {loading && <Loader />}
+  
+        {!loading && isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated} />}
+  
         <Routes>
-       
           <Route
             path="/"
-            element={<Login setIsAuthenticated={setIsAuthenticated}  setLoading={setLoading} />}
+            element={<Login setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />}
           />
           <Route
             path="/register"
@@ -41,17 +37,40 @@ function App() {
           />
           <Route
             path="/gasto"
-            element={isAuthenticated ? <Gastos/> : <Navigate to="/" />}
+            element={isAuthenticated ? <Gastos /> : <Navigate to="/" />}
           />
           <Route path="*" element={<Navigate to="/" />} />
+          <Route
+            path="/convertidor"
+            element={isAuthenticated ? <Convertidor /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/charts"
+            element={isAuthenticated ? <Charts /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/notas"
+            element={isAuthenticated ? <NotasPage /> : <Navigate to="/" />}
+          />
 
-          <Route path="/convertidor" element={isAuthenticated ? <Convertidor/>  : <Navigate to="/" />} />
+          <Route 
+            path="change-user" 
+            element={isAuthenticated ? ( 
+              <ChangeUser setisAuthenticated={setIsAuthenticated} setLoading={setLoading} /> 
+              ) :( 
+              <Navigate to="/" />)
+              } />
 
-          <Route path="/charts" element={isAuthenticated ? <Charts /> : <Navigate to="/" />} />
-
-          <Route path='/notas' element={isAuthenticated ? <NotasPage/> : <Navigate to='/'/>} />
-          
-          <Route path='/change-password' element={isAuthenticated ? <ChangePassword/> : <Navigate to='/'/>} />
+          <Route
+            path="/change-password"
+            element={
+              isAuthenticated ? (
+                <ChangePassword setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
 
         </Routes>
       </BrowserRouter>

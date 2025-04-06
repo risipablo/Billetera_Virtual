@@ -21,11 +21,10 @@ import useSound from 'use-sound'
 import Cash from "../../assets/cash.mp3"
 import Ok from '../../assets/ok.mp3'
 import { Notas } from '../../component/notas/notas';
+import { config } from '../../component/variables/config';
 
 
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
-
+const serverFront = config.apiUrl;
 
  function Gastos(){
     const [gastos, setGastos] = useState([]);
@@ -131,19 +130,7 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
         .catch(err => console.log(err))
     }
 
-    const searchGastos = (palabraClave) => {
-        setGastosFiltrados(gastos.filter(gasto => {
-            return palabraClave.every(palabra =>
-                gasto.dia.toLowerCase().includes(palabra) ||
-                gasto.mes.toLowerCase().includes(palabra) ||
-                gasto.año.toLowerCase().includes(palabra) ||
-                gasto.metodo.toLowerCase().includes(palabra) ||
-                gasto.producto.toLowerCase().includes(palabra) ||
-                gasto.monto.toString().includes(palabra) ||
-                gasto.condicion.toLowerCase().includes(palabra) 
-            )
-        }))
-    }
+
 
     const saveEdit = (id) => {
         console.log(`Cambios guardadoss: ${id}`);
@@ -236,7 +223,20 @@ const serverFront = "https://billetera-virtual-1.onrender.com";
       };
 
 
-
+      const searchGastos = (palabraClave) => {
+        setGastosFiltrados(gastos.filter(gasto => {
+            return palabraClave.every(palabra =>
+                gasto.dia.toLowerCase().includes(palabra) ||
+                gasto.mes.toLowerCase().includes(palabra) ||
+                gasto.año.toLowerCase().includes(palabra) ||
+                gasto.metodo.toLowerCase().includes(palabra) ||
+                gasto.producto.toLowerCase().includes(palabra) ||
+                gasto.monto.toString().includes(palabra) ||
+                gasto.condicion.toLowerCase().includes(palabra) 
+            )
+        }))
+    }
+    
       const limiteSpend = (gastos) => {
         const conditionsOptions = ['cajero', 'inversion', 'deben', 'cuotas',]
 

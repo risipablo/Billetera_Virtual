@@ -1,125 +1,42 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { Container, Grid, Card, CardContent, TextField, Button, IconButton, Typography } from "@mui/material";
 import { Delete, Edit, Save, Cancel, Check } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { Consejo } from "../../component/consejos/consejo";
+import { useNotes } from "../../utils/hooks/useNotes";
 import "./notasPage.css";
 
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
 
 export function NotasPage() {
-    const [note, setNote] = useState([]);
+    const { notes, addNote, deleteNote, editNote } = useNotes();
     const [titulo, setTitulo] = useState("");
     const [descripcion, setDescripcion] = useState("");
-    const [fecha, setFecha] = useState(() => {
-        return localStorage.getItem('fecha') || "0000-00-00";
-    });
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.error("No hay token disponible");
-            return;
-        }
-        axios.get(`${serverFront}/api/note`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            withCredentials: true,
-        })
-        .then(response => {
-            setNote(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    }, []);
-
-    const addNote = () => {
-        if (titulo.trim() !== '' && descripcion.trim() !== '') {
-            const token = localStorage.getItem('token');
-            axios.post(`${serverFront}/api/note`, {
-                titulo: titulo,
-                descripcion: descripcion,
-                fecha: fecha
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                withCredentials: true,
-            })
-            .then(response => {
-                setNote([...note, response.data]);
-                setFecha('');
-                setTitulo('');
-                setDescripcion('');
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        } else {
-            console.error("El título y la descripción no pueden estar vacíos");
-        }
-    };
-
-    const deleteNote = (id) => {
-        const token = localStorage.getItem('token');
-        axios.delete(`${serverFront}/api/note/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            withCredentials: true,
-        })
-        .then(response => {
-            setNote(note.filter(nota => nota._id !== id));
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    };
-
+    const [fecha, setFecha] = useState("0000-00-00");
     const [editingId, setEditingId] = useState(null);
     const [editingData, setEditingData] = useState({
         titulo: '',
-        descripcion: '',
-        fecha: ''
+        descripcion: ''
     });
 
-    const editNote = (nota) => {
+    const handleAddNote = () => {
+        addNote(titulo, descripcion, fecha);
+        setTitulo('');
+        setDescripcion('');
+        setFecha('0000-00-00');
+    };
+
+    const handleEditNote = (nota) => {
         setEditingId(nota._id);
         setEditingData({
             titulo: nota.titulo,
-            descripcion: nota.descripcion,
-            fecha:nota.fecha
+            descripcion: nota.descripcion
         });
     };
 
-    const saveEditNote = (id) => {
-        const token = localStorage.getItem('token');
-        axios.patch(`${serverFront}/api/note/${id}`, {
-            titulo: editingData.titulo,
-            descripcion: editingData.descripcion,
-            fecha:editingData.fecha
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            setNote(note.map(nota => {
-                if (nota._id === id) {
-                    return response.data;
-                }
-                return nota;
-            }));
-            setEditingId(null);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    const handleSaveEditNote = (id) => {
+        editNote(id, editingData);
+        setEditingId(null);
     };
 
     const formatDate = (dateString) => {
@@ -177,7 +94,7 @@ export function NotasPage() {
                         <Button 
                             variant="contained" 
                             color="primary" 
-                            onClick={addNote}
+                            onClick={handleAddNote}
                         >
                             <Check/>
                         </Button>
@@ -187,7 +104,7 @@ export function NotasPage() {
             
             <Container style={{ marginTop: 40 }}>
                 <Grid container spacing={2}>
-                    {note.map((nota, index) => (
+                    {notes.map((nota, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -201,7 +118,7 @@ export function NotasPage() {
                                                 {nota.titulo}
                                             </Typography>
                                             <div>
-                                                <IconButton color="warning" onClick={() => editNote(nota)}>
+                                                <IconButton color="warning" onClick={() => handleEditNote(nota)}>
                                                     <Edit />
                                                 </IconButton>
                                                 <IconButton color="error" onClick={() => deleteNote(nota._id)}>
@@ -234,23 +151,12 @@ export function NotasPage() {
                                                     onChange={(e) => setEditingData({ ...editingData, descripcion: e.target.value })}
                                                     style={{ marginTop: 8 }}
                                                 />
-
-                                                <TextField 
-                                                    fullWidth
-                                                    size="small"
-                                                    label="Editar fecha"
-                                                    variant="outlined"
-                                                    value={editingData.fecha}
-                                                    onChange={(e) => setEditingData({ ...editingData, fecha: e.target.value })}
-                                                    style={{ marginTop: 8 }}
-                                                />
-
-                                                <div style={{ display: "flex", justifyContent: "center", gap: 22, marginTop: 8 }}>
+                                                <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
                                                     <Button 
                                                         variant="contained" 
                                                         color="success" 
                                                         startIcon={<Save />} 
-                                                        onClick={() => saveEditNote(nota._id)}
+                                                        onClick={() => handleSaveEditNote(nota._id)}
                                                         size="small"
                                                     />
                                                     <Button 

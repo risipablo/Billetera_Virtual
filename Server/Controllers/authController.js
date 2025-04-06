@@ -4,36 +4,32 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 exports.registerUser = async (req, res) => {
-    const { email, password, name } = req.body;
-
-    // Validar los campos requeridos
+    const { email, password, name} = req.body;
+  
     if (!email || !password || !name) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
-
+  
     try {
-        // Verificar si el usuario ya existe
-        const userExists = await UserModel.findOne({ email });
-        if (userExists) {
-            return res.status(400).json({ error: 'El usuario ya existe' });
-        }
-
-        // Crear un nuevo usuario
-        const newUser = new UserModel({ email, password, name });
-        
-        // Asignar rol de administrador si el correo coincide
-        newUser.role = email === process.env.USER_ADMIN ? 'admin' : 'user';
-
-        await newUser.save(); // Guardar el nuevo usuario
-        res.status(201).json({ message: 'Usuario registrado con éxito' });
+      const userExists = await UserModel.findOne({ email });
+      const nameExists = await UserModel.findOne({ name });
+      if (userExists) {
+        return res.status(400).json({ error: 'El email ya está registrado' });
+      } else if (nameExists){
+        return res.status(400).json({ error: 'El nombre ya está registrado' });
+      }
+  
+      const newUser = new UserModel({ email, password, name });
+      await newUser.save();
+      res.status(201).json({ message: 'Usuario registrado exitosamente' }); 
     } catch (err) {
-        res.status(500).json({ error: 'Error en el servidor: ' + err.message });
+      res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
 
 exports.loginUser = async (req, res) => {
-    const { email, password, name } = req.body;
+    const { email, password,name } = req.body;
 
     // Validar los campos requeridos
     if (!email || !password || !name) {
@@ -48,7 +44,7 @@ exports.loginUser = async (req, res) => {
         }
 
         // Crear un token de acceso
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         // Establecer la cookie con el token
         res.cookie('token', token, {
@@ -57,11 +53,13 @@ exports.loginUser = async (req, res) => {
             sameSite: 'none',   // Previene ataques CSRF
         });
 
-        res.json({ message: 'Inicio de sesión exitoso', token });
+        res.json({ message: 'Inicio de sesión exitoso', token }); // Enviar el token en la respuesta
     } catch (err) {
         res.status(500).json({ error: 'Error en el servidor: ' + err.message });
     }
 };
+
+
 
 exports.logoutUser = (req, res) => {
     // Eliminar la cookie de sesión
@@ -74,9 +72,7 @@ exports.logoutUser = (req, res) => {
 };
 
 
-// Logica de cambio de contraseña
-const User = require('../Models/User')
-const bcrypt = require('bcrypt')
+
 
 exports.verifyEmail = async (req, res) => {
     const {email} = req.body
@@ -84,7 +80,7 @@ exports.verifyEmail = async (req, res) => {
     try{
          // Verificar que el correo coincida con el del usuario logueado
 
-        const user = await User.findOne({email, _id: req.user.id})
+        const user = await UserModel.findOne({email, _id: req.user.id})
         if (!user){
             return res.status(404).json({message: 'Correo Incorrecto'})
         }
@@ -94,28 +90,68 @@ exports.verifyEmail = async (req, res) => {
     }
 }
 
-exports.changePassword = async (req,res) => {
-    const { newPassword} = req.body
+exports.changeUsername = async (req, res) => {
+    const { newName } = req.body;
+    const userId = req.user.id;
 
-    try{
-        const user = await User.findById(req.user.id)
-        if (!user) {
-            return res.status(404).json({ message: 'Correo Incorrecto'})
-        }
-
-        // Verificar que la contraseña nueva no sea igual a la actual
-        const samePassword = await user.comparePassword(newPassword)
-        if (samePassword) {
-            return res.status(404).json({message: 'La nueva contraseña no puede ser igual a la contraseña actual'})
-        }
-
-        const salt = await bcrypt.genSalt(12)
-        user.password = await bcrypt.hash(newPassword, salt)
-        await user.save()
-
-        res.status(200).json({ message: 'Contraseña cambiada exitosamente' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error del servidor' });
+    if (!newName) {
+        return res.status(400).json({ error: 'El nuevo nombre es requerido' });
     }
-}
 
+    try {
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const nameExists = await UserModel.findOne({ name: newName });
+        if (nameExists) {
+            return res.status(400).json({ error: 'El nombre ya está registrado' });
+        }
+
+        user.name = newName;
+        await user.save();
+
+        res.status(200).json({ message: 'Nombre de usuario actualizado exitosamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor: ' + error.message });
+    }
+};
+
+
+
+
+exports.changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user.id; // Obtiene el ID del usuario autenticado
+
+    // Validaciones básicas
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: 'Ambas contraseñas son requeridas' });
+    }
+
+    if (newPassword.length < 8) {
+        return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 8 caracteres' });
+    }
+
+    try {
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        // 2. Verificar la contraseña actual
+        const isMatch = await user.comparePassword(currentPassword);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Contraseña actual incorrecta' });
+        }
+
+        // 3. Hashear y guardar la nueva contraseña
+        user.password = newPassword; // El pre-hook 'save' en el modelo se encargará del hashing
+        await user.save();
+
+        res.json({ message: 'Contraseña actualizada exitosamente' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

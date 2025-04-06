@@ -3,11 +3,14 @@ import GastoChart from "../../component/charts/gastoChart";
 import axios from "axios";
 import { FiltrosChart } from "../../component/charts/filtrosChart/filtrosChart";
 import  { Helmet } from 'react-helmet';
+import { config } from "../../component/variables/config";
+
 
 
 function Charts(){
-    // const serverFront = "http://localhost:3001";
-    const serverFront = "https://billetera-virtual-1.onrender.com";
+
+    const serverFront = config.apiUrl;
+
     
     const [gastos,setGastos] = useState([])
     const [gastosFiltrados, setGastosFiltrados] = useState([])

@@ -4,17 +4,22 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import { TransitionGroup } from 'react-transition-group';
+// import { ExpandMore, ExpandLess } from '@mui/icons-material';
+import InfoIcon from '@mui/icons-material/Info';
 import "../login/user.css"
+import { Button, Collapse } from '@mui/material';
 
 
 // const serverFront = "http://localhost:3001";
 const serverFront = "https://billetera-virtual-1.onrender.com";
 
-const Register = ({ setIsAuthenticated }) => {
+const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [name,setName] = useState('')
+  const [showInputs,setShowInputs] = useState(true)
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
@@ -24,16 +29,39 @@ const Register = ({ setIsAuthenticated }) => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (password !== confirmPassword) {
+      setMessage("Las contraseñas no coinciden");
+      return;
+    }
+  
     try {
-      const response = await axios.post(`${serverFront}/api/auth/register`, {  email, password, name });
+      const response = await axios.post(`${serverFront}/api/auth/register`, {
+        email,
+        password,
+        name
+      });
       setMessage(response.data.message);
-      navigate('/login'); // Redirigir al login tras el registro
+      navigate('/login');
     } catch (error) {
-      setMessage(error.response.data.error || 'Error en el registro');
+      
+      if (error.response) {
+        
+        setMessage(error.response.data?.error || 'Error en el registro');
+      } else if (error.request) {
+      
+        setMessage('El servidor no respondió. Intenta más tarde.');
+      } else {
+      
+        setMessage('Error al enviar la solicitud');
+      }
+      console.error('Detalles del error:', error);
     }
   };
 
+
   return (
+  
     <motion.div 
       className="container-login"
       initial={{ opacity: 0 }}
@@ -56,7 +84,7 @@ const Register = ({ setIsAuthenticated }) => {
       >
         <motion.input
           type="email"
-          placeholder="Correo electrónico"
+          placeholder="Ingrese Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -65,7 +93,7 @@ const Register = ({ setIsAuthenticated }) => {
 
         <motion.input
           type="name"
-          placeholder="Nombre de usuario"
+          placeholder="Ingrese Nombre de Usuario"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -79,7 +107,7 @@ const Register = ({ setIsAuthenticated }) => {
           transition={{ delay: 0.2, duration: 0.5 }}
         >
           <input
-            placeholder="Contraseña"
+            placeholder="Crea una Contraseña"
             value={password}
             type={show ? 'text' : 'password'}
             onChange={(e) => setPassword(e.target.value)}
@@ -90,12 +118,31 @@ const Register = ({ setIsAuthenticated }) => {
           </span>
         </motion.div>
 
+        <motion.div 
+          className="password-container"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          <input
+            placeholder="Confirme Contraseña"
+            value={confirmPassword}
+            type={show ? 'text' : 'password'}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <span className="password-icon" onClick={switchButton}>
+            {show ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </motion.div>
+
+
         <motion.button 
           type="submit"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          Iniciar sesión
+          Confirmar
         </motion.button>
       </motion.form>
 
@@ -120,6 +167,39 @@ const Register = ({ setIsAuthenticated }) => {
           <p> ¡Ya tengo cuenta! </p>
         </NavLink>
       </motion.div>
+
+
+      <div   onClick={() => setShowInputs(!showInputs)}  style={{ display: 'flex', alignItems: 'center', color: 'red', fontWeight: 600, marginTop: '1rem', cursor: 'pointer' }}>
+          <InfoIcon 
+            sx={{ marginRight: '0.5rem', cursor: 'pointer' }} 
+          />
+          <p style={{ margin: 0 }}>Requisitos</p>
+        </div>
+
+      <TransitionGroup>
+        {!showInputs && 
+        <Collapse>
+        
+          <ul className='p3'>
+            
+            {[
+              "La contraseña debe tener al menos 8 caracteres.",
+              "Incluir al menos una mayúscula.",
+              "Incluir al menos un número.",
+              "Incluir al menos un carácter especial (opcional).",
+              "No incluir espacios en blanco."
+            ].map((item, index) => (
+              <li key={index}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Collapse>
+
+        }
+      </TransitionGroup>
+
+
     </motion.div>
 
   );

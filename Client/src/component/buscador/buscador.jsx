@@ -31,7 +31,8 @@ export function Debounce(func, delay) {
 
 export function Buscador({filtrarDatos}){
     const [showSearch, setShowSearch] = useState(false);
-    const [buscar,setBuscar] = useState('')
+    // const [buscar,setBuscar] = useState('')
+    const [inputValue,setInputValue] = useState('')
 
     const filtrarDebounce = useMemo(() => Debounce((palabraClave) => {
         filtrarDatos(palabraClave);
@@ -39,11 +40,14 @@ export function Buscador({filtrarDatos}){
 
 
     const buscarChange = (event) => {
-        const value = event.target.value;
-        const palabraClave = value.trim().toLowerCase().split(/\s+/);
-        setBuscar(value);
-        // filtrarDatos(palabraClave);
-        filtrarDebounce(palabraClave)
+        if(event.key === 'Enter'){
+            const value = event.target.value;
+            const palabraClave = value.trim().toLowerCase().split(/\s+/);
+            setBuscar(value);
+            // filtrarDatos(palabraClave);
+            filtrarDebounce(palabraClave)
+        }
+
     }
 
     return(
@@ -57,8 +61,9 @@ export function Buscador({filtrarDatos}){
                 label="Buscar"
                 variant="outlined"
                 fullWidth
-                value={buscar}
-                onChange={buscarChange} 
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)} 
+                onKeyPress={buscarChange}
             />
          
             </SearchBox>

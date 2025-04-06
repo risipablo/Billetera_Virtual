@@ -17,10 +17,11 @@ app.use(cookieParser());
 
 
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'https://billetera-virtual-nine.vercel.app', 'https://billetera-virtual-1.onrender.com'],
+    origin: ['http://localhost:5173', 'http://localhost:5176', 'http://localhost:5175', 'https://billetera-virtual-nine.vercel.app', 'https://billetera-virtual-1.onrender.com'],
     optionsSuccessStatus: 200,
     methods: 'GET,POST,DELETE,PATCH',
     credentials: true,
+    // allowedHeaders: 'Content-Type,Authorization'
 };
 
 app.use(cors(corsOptions));
@@ -33,6 +34,7 @@ app.use('/api', noteRoutes)
 app.use('/api/auth', authRoutes)
 app.use(errorHandler);
 
-app.listen(3001, () => {
-    console.log("Servidor corriendo en el puerto 3001");
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+  console.log(`Server corriendo en el puerto ${port}`);
 });

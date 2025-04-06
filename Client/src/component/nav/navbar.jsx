@@ -1,26 +1,18 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import LogoutIcon from '@mui/icons-material/Logout';
+import { NavLink } from "react-router-dom";
 import BarChartIcon from '@mui/icons-material/BarChart';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import { UserContext } from "../user/userContext";
-import { useContext, useState } from "react";
-import { Tooltip } from "@mui/material";
+import {  useState } from "react";
+import { Tooltip} from "@mui/material";
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import SettingsIcon from '@mui/icons-material/Settings';
-import axios from 'axios'
 import "./navbar.css"
 
-
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
+import { SubMenu } from "./subMenu/subMenu";
 
 export function Navbar({setIsAuthenticated}) {
-    const navigate = useNavigate()
-    const {user} = useContext(UserContext)
     const [active,setActive] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
+
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -32,7 +24,6 @@ export function Navbar({setIsAuthenticated}) {
         document.body.classList.remove('open')
     }
 
-
     const open = (icon) => {
         setActive(icon)
     }
@@ -41,33 +32,11 @@ export function Navbar({setIsAuthenticated}) {
         setActive(null)
     }
 
-    // Cerrar Sesión 
-    const handleLogout = async () => {
-        try {
-            // Llamada al endpoint de logout en el servidor
-            await axios.post(`${serverFront}/api/auth/logout`, {}, { withCredentials: true });
-
-            // Borrar cualquier token en el almacenamiento local
-            localStorage.removeItem('token');
-            
-            // Actualizar el estado de autenticación
-            setIsAuthenticated(false);
-
-            // Redirigir al usuario a la página principal o de login
-            navigate('/');
-        } catch (error) {
-            console.error('Error al cerrar sesión:', error);
-        }
-    };
-
-
-    const handleUserClick = () => {
-        navigate('/gasto');
-    };
-
+    // const handleLogout = () => {
+    //     setIsAuthenticated(false); 
+    // };
 
     return(
-
         <div className='icon-container'>
             <div onClick={toggleMenu} className={`menu-icon ${isOpen ? 'open' : ''}`}>             
                 <span></span>
@@ -77,9 +46,7 @@ export function Navbar({setIsAuthenticated}) {
 
             <div className={`icons ${isOpen ? 'open' : ''}`} onClick={closeMenu}>
                 <div className={`menu ${isOpen ? 'open' : ''}`}> 
-
-
-                <NavLink to="/gasto" onMouseEnter={() => open('gastos')} onMouseLeave={close} onClick={closeMenu}>
+                    <NavLink to="/gasto" onMouseEnter={() => open('gastos')} onMouseLeave={close} onClick={closeMenu}>
                         <Tooltip title={active === 'gastos' ? "Gastos" : " "}>
                             <div className="icon gasto-icon">
                                 <MonetizationOnIcon />
@@ -88,7 +55,6 @@ export function Navbar({setIsAuthenticated}) {
                         </Tooltip>
                     </NavLink>
                         
-
                     <NavLink to="/charts" onMouseEnter={() => open('estadisticas')} onMouseLeave={close} onClick={closeMenu}>
                         <Tooltip title={active === 'estadisticas' ? "Estadisticas" : " "}>
                             <div className="icon chart-icon">
@@ -113,46 +79,17 @@ export function Navbar({setIsAuthenticated}) {
                                 <EditNoteIcon />
                                 <span className="text">Notas</span> 
                             </div>
-                            </Tooltip>
+                        </Tooltip>
                     </NavLink>
 
-                    <NavLink to="/change-password" onMouseEnter={() => open('configuraciones')} onMouseLeave={close} >
-                        <Tooltip title={active === 'configuraciones' ? 'Configuraciones' : ''}>
-                            <div className="icon logout-icon">
-                                <SettingsIcon/>
-                                <span className="text">Configuraciones</span>
-                            </div>
-                        </Tooltip>   
-                    </NavLink>
 
-                    
-        
-
-                        <NavLink onClick={handleLogout} onMouseEnter={() => open('cerrar sesión')} onMouseLeave={close}>
-                            <Tooltip title={active === 'cerrar sesión' ? "Cerrar Sesión" : " "}>
-                                <div className="icon logout-icon">
-                                    <LogoutIcon />
-                                    <span className="text">Cerrar Sesión</span> 
-                                </div>
-                            </Tooltip>
-                        </NavLink>
-
- 
                 </div>
             </div>
 
-   
-            
-            <div className='user' onClick={handleUserClick} style={{ cursor: 'pointer' }}>
-                <EmojiEmotionsIcon/>
-                {user && <p>Hola, {user.name}</p>}
-            </div>
-
+            <SubMenu setIsAuthenticated={setIsAuthenticated}/>
             <div className="span2">
                 <span></span>
             </div>
-
         </div>
-
     )
 }
