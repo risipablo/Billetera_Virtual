@@ -102,8 +102,8 @@ export function NotasPage() {
                 </Grid>
             </Container>
             
-            <Container style={{ marginTop: 40 }}>
-                <Grid container spacing={2}>
+            <Container style={{ marginTop: 50 }}>
+                <Grid container spacing={6}>
                     {notes.map((nota, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <motion.div

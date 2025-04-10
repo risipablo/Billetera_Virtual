@@ -114,7 +114,7 @@ export const SubMenu = ({setIsAuthenticated}) => {
                     sx: {
                         overflow: 'visible',
                         filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        mt: 1.5,
+                        mt: 1.8,
                         '& .MuiAvatar-root': {
                             width: 32,
                             height: 32,
@@ -126,9 +126,9 @@ export const SubMenu = ({setIsAuthenticated}) => {
                             display: 'block',
                             position: 'absolute',
                             top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
+                            right: 12,
+                            width: 12,
+                            height: 12,
                             bgcolor: 'background.paper',
                             transform: 'translateY(-50%) rotate(45deg)',
                             zIndex: 0,
@@ -151,11 +151,7 @@ export const SubMenu = ({setIsAuthenticated}) => {
                         e.stopPropagation();
                         handleSubMenuClick(e);
                     }}
-                    onMouseEnter={(e) => {
-                        if (userMenuOpen) {
-                            handleSubMenuClick(e);
-                        }
-                    }}
+                    sx={{ margin: '10px  0 '}}
                 >
                     <ListItemIcon>
                         <SettingsIcon fontSize="small" />
@@ -164,7 +160,7 @@ export const SubMenu = ({setIsAuthenticated}) => {
                     <KeyboardArrowRightIcon style={{ marginLeft: 'auto' }} />
                 </MenuItem>
 
-                <MenuItem onClick={handleLogout} disabled={loading}>
+                <MenuItem onClick={handleLogout} disabled={loading}  sx={{ margin: '10px  0 '}}>
                     <ListItemIcon>
                         {loading ? (
                         <CircularProgress size={20} />
@@ -182,27 +178,42 @@ export const SubMenu = ({setIsAuthenticated}) => {
                 anchorEl={subMenuAnchorEl}
                 open={subMenuOpen}
                 onClose={handleSubMenuClose}
-                anchorOrigin={{ 
-                    vertical: 'top',
-                    horizontal: 'left',
+                // sx={{ margin: '20px  0 '} }
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        overflow: 'visible',
+                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                        mt: 1.8,
+                        '& .MuiAvatar-root': {
+                            width: 32,
+                            height: 32,
+                            mr: -0.5,
+                            ml: 1,
+                        },
+                        '&:before': {
+                            content: '""',
+                            display: 'block',
+                            position: 'absolute',
+                            top: 0,
+                            left: 12,
+                            width: 12,
+                            height: 12,
+                            bgcolor: 'background.paper',
+                            transform: 'translateY(-50%) rotate(45deg)',
+                            zIndex: 0,
+                        },
+                    },
                 }}
-                transformOrigin={{ 
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                sx={{
-                    '& .MuiPaper-root': {
-                        ml: 1,
-                    }
-                }}
+                
             >
-                <MenuItem onClick={handleProfileClick}>
+                <MenuItem onClick={handleProfileClick} sx={{ margin: '12px  0 '}}>
                     <ListItemIcon>
                         <BadgeIcon fontSize="small" />
                     </ListItemIcon>
                     Usuario
                 </MenuItem>
-                <MenuItem onClick={handlePasswordClick}>
+                <MenuItem onClick={handlePasswordClick} sx={{ margin: '12px  0 '}}>
                     <ListItemIcon>
                         <PasswordIcon fontSize="small" />
                     </ListItemIcon>

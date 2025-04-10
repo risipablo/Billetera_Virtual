@@ -4,6 +4,7 @@ import axios from "axios";
 import { FiltrosChart } from "../../component/charts/filtrosChart/filtrosChart";
 import  { Helmet } from 'react-helmet';
 import { config } from "../../component/variables/config";
+import { ScrollTop } from "../../component/common/scrollTop";
 
 
 
@@ -51,6 +52,8 @@ function Charts(){
             <GastoChart 
                 gastos={gastosFiltrados}
             />
+
+            <ScrollTop/>
 
         </div>
     )

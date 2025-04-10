@@ -43,8 +43,8 @@ export function Buscador({filtrarDatos}){
         if(event.key === 'Enter'){
             const value = event.target.value;
             const palabraClave = value.trim().toLowerCase().split(/\s+/);
-            setBuscar(value);
-            // filtrarDatos(palabraClave);
+            // setBuscar(value);
+            filtrarDatos(palabraClave);
             filtrarDebounce(palabraClave)
         }
 

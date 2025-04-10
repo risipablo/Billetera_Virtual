@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 import { motion } from 'framer-motion';
 import "./chart.css"
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+
 
 const GastoChart = ({ gastos}) => {
     

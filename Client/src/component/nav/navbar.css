@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between; 
-    padding: 1rem 1.8rem; 
+    padding: 1rem 2rem; 
     z-index: 99;
     background-color: rgb(18, 105, 160);
     top:0;
@@ -191,7 +191,7 @@ span:hover{
 @media (max-width: 350px) {
     .user {
         flex-wrap: wrap;
-        font-size: .7rem;
+        /* font-size: .7rem; */
     }
 }
 

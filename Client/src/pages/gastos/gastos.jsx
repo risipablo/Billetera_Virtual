@@ -2,7 +2,8 @@ import  { useState, useEffect, useMemo} from 'react';
 import axios from 'axios';
 import {Box,Button,useMediaQuery,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,
 ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField, Paper, IconButton, ListItem,
-Collapse,} from '@mui/material';
+Collapse,
+Skeleton,} from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -36,7 +37,8 @@ const serverFront = config.apiUrl;
     const [monto, setMonto] = useState("");
     const [año,setAño] = useState("")
     const [condicion, setCondicion] = useState("");
-    const [limite,setLimite] = useState([])
+    const [limite, setLimite] = useState([])
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     const token = localStorage.getItem('token');
     console.log(token); 
@@ -58,11 +60,16 @@ const serverFront = config.apiUrl;
                 withCredentials: true, 
             })
             .then(response => {
-                setGastos(response.data);
-                setGastosFiltrados(response.data);
+                setTimeout(() => {
+                    setGastos(response.data);
+                    setGastosFiltrados(response.data);
+                    setLoading(false);
+                }, 2000);
+                
             })
             .catch(err => {
                 console.log(err);
+                setLoading
                 if (err.response && err.response.status === 401) {
                     toast.error('Usuario no autorizado, por favor inicia sesión', { position: 'top-right' });
                 }
@@ -328,7 +335,7 @@ const serverFront = config.apiUrl;
 
                 <Grid item>
                     <Button variant="contained" color="secondary" className="limpiar" sx={{ fontFamily: "Montserrat, sans-serif", marginLeft:3 }} onClick={() => {
-                        setCondicion(''); setDia(''); setMes(''); setMetodo(''); setMonto(''); setProducto('');}}> Limpiar </Button>
+                        setCondicion(''); setDia(''); setMes(''); setMetodo(''); setMonto(''); setProducto('');}}> Borrar </Button>
                 </Grid>
                 
             </Grid>
@@ -412,6 +419,7 @@ const serverFront = config.apiUrl;
     
 
             <TableContainer component={Paper} className="productos" sx={{ mt: 6, boxShadow: 4, fontFamily: "Montserrat, sans-serif" }} style={{ overflowX: 'auto' }}>
+               
                 <Table>
                     <TableHead>  
                         <TableRow className='fila' sx={{ mt: 2 }}>
@@ -425,16 +433,51 @@ const serverFront = config.apiUrl;
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}></TableCell>
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
-                        {gastosFiltrados.map((element, index) => (
-                            <TableRow key={index} style={{ background: condicionPago(element.condicion || '') }}>
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <select value={editingData.dia} onChange={(e) => setEditingData({...editingData, dia: e.target.value})}>
-                                        {[...Array(31)].map((_, index) => (
-                                            <option key={index + 1} value={index + 1}>{index + 1}</option>
-                                            ))} </select> : element.dia}</TableCell>
-                                    
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
+                        {loading ? (
+                            
+                            [...Array(5)].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={50} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={80} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={60} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={100} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={70} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={90} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="text" width={80} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Skeleton variant="circular" width={40} height={40} />
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            
+                            gastosFiltrados.map((element, index) => (
+                                <TableRow key={index} style={{ background: condicionPago(element.condicion || '') }}>
+                                   
+                                    <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
+                                        {editingId === element._id ? <select value={editingData.dia} onChange={(e) => setEditingData({...editingData, dia: e.target.value})}>
+                                            {[...Array(31)].map((_, index) => (
+                                                <option key={index + 1} value={index + 1}>{index + 1}</option>
+                                            ))} </select> : element.dia}
+                                    </TableCell>
+
+                                    <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
                                     {editingId === element._id ? <select value={editingData.mes} onChange={(e) => setEditingData({...editingData, mes: e.target.value})}> 
                                         {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => <option key={mes} value={mes}>{mes}</option>)} </select> : element.mes}</TableCell>
 
@@ -474,9 +517,14 @@ const serverFront = config.apiUrl;
                                         )}
                                     </Box>
                                 </TableCell>
-                            </TableRow>
-                        ))}
+
+                                </TableRow>
+
+
+                            ))
+                        )}
                     </TableBody>
+
                     <tfoot>
                         <TableRow>
                             <TableCell></TableCell>

@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Loader from "./component/loader/loader"
 import Login from './pages/login/login'
@@ -11,12 +11,33 @@ import { NotasPage } from './pages/notas/notasPage';
 import { ChangePassword } from './component/password/changePassword';
 import { UserProvider } from './component/user/userContext';
 import { ChangeUser } from './component/user/changeUser';
+import { config } from './component/variables/config';
+import axios from 'axios';
 
+
+const serverFront = config.apiUrl;
 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState (false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios
+        .get(`${serverFront}/api/auth/validate-token`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          setIsAuthenticated(true);
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+        });
+    }
+  }, []);
 
 
   return (

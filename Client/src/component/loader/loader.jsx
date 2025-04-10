@@ -11,7 +11,7 @@ const Loader = ({ setLoading }) => {
     const timer = setTimeout(() => {
       setLoading(false); 
       navigate('/gasto'); 
-    }, 7000);
+    }, 3000);
 
     return () => clearTimeout(timer); 
   }, [navigate, setLoading]);
@@ -20,6 +20,7 @@ const Loader = ({ setLoading }) => {
     <div className="loader" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
     <InfinitySpin
       visible={true}
+      display="block"
       width="200"
       color="#4fa94d"
       ariaLabel="infinity-spin-loading"

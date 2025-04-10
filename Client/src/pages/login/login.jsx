@@ -5,9 +5,10 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import "./user.css"
 import { UserContext } from '../../component/user/userContext';
 import { NavLink, useNavigate } from 'react-router-dom';
+import {config} from '../../component/variables/config'
 
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
+const serverFront = config.apiUrl;
+
 
 
  function Login ({ setIsAuthenticated, setLoading }) {
