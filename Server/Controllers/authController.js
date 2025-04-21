@@ -174,7 +174,7 @@ exports.forgotPassword = async (req, res) => {
         user.resetPasswordExpires = Date.now() + 360000
         await user.save()
 
-        const resetLink = `https://billetera-virtual-nine.vercel.app/api/auth/reset-password?token=${token}`
+        const resetLink = `https://billetera-virtual-nine.vercel.app/reset-password/${token}`
         await sendResetEmail(user.email, user.name, resetLink)
         
         console.log(`Enlace de restablecimiento: ${resetLink}`);

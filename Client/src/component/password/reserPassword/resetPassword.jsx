@@ -37,7 +37,7 @@ export function ResertPassword(){
             SetMessage('¡Contraseña actualizada! Redirigiendo...');
             setTimeout(() => navigate('/login'), 3000);
             
-        } catch (error) {
+        } catch (err) {
             SetMessage(err.response?.data?.message || "Error al restablecer la contraseña")
         }
     }
@@ -63,8 +63,9 @@ export function ResertPassword(){
                         minLength="8"
                     />
 
+                    <button type="submit">Confirmar </button>
             </form>
-            <button type="submit">Confirmar </button>
+           
             {message && <p>{message}</p>}
         </div>
     )
