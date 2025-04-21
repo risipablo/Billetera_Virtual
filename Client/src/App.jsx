@@ -8,11 +8,13 @@ import Charts from "./pages/chartPage/charts"
 import Gastos from "./pages/gastos/gastos"
 import {Navbar} from "./component/nav/navbar"
 import { NotasPage } from './pages/notas/notasPage';
-import { ChangePassword } from './component/password/changePassword';
 import { UserProvider } from './component/user/userContext';
 import { ChangeUser } from './component/user/changeUser';
 import { config } from './component/variables/config';
 import axios from 'axios';
+import { ForgotPassword } from './component/password/ForgotPassword/forgotPassword';
+import { ChangePassword } from './component/password/changePassword/changePassword';
+import { ResertPassword } from './component/password/reserPassword/resetPassword';
 
 
 const serverFront = config.apiUrl;
@@ -48,19 +50,26 @@ function App() {
         {!loading && isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated} />}
   
         <Routes>
+
           <Route
             path="/"
             element={<Login setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />}
           />
+
           <Route
             path="/register"
             element={<Register setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />}
           />
+
+          <Route path='/forgot-password' element={<ForgotPassword setIsAuthenticated={setIsAuthenticated} setLoading={setLoading}/>}/>
+          <Route path="/reset-password/:token" element={<ResertPassword setIsAuthenticated={setIsAuthenticated} setLoading={setLoading}/>} />
+
           <Route
             path="/gasto"
             element={isAuthenticated ? <Gastos /> : <Navigate to="/" />}
           />
           <Route path="*" element={<Navigate to="/" />} />
+
           <Route
             path="/convertidor"
             element={isAuthenticated ? <Convertidor /> : <Navigate to="/" />}

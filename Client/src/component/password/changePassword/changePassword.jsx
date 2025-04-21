@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
-import "./changePassword.css";
-import { config } from "../variables/config";
+import "../changePassword/changePassword.css";
+import { config } from "../../variables/config";
 
 
 const serverFront = config.apiUrl;

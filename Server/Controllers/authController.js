@@ -1,6 +1,10 @@
 
 const UserModel = require('../Models/User');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const { error } = require('console');
+const { sendResetEmail } = require('./emailSender');
 require('dotenv').config();
 
 exports.registerUser = async (req, res) => {
@@ -70,8 +74,6 @@ exports.logoutUser = (req, res) => {
     });
     res.json({ message: 'Cierre de sesión exitoso' });
 };
-
-
 
 
 exports.verifyEmail = async (req, res) => {
@@ -157,19 +159,53 @@ exports.changePassword = async (req, res) => {
 };
 
 
-exports.validateToken = (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    
-    if (!token) {
-        return res.status(401).json({ message: "Token not provided" })  
-    }
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        res.status(200).json({ message: 'Token válido', user: decoded });
-    } catch (err) {
-        res.status(401).json({ message: 'Token inválido' });
-    }
+exports.forgotPassword = async (req, res) => {
+    const {email} = req.body;
 
+    try{
+        const user = await UserModel.findOne({email})
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado"})
+        }
+
+        const token = crypto.randomBytes(20).toString('hex')
+        user.resetPasswordToken = token
+        user.resetPasswordExpires = Date.now() + 360000
+        await user.save()
+
+        const resetLink = `https://billetera-virtual-nine.vercel.app/api/auth/reset-password?token=${token}`
+        await sendResetEmail(user.email, user.name, resetLink)
+        
+        console.log(`Enlace de restablecimiento: ${resetLink}`);
+
+        res.json({ message: "Correo de restablecimiento enviado"})
+    } catch (error) {
+        res.status(500).json({message: "error del servidor", error: error.message})
+    }
 }
 
+exports.resetPassword = async (req, res) => {
+    const {token, newPassword} = req.body
+
+    try{
+        const user = await UserModel.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now()}
+        })
+
+        if(!user){
+            return res.status(400).json({ message: "Token inválido o expirado"})
+        }
+
+        user.password = await bcrypt.hash( newPassword,12)
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save()
+
+        res.json({ message: "Contraseña actualizada correctamente"})
+
+    } catch (err){
+        res.status(500).json({ message: "Error del servidor", error:error.message})
+    }
+} 

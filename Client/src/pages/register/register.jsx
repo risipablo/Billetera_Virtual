@@ -8,11 +8,10 @@ import { TransitionGroup } from 'react-transition-group';
 // import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import "../login/user.css"
-import { Button, Collapse } from '@mui/material';
+import { Collapse } from '@mui/material';
+import { config } from '../../component/variables/config';
+const serverFront = config.apiUrl;
 
-
-// const serverFront = "http://localhost:3001";
-const serverFront = "https://billetera-virtual-1.onrender.com";
 
 const Register = () => {
   const [email, setEmail] = useState('');

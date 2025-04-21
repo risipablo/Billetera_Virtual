@@ -102,6 +102,10 @@ const serverFront = config.apiUrl;
             {show ? <FaEyeSlash /> : <FaEye />}
           </span>
 
+          <NavLink to="/forgot-password">
+            <p className>Recuperar contraseña</p>
+          </NavLink>
+          
         </motion.div>
 
         <motion.button 

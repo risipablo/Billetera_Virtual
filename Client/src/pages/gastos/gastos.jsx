@@ -43,7 +43,7 @@ const serverFront = config.apiUrl;
     const token = localStorage.getItem('token');
     console.log(token); 
     const [isAdmin, setIsAdmin] = useState(false);
-    const [showInputs,setShowInputs] = useState(false)
+    const [showInputs,setShowInputs] = useState(true)
     const isMobile = useMediaQuery('(max-width:500px)');
     const [play] = useSound(Cash)
     const [play2] = useSound(Ok)
@@ -59,6 +59,7 @@ const serverFront = config.apiUrl;
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true, 
             })
+   
             .then(response => {
                 setTimeout(() => {
                     setGastos(response.data);
@@ -270,6 +271,9 @@ const serverFront = config.apiUrl;
         localStorage.setItem('limiteGasto', limite);
       }, [limite]);
     
+      useEffect(() => {
+        setShowInputs(isMobile)
+      },[isMobile])
 
     
     return (
@@ -346,9 +350,10 @@ const serverFront = config.apiUrl;
 
             
             <Button
-                onClick={() => setShowInputs(!showInputs)}
+                onClick={() => setShowInputs(prev => !prev)}
                 startIcon={showInputs ? <ExpandLess /> : <ExpandMore />}
                 sx={{  margin: '2rem 0 0.2rem auto'}}
+                
             >
                 {showInputs ? '' : '' } 
             </Button>
