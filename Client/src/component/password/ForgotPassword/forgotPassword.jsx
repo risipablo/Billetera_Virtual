@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {config} from '../../variables/config'
+import "../../../pages/login/user.css"
 import axios from "axios";
 
 
@@ -21,11 +22,9 @@ export function ForgotPassword() {
         }
     }
 
-    return(
-        <div>
-               <h3><strong>Ingrese su correo electronico </strong></h3>
-
-
+    return (
+        <div className="container-forgot-password">
+            <h2><strong>Ingrese su correo electronico </strong></h2>
             <form onSubmit={handleSubmit}>
                 <input 
                     type="email"
@@ -33,12 +32,10 @@ export function ForgotPassword() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-
                 />
                 <button type="submit">Enviar</button>
                 {message && <p>{message}</p>}
             </form>
-            
         </div>
-    )
+    );
 }

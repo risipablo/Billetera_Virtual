@@ -102,7 +102,7 @@ export const SubMenu = ({setIsAuthenticated}) => {
                     <EmojiEmotionsIcon/>
                 </NavLink>
                
-                {user && <p>Hola, {user.name}</p>}
+                {user?.name && <p>Hola, {user.name}</p>}
             </div>
 
             <Menu

@@ -33,10 +33,10 @@ exports.registerUser = async (req, res) => {
 
 
 exports.loginUser = async (req, res) => {
-    const { email, password,name } = req.body;
+    const { email, password } = req.body;
 
     // Validar los campos requeridos
-    if (!email || !password || !name) {
+    if (!email || !password ) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 

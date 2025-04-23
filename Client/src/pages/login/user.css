@@ -18,7 +18,7 @@
 
 .password-icon {
   position: absolute;
-  right: 40px;
+  right: 30px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -74,11 +74,21 @@
   border-bottom: 2px solid #9b09de;
 }
 
+.forgot{
+  font-family: .3rem;
+  font-weight: 600;
+}
+.forgot p:hover {
+  color: #d9534f;
+  transition: .3s;
+}
+
+
 .container-login button {
   font-family: "Montserrat", system-ui;
   width: 50%;
-  padding: 10px;
-  margin: 1rem auto;
+  padding: 12px 8px;
+  margin: 2.5rem auto  1.5rem;
   background-color: #ffffff;
   color: #060606;
   border: 1px groove rgba(0, 0, 0, 0.9);
@@ -132,4 +142,70 @@
   color: #0d0d0d; 
   font-size: 1rem; 
   font-weight: 600;
+}
+
+
+
+
+/* forgot-password */
+.container-forgot-password {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.container-forgot-password h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.container-forgot-password form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 20px;
+}
+
+.container-forgot-password input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 1rem;
+}
+
+.container-forgot-password button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.container-forgot-password button:hover {
+  background-color: #0056b3;
+}
+
+.container-forgot-password p {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
 }

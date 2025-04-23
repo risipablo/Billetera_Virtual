@@ -6,6 +6,7 @@ import "./user.css"
 import { UserContext } from '../../component/user/userContext';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {config} from '../../component/variables/config'
+import Tooltip from '@mui/material/Tooltip';
 
 const serverFront = config.apiUrl;
 
@@ -14,11 +15,9 @@ const serverFront = config.apiUrl;
  function Login ({ setIsAuthenticated, setLoading }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name,setName] = useState('')
   const [message, setMessage] = useState('');
-  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
-
+  const { setUser } = useContext(UserContext);
   const [show, setShow] = useState(false);
   const switchButton = () => setShow(!show);
 
@@ -29,12 +28,14 @@ const serverFront = config.apiUrl;
     try {
         const response = await axios.post(
             `${serverFront}/api/auth/login`, 
-            { email, password,name }, 
+            { email, password }, 
             { withCredentials: true }
         );
         
         localStorage.setItem('token', response.data.token);
-        setUser({ name});
+        setUser({
+          ...response.data.user, name: response.data.user.name
+        });
         setIsAuthenticated(true);
         navigate('/gasto');
     } catch (error) {
@@ -75,16 +76,6 @@ const serverFront = config.apiUrl;
         />
 
 
-        <motion.input
-          type="name"
-          placeholder="Usuario"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          whileFocus={{ scale: 1.05 }}
-        />
-
-
         <motion.div 
           className="password-container"
           initial={{ x: -50, opacity: 0 }}
@@ -98,15 +89,23 @@ const serverFront = config.apiUrl;
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <span className="password-icon" onClick={switchButton}>
-            {show ? <FaEyeSlash /> : <FaEye />}
-          </span>
 
-          <NavLink to="/forgot-password">
-            <p className>Recuperar contraseña</p>
-          </NavLink>
+          <Tooltip title={show ? "Ocultar contraseña" : "Mostrar contraseña"} arrow>
+            <span className="password-icon" onClick={switchButton}>
+              {show ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </Tooltip>
           
+
         </motion.div>
+
+        
+        <div className="forgot">
+            <NavLink to="/forgot-password">
+              <p>¿Haz olvidado tu contraseña?</p>
+            </NavLink>
+          </div>
+          
 
         <motion.button 
           type="submit"
