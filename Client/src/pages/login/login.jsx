@@ -33,9 +33,9 @@ const serverFront = config.apiUrl;
         );
         
         localStorage.setItem('token', response.data.token);
-        setUser({
-          ...response.data.user, name: response.data.user.name
-        });
+        // setUser({
+        //   ...response.data.user, name: response.data.user.name
+        // });
         setIsAuthenticated(true);
         navigate('/gasto');
     } catch (error) {
