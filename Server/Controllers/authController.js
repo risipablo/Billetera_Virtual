@@ -177,7 +177,7 @@ exports.forgotPassword = async (req, res) => {
         const resetLink = `https://billetera-virtual-nine.vercel.app/reset-password/${token}`
         // const resetLink = `http://localhost:3000/reset-password/${token}` // Cambia esto a tu URL de producción
         
-        await sendResetEmail(user.email, resetLink)
+        await sendResetEmail(user.email, user.name, resetLink);
         
         console.log(`Enlace de restablecimiento: ${resetLink}`);
 

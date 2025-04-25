@@ -9,7 +9,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import {UserContext} from "../../user/userContext"
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { config } from "../../variables/config";
 
+const serverFront = config.apiUrl; 
 
 
 export const SubMenu = ({ setIsAuthenticated }) => {
@@ -101,7 +103,7 @@ export const SubMenu = ({ setIsAuthenticated }) => {
                     <EmojiEmotionsIcon/>
                 </NavLink>
                
-                <p style={{ display: 'flex' }}>{user?.name || 'Cargando...'}</p>
+                <p style={{ display: 'flex' }}> Hola, {user?.name || 'Cargando...'}</p>
                 {/* {user?.name && <p>Hola, {user.name}</p>} */}
             </div>
 

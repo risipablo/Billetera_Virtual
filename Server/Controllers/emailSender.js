@@ -16,11 +16,17 @@ const sendResetEmail = async (email,name,resetLink) => {
         to: email,
         subject: 'Restablece tu contraseña',
         html: `
-            <h1>Hola ${name}</h1>
-            <p>Recibiste este correo porque solicitaste restablecer tu contraseña.</p>
-            <p>Haz clic en el siguiente enlace para continuar el proceso:</p>
-            <a href="${resetLink}">Restablecer contraseña</a>
-            <p>Si no solicitaste esto, ignora este correo.</p>
+            <div style="font-family: Arial, sans-serif; color: #333;">
+                <h2 style="color: #4CAF50;">Hola ${name},</h2>
+                <p>Recibiste este correo porque solicitaste restablecer tu contraseña.</p>
+                <p>Haz clic en el siguiente botón para continuar:</p>
+                <a href="${resetLink}" 
+                style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
+                    Restablecer contraseña
+                </a>
+                <p style="margin-top: 20px;">Si no solicitaste esto, puedes ignorar este correo.</p>
+                <p style="font-size: 12px; color: #888;">Billetera Virtual - Seguridad de tu cuenta</p>
+            </div>
         `
     }
 
