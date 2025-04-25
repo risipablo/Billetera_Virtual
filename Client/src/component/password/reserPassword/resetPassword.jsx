@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios"
+import { config } from "../../variables/config";
 
-// const serverFront = "http://localhost:3001"
-const serverFront = "https://billetera-virtual-1.onrender.com"
+const serverFront = config.apiUrl;
 
 
 export function ResertPassword(){
@@ -64,8 +64,9 @@ export function ResertPassword(){
 
                     <button type="submit">Confirmar </button>
             </form>
-           
-            {message && <p>{message}</p>}
+            {loading && <p>Cargando...</p>}
+            {message && <p className={message.includes('¡Contraseña actualizada!') ? 'success' : 'error'}>{message}</p>}
+            
         </div>
     )
 }

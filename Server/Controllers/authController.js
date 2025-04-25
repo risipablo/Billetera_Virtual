@@ -43,6 +43,9 @@ exports.loginUser = async (req, res) => {
     try {
         // Verificar las credenciales del usuario
         const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ error: 'Credenciales incorrectas' });
+        }
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: 'Credenciales incorrectas' });
         }
@@ -57,7 +60,10 @@ exports.loginUser = async (req, res) => {
             sameSite: 'none',   // Previene ataques CSRF
         });
 
-        res.json({ message: 'Inicio de sesión exitoso', token, user: { name: user.name }  }); // Enviar el token en la respuesta
+        res.json({ message: 'Inicio de sesión exitoso', token, user: { 
+            id: user._id,
+            name: user.name,
+            email: user.email,}  }); // Enviar el token en la respuesta
     } catch (err) {
         res.status(500).json({ error: 'Error en el servidor: ' + err.message });
     }
@@ -175,10 +181,10 @@ exports.forgotPassword = async (req, res) => {
         await user.save()
 
         const resetLink = `https://billetera-virtual-nine.vercel.app/reset-password/${token}`
-        // const resetLink = `http://localhost:3000/reset-password/${token}` // Cambia esto a tu URL de producción
+        // const resetLink = `http://localhost:3001/reset-password/${token}` // Cambia esto a tu URL de producción
         
         await sendResetEmail(user.email, user.name, resetLink);
-        
+
         console.log(`Enlace de restablecimiento: ${resetLink}`);
 
         res.json({ message: "Correo de restablecimiento enviado"})
@@ -188,29 +194,33 @@ exports.forgotPassword = async (req, res) => {
 }
 
 exports.resetPassword = async (req, res) => {
-    const {token, newPassword} = req.body
+    const { token, newPassword } = req.body;
 
-    try{
+    try {
         const user = await UserModel.findOne({
             resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now()}
-        })
+            resetPasswordExpires: { $gt: Date.now() }
+        });
 
-        if(!user){
-            return res.status(400).json({ message: "Token inválido o expirado"})
+        if (!user) {
+            return res.status(400).json({ message: "Token inválido o expirado" });
         }
 
-        user.password = await bcrypt.hash( newPassword,12)
+        // Asigna nueva contraseña
+        user.password = newPassword;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
-        await user.save()
 
-        res.json({ message: "Contraseña actualizada correctamente"})
+        // Guarda el usuario y se activa el pre-save para encriptar
+        await user.save();
 
-    } catch (err){
-        res.status(500).json({ message: "Error del servidor", error:error.message})
+        res.json({ message: "Contraseña actualizada correctamente" });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error del servidor", error: error.message });
     }
-} 
+};
+
 
 
 exports.userName = async (req, res) => {
