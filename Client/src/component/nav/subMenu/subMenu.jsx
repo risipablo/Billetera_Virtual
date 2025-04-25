@@ -1,33 +1,32 @@
 import { Menu, MenuItem, ListItemIcon, CircularProgress } from "@mui/material";
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import SettingsIcon from '@mui/icons-material/Settings';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import BadgeIcon from '@mui/icons-material/Badge';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PasswordIcon from '@mui/icons-material/Password';
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {UserContext} from "../../user/userContext"
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { config } from "../../variables/config";
 
 
-const serverFront = config.apiUrl;
 
-
-export const SubMenu = ({setIsAuthenticated}) => {
-        const {user, setUser} = useContext(UserContext)
+export const SubMenu = ({ setIsAuthenticated }) => {
+        const { user, fetchUserData  } = useContext(UserContext);
         const navigate = useNavigate()
         // Estados para los menús
-        const [anchorEl, setAnchorEl] = useState(null);
+        const [anchorEl, setAnchorEl] = useState(null); 
         const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
         const userMenuOpen = Boolean(anchorEl);
         const subMenuOpen = Boolean(subMenuAnchorEl);
         const userButtonRef = useRef(null);
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState(null);
-       
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
 
     const handleUserMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -102,7 +101,8 @@ export const SubMenu = ({setIsAuthenticated}) => {
                     <EmojiEmotionsIcon/>
                 </NavLink>
                
-                {user?.name && <p>Hola, {user.name}</p>}
+                <p style={{ display: 'flex' }}>{user?.name || 'Cargando...'}</p>
+                {/* {user?.name && <p>Hola, {user.name}</p>} */}
             </div>
 
             <Menu

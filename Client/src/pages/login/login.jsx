@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import "./user.css"
-import { UserContext } from '../../component/user/userContext';
+
 import { NavLink, useNavigate } from 'react-router-dom';
 import {config} from '../../component/variables/config'
 import Tooltip from '@mui/material/Tooltip';
@@ -17,7 +17,7 @@ const serverFront = config.apiUrl;
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+
   const [show, setShow] = useState(false);
   const switchButton = () => setShow(!show);
 
@@ -33,9 +33,7 @@ const serverFront = config.apiUrl;
         );
         
         localStorage.setItem('token', response.data.token);
-        // setUser({
-        //   ...response.data.user, name: response.data.user.name
-        // });
+
         setIsAuthenticated(true);
         navigate('/gasto');
     } catch (error) {

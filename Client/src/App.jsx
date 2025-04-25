@@ -24,22 +24,22 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState (false)
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      axios
-        .get(`${serverFront}/api/auth/validate-token`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          setIsAuthenticated(true);
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-          setIsAuthenticated(false);
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     axios
+  //       .get(`${serverFront}/api/auth/validate-token`, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       })
+  //       .then(() => {
+  //         setIsAuthenticated(true);
+  //       })
+  //       .catch(() => {
+  //         localStorage.removeItem('token');
+  //         setIsAuthenticated(false);
+  //       });
+  //   }
+  // }, []);
 
 
   return (

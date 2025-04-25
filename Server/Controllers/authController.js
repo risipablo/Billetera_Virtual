@@ -57,7 +57,7 @@ exports.loginUser = async (req, res) => {
             sameSite: 'none',   // Previene ataques CSRF
         });
 
-        res.json({ message: 'Inicio de sesión exitoso', token }); // Enviar el token en la respuesta
+        res.json({ message: 'Inicio de sesión exitoso', token, user: { name: user.name }  }); // Enviar el token en la respuesta
     } catch (err) {
         res.status(500).json({ error: 'Error en el servidor: ' + err.message });
     }
@@ -211,3 +211,16 @@ exports.resetPassword = async (req, res) => {
         res.status(500).json({ message: "Error del servidor", error:error.message})
     }
 } 
+
+
+exports.userName = async (req, res) => {
+    try {
+        const user = await UserModel.findById(req.user.id).select('name');
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        res.status(200).json({ user: { name: user.name } });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}

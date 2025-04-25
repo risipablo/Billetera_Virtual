@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios"
-import { config } from "../../variables/config";
 
-const serverFront = config.apiUrl;
-
+// const serverFront = "http://localhost:3001"
+const serverFront = "https://billetera-virtual-1.onrender.com"
 
 
 export function ResertPassword(){

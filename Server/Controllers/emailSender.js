@@ -17,7 +17,7 @@ const sendResetEmail = async (email,name,resetLink) => {
         subject: 'Restablece tu contraseña',
         html: `
             <h1>Hola ${name}</h1>
-            p>Recibiste este correo porque solicitaste restablecer tu contraseña.</p>
+            <p>Recibiste este correo porque solicitaste restablecer tu contraseña.</p>
             <p>Haz clic en el siguiente enlace para continuar el proceso:</p>
             <a href="${resetLink}">Restablecer contraseña</a>
             <p>Si no solicitaste esto, ignora este correo.</p>
