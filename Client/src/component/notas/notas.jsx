@@ -5,7 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { Cancel } from '@mui/icons-material';
-import { useNotas } from '../../utils/hooks/useNotas';
+import { useNotas } from '../../utils/hooks/useNotesRemind';
 import "./notas.css";
 
 export function Notas() {

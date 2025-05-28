@@ -2,6 +2,8 @@ import { NavLink } from "react-router-dom";
 import BarChartIcon from '@mui/icons-material/BarChart';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import {  useState } from "react";
 import { Tooltip} from "@mui/material";
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
@@ -78,6 +80,24 @@ export function Navbar({setIsAuthenticated}) {
                             <div className="icon notas-icon">
                                 <EditNoteIcon />
                                 <span className="text">Notas</span> 
+                            </div>
+                        </Tooltip>
+                    </NavLink>
+
+                    <NavLink to="/listado" onMouseEnter={() => open('listado')} onMouseLeave={close}>
+                        <Tooltip title={active === 'listado' ? 'Listado' : ""}>
+                            <div className="icon notas-icon">
+                                <StorefrontIcon />
+                                <span className="text">Listado</span> 
+                            </div>
+                        </Tooltip>
+                    </NavLink>
+
+                    <NavLink to="/consejos" onMouseEnter={() => open('consejos')} onMouseLeave={close}>
+                        <Tooltip title={active === 'consejos' ? 'Consejos' : ""}>
+                            <div className="icon notas-icon">
+                                <TipsAndUpdatesIcon />
+                                <span className="text">Consejos</span> 
                             </div>
                         </Tooltip>
                     </NavLink>

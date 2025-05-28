@@ -1,3 +1,6 @@
+// Seccion de notas
+
+
 const moongose = require('mongoose')
 
 const noteSchema = new moongose.Schema({
@@ -5,13 +8,25 @@ const noteSchema = new moongose.Schema({
         type: String,
         required: true
     },
-    descripcion: {
+
+    cuotas:{
         type: String,
         required: true
-    },  
-    fecha: {
-        type: Date,
+    },
+      
+    descripcion:{
+        type: [String],
         required: true
+    },  
+    precio:{
+        type: [Number],
+        required: true
+    },
+      
+    fecha: {
+        type: [Date],
+        required: true,
+        default: []
     },
     userId: {
         type: moongose.Schema.Types.ObjectId,

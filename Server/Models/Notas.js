@@ -1,3 +1,5 @@
+// Recordatorios de notas 
+
 const mongoose = require('mongoose')
 
 const notaSchema = new mongoose.Schema({

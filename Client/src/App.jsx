@@ -10,14 +10,16 @@ import {Navbar} from "./component/nav/navbar"
 import { NotasPage } from './pages/notas/notasPage';
 import { UserProvider } from './component/user/userContext';
 import { ChangeUser } from './component/user/changeUser';
-import { config } from './component/variables/config';
-import axios from 'axios';
+// import { config } from './component/variables/config';
+// import axios from 'axios';
 import { ForgotPassword } from './component/password/ForgotPassword/forgotPassword';
 import { ChangePassword } from './component/password/changePassword/changePassword';
 import { ResertPassword } from './component/password/reserPassword/resetPassword';
+import { Consejo } from './component/consejos/consejo';
+import { Listado } from './pages/listado/listado';
 
 
-const serverFront = config.apiUrl;
+// const serverFront = config.apiUrl;
 
 
 function App() {
@@ -81,6 +83,16 @@ function App() {
           <Route
             path="/notas"
             element={isAuthenticated ? <NotasPage /> : <Navigate to="/" />}
+          />
+
+          <Route
+            path="/listado"
+            element={isAuthenticated ? <Listado /> : <Navigate to="/" />}
+          />
+
+          <Route
+            path="/consejos"
+            element={isAuthenticated ? <Consejo /> : <Navigate to="/" />}
           />
 
           <Route 

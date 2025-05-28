@@ -1,8 +1,10 @@
 
-import { Grid,IconButton,TextField,Box, } from "@mui/material";
+import { Grid,IconButton,TextField,Box, Button, } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { styled } from '@mui/system';
 import { useMemo, useState } from "react";
+import { CloseOutlined } from "@mui/icons-material";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const SearchBox = styled(Box)(({ show }) => ({
     position: 'relative',
@@ -33,6 +35,7 @@ export function Buscador({filtrarDatos}){
     const [showSearch, setShowSearch] = useState(false);
     // const [buscar,setBuscar] = useState('')
     const [inputValue,setInputValue] = useState('')
+    const [searching, setSearching] = useState(false)
 
     const filtrarDebounce = useMemo(() => Debounce((palabraClave) => {
         filtrarDatos(palabraClave);
@@ -40,33 +43,58 @@ export function Buscador({filtrarDatos}){
 
 
     const buscarChange = (event) => {
-        if(event.key === 'Enter'){
-            const value = event.target.value;
+        if(event.key === 'Enter') return;
+        {
+            const value = inputValue; // se toma el valor
             const palabraClave = value.trim().toLowerCase().split(/\s+/);
             // setBuscar(value);
             filtrarDatos(palabraClave);
             filtrarDebounce(palabraClave)
+            setSearching(true)
         }
+    }
 
+    const Reset = () => {
+        setInputValue("")
+        filtrarDatos([])
+        setSearching(false)
     }
 
     return(
         <Grid item sx={{  margin: '2rem 0 0.2rem auto' ,display: 'flex', alignItems: 'center' }}>
+           
             <IconButton color="primary" aria-label="search" onClick={() => setShowSearch(!showSearch)} >
-                <SearchIcon />
+                <RemoveRedEyeIcon />
             </IconButton>
+
             <SearchBox show={showSearch} >
-                
-            <TextField
-                label="Buscar"
-                variant="outlined"
-                fullWidth
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)} 
-                onKeyPress={buscarChange}
-            />
-         
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <TextField
+                        label="Buscar"
+                        variant="outlined"
+                        fullWidth
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)} 
+                        onKeyDown={(e) => e.key === 'Enter' && buscarChange(e)}
+                        InputProps={{
+                            endAdornment: (
+                                <>
+                                    {searching && (
+                                        <IconButton onClick={Reset} size="small">
+                                            <CloseOutlined />
+                                        </IconButton>
+                                    )}
+                                </>
+                            ),
+                        }}
+                    />
+
+                    <IconButton onClick={buscarChange} size="small">
+                        <SearchIcon />
+                    </IconButton>
+                </Box>
             </SearchBox>
+
         </Grid>
     )
 

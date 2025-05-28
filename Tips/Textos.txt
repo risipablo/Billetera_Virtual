@@ -1,0 +1,10 @@
+{
+  "_id": {
+    "$oid": "6705a78a93fb1bddab3384f5"
+  },
+  "email": "pablorisi22@gmail.com",
+  "password": "$2a$10$MT.yWXSjKIMYxSqj6Vdkwe7LAfCWWde.f3z5SOzSOEcc7/lSxuZpq",
+  "role": "admin",
+  "__v": 0,
+  "name": "Pablo"
+}

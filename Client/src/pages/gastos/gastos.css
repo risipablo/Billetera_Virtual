@@ -31,15 +31,23 @@ h1{
     transition: border 0.3s ease-in-out;
   } */
 
-  .form-container input,select{
+.form-container input,
+.form-container select {
     flex: 1 2 calc(22% - 18px); 
     padding: 18px;
-    border: 1px solid rgb(5, 4, 4,0.7);
+    border: 1px solid #cccccc;
     border-radius: 8px;
-    transition: border-color 0.3s ease-in-out;
-  }
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-bottom: 3px;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    box-shadow: 0 0 5px rgba(6, 70, 181, 0.3);
+    outline: none;
+}
   
-  .form-container select:hover {
+ .form-container select:hover {
     border: 1.2px solid rgb(6, 70, 181);
     outline: none;
   }
@@ -50,11 +58,9 @@ h1{
   }
   
 
-  .form-container::placeholder {
+.form-container input::placeholder {
     color: #a39a9a;
-  }
-  
-
+}
 
 .productos{
     border: 1px solid rgba(36, 36, 36, 0.489);

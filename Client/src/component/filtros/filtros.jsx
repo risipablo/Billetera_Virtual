@@ -82,6 +82,24 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Mercado Pago">Mercado Pago</MenuItem>
                         </Select>
                     </Grid>
+
+                                        <Grid item xs>
+                        <Select
+                            fullWidth
+                            value={año}
+                            onChange={(e) => setAño(e.target.value)}
+                            displayEmpty
+                            size="small" 
+                        >
+                            <MenuItem value=""><em>Seleccionar Año</em></MenuItem>
+                            <MenuItem value="2024">2024</MenuItem>
+                            <MenuItem value="2025">2025</MenuItem>
+                            <MenuItem value="2026">2026</MenuItem>
+                            <MenuItem value="2027">2027</MenuItem>
+                            <MenuItem value="2028">2028</MenuItem>
+                        </Select>
+                    </Grid>
+    
     
                     <Grid item xs>
                         <Select
@@ -102,23 +120,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                         </Select>
                     </Grid>
 
-                    <Grid item xs>
-                        <Select
-                            fullWidth
-                            value={año}
-                            onChange={(e) => setAño(e.target.value)}
-                            displayEmpty
-                            size="small" 
-                        >
-                            <MenuItem value=""><em>Seleccionar Año</em></MenuItem>
-                            <MenuItem value="2024">2024</MenuItem>
-                            <MenuItem value="2025">2025</MenuItem>
-                            <MenuItem value="2026">2026</MenuItem>
-                            <MenuItem value="2027">2027</MenuItem>
-                            <MenuItem value="2028">2028</MenuItem>
-                        </Select>
-                    </Grid>
-    
+
                     <Grid item>
                         <Button
                             variant="contained"
@@ -174,6 +176,24 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Mercado Pago">Mercado Pago</MenuItem>
                         </Select>
                     </Grid>
+
+                    <Grid item xs>
+                        <Select
+                            fullWidth
+                            value={año}
+                            onChange={(e) => setAño(e.target.value)}
+                            displayEmpty
+                            size="small" 
+                        >
+                            <MenuItem value=""><em>Seleccionar Año</em></MenuItem>
+                            <MenuItem value="2024">2024</MenuItem>
+                            <MenuItem value="2025">2025</MenuItem>
+                            <MenuItem value="2026">2026</MenuItem>
+                            <MenuItem value="2027">2027</MenuItem>
+                            <MenuItem value="2028">2028</MenuItem>
+                        </Select>
+                    </Grid>
+    
     
                     <Grid item xs={12}>
                         <Select

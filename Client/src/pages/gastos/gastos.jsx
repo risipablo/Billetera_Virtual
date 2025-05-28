@@ -1,4 +1,4 @@
-import  { useState, useEffect, useMemo} from 'react';
+import  React, { useState, useEffect, useMemo} from 'react';
 import axios from 'axios';
 import {Box,Button,useMediaQuery,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,
 ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField, Paper, IconButton, ListItem,
@@ -400,7 +400,6 @@ const serverFront = config.apiUrl;
 
                 
                             <ListItem sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem' }}>
-
                             <TextField
                                 fullWidth 
                                 sx={{ fontFamily: "Montserrat, sans-serif" }} 
@@ -441,91 +440,164 @@ const serverFront = config.apiUrl;
 
                     <TableBody>
                         {loading ? (
-                            
                             [...Array(5)].map((_, index) => (
                                 <TableRow key={index}>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={50} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={80} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={60} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={100} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={70} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={90} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="text" width={80} />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Skeleton variant="circular" width={40} height={40} />
-                                    </TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={50} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={80} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={60} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={100} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={70} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={90} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="text" width={80} /></TableCell>
+                                    <TableCell align="center"><Skeleton variant="circular" width={40} height={40} /></TableCell>
                                 </TableRow>
                             ))
                         ) : (
-                            
                             gastosFiltrados.map((element, index) => (
-                                <TableRow key={index} style={{ background: condicionPago(element.condicion || '') }}>
-                                   
-                                    <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                        {editingId === element._id ? <select value={editingData.dia} onChange={(e) => setEditingData({...editingData, dia: e.target.value})}>
-                                            {[...Array(31)].map((_, index) => (
-                                                <option key={index + 1} value={index + 1}>{index + 1}</option>
-                                            ))} </select> : element.dia}
-                                    </TableCell>
-
-                                    <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <select value={editingData.mes} onChange={(e) => setEditingData({...editingData, mes: e.target.value})}> 
-                                        {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => <option key={mes} value={mes}>{mes}</option>)} </select> : element.mes}</TableCell>
-
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                {editingId === element._id ? <input value={editingData.año} onChange={(e) => setEditingData({...editingData, año: e.target.value})} /> : element.año}</TableCell>
-                                
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <input value={editingData.producto} onChange={(e) => setEditingData({...editingData, producto: e.target.value})} /> : element.producto}</TableCell>
-                                
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: 'bold' }}> $
-                                    {editingId === element._id ? <input value={editingData.monto} onChange={(e) => setEditingData({...editingData, monto: e.target.value})} /> : element.monto}</TableCell>
-                                
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}> 
-                                    {editingId === element._id ? <select value={editingData.metodo} onChange={(e) => setEditingData({...editingData, metodo: e.target.value})} >  {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => <option key={metodo} value={metodo}>{metodo}</option>)} </select>  : element.metodo}</TableCell>
-                                
-                                <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" , fontWeight: '600' }}> 
-                                    {editingId === element._id ? <select value={editingData.condicion} onChange={(e) => setEditingData({...editingData, condicion: e.target.value})} > {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversión"].map(condicion => <option key={condicion} value={condicion}>{condicion}</option>)} </select> : element.condicion}</TableCell>
-                               
-                                <TableCell align="center">
-                                    <Box className="actions" sx={{ display: 'flex', gap: 1, justifyContent: 'center', fontFamily: "Montserrat, sans-serif" }}>
-                                        <IconButton className="trash" sx={{ color: 'red', fontFamily: "Montserrat, sans-serif" }} onClick={() => deleteGastos(element._id)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        {editingId === element._id ? (
-                                            <>
-                                                <IconButton className="check" sx={{ color: 'green', backgroundColor: 'lightgreen', borderRadius: '4px', padding: '5px' }} onClick={() => handleSaveEditDebounced(element._id)}>
-                                                    <CheckIcon />
+                                <React.Fragment key={index}>
+                                    <TableRow style={{ background: condicionPago(element.condicion || '') }}                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(10, 49, 191, 0.2)',
+                                                    transition: 'all 0.1s ease-in',
+                                                }
+                                            }}>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
+                                            {element.dia}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
+                                            {element.mes}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
+                                            {element.año}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
+                                            {element.producto}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: 'bold' }}>
+                                            ${element.monto}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
+                                            {element.metodo}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: '600' }}>
+                                            {element.condicion}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Box className="actions" sx={{ display: 'flex', gap: 1, justifyContent: 'center', fontFamily: "Montserrat, sans-serif" }}>
+                                                <IconButton className="trash" sx={{ color: 'red', fontFamily: "Montserrat, sans-serif" }} onClick={() => deleteGastos(element._id)}>
+                                                    <DeleteIcon />
                                                 </IconButton>
-                                                <IconButton className="cancel" sx={{ color: 'white', backgroundColor: 'red', borderRadius: '4px', padding: '5px' }} onClick={cancelEdit}>
-                                                    <CancelIcon />
-                                                </IconButton>
-                                            </>
-                                        ) : (
-                                            <IconButton className="edit" sx={{ color: 'grey', fontFamily: "Montserrat, sans-serif" }} onClick={() => editGastos(element)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                        )}
-                                    </Box>
-                                </TableCell>
-
-                                </TableRow>
+                                                {editingId === element._id ? null : (
+                                                    <IconButton className="edit" sx={{ color: 'grey', fontFamily: "Montserrat, sans-serif" }} onClick={() => editGastos(element)}>
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                )}
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
 
 
+                                    {editingId === element._id && (
+                                        <TableRow
+                                            className="edit-row"
+                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(69, 111, 179, 0.2)',
+                                                    transition: 'all 0.1s ease-in',
+                                                }
+                                            }}
+                                        >
+                                            <TableCell align="center">
+                                                <FormControl fullWidth>
+                                                    <Select
+                                                        value={editingData.dia}
+                                                        onChange={(e) => setEditingData({ ...editingData, dia: e.target.value })}
+                                                        size="small"
+                                                    >
+                                                        {[...Array(31)].map((_, idx) => (
+                                                            <MenuItem key={idx + 1} value={idx + 1}>{idx + 1}</MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <FormControl fullWidth>
+                                                    <Select
+                                                        value={editingData.mes}
+                                                        onChange={(e) => setEditingData({ ...editingData, mes: e.target.value })}
+                                                        size="small"
+                                                    >
+                                                        {["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].map(mes => (
+                                                            <MenuItem key={mes} value={mes}>{mes}</MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    value={editingData.año}
+                                                    onChange={(e) => setEditingData({ ...editingData, año: e.target.value })}
+                                                    size="small"
+                                                    fullWidth
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    value={editingData.producto}
+                                                    onChange={(e) => setEditingData({ ...editingData, producto: e.target.value })}
+                                                    size="small"
+                                                    fullWidth
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    type="number"
+                                                    value={editingData.monto}
+                                                    onChange={(e) => setEditingData({ ...editingData, monto: e.target.value })}
+                                                    size="small"
+                                                    fullWidth
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <FormControl fullWidth>
+                                                    <Select
+                                                        value={editingData.metodo}
+                                                        onChange={(e) => setEditingData({ ...editingData, metodo: e.target.value })}
+                                                        size="small"
+                                                    >
+                                                        {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => (
+                                                            <MenuItem key={metodo} value={metodo}>{metodo}</MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <FormControl fullWidth>
+                                                    <Select
+                                                        value={editingData.condicion}
+                                                        onChange={(e) => setEditingData({ ...editingData, condicion: e.target.value })}
+                                                        size="small"
+                                                    >
+                                                        {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversion"].map(condicion => (
+                                                            <MenuItem key={condicion} value={condicion}>{condicion}</MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
+                                            <TableCell align="center" className="actions">
+                                                <Box className="btn-edit" sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                                                    <IconButton className="check" sx={{ color: 'green', backgroundColor: 'lightgreen', borderRadius: '4px', padding: '5px' }} onClick={() => handleSaveEditDebounced(element._id)}>
+                                                        <CheckIcon />
+                                                    </IconButton>
+                                                    <IconButton className="cancel" sx={{ color: 'white', backgroundColor: 'red', borderRadius: '4px', padding: '5px' }} onClick={cancelEdit}>
+                                                        <CancelIcon />
+                                                    </IconButton>
+                                                </Box>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+
+                                </React.Fragment>
                             ))
                         )}
                     </TableBody>

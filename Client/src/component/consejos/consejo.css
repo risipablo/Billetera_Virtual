@@ -2,6 +2,7 @@
     margin: 3rem auto;
     max-width: 1200px;
     padding: 1rem 1.2rem;
+      font-family: "Montserrat", system-ui;
 }
 
 @media (max-width: 600px){
@@ -9,8 +10,6 @@
     margin: 1.2rem auto;
 }
 }
-
-
 
 .ahorro-container{
     margin: .9rem auto;

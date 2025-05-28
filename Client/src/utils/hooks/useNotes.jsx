@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { config } from "../../component/variables/config";
+import toast from 'react-hot-toast';
 
 const serverFront = config.apiUrl;
 
@@ -28,12 +29,14 @@ export function useNotes() {
         });
     }, []);
 
-    const addNote = (titulo, descripcion, fecha) => {
+    const addNote = (titulo, descripcion, fecha, cuotas, precio) => {
         if (titulo.trim() !== '' && descripcion.trim() !== '') {
             const token = localStorage.getItem('token');
             axios.post(`${serverFront}/api/note`, {
                 titulo: titulo,
                 descripcion: descripcion,
+                cuotas: cuotas,
+                precio: precio,
                 fecha: fecha
             }, {
                 headers: {
@@ -43,14 +46,79 @@ export function useNotes() {
             })
             .then(response => {
                 setNotes([...notes, response.data]);
+            toast.success('Nota agregado con éxito', {
+                position: 'top-right',
+            });
             })
             .catch(error => {
                 console.log(error);
+                toast.error('Nota incorrecta, no se ha podido agregar', {
+                    position: 'top-right'
+                })
             });
         } else {
-            console.error("El título y la descripción no pueden estar vacíos");
+                     toast.error('Nota incorrecta, completa todos los campos requeridos', {
+                    position: 'top-right'
+                })
         }
     };
+
+
+
+
+    const addNoteWithDate = async (noteId, descripcion,fecha,precio) => {
+        try{
+            const token = localStorage.getItem('token')
+
+            // Para esta funcion se debe mandar por separados los endpoint correspondiente de cada uno.
+            await axios.put(`${serverFront}/api/note/${noteId}/add-note`,
+                { newNote: descripcion},
+                    {
+                        headers:{
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+            );
+
+            await axios.put(`${serverFront}/api/note/${noteId}/add-price`, 
+                {newPrice: precio},
+                    {
+                        headers:{
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+            )
+
+            await axios.put(`${serverFront}/api/note/${noteId}/add-date`,
+                { newDate: fecha},
+                    {
+                        headers:{
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+            );
+                    toast.success('Nota adicional agregada con éxito', {
+                    position: 'top-right'
+                })
+            // Manejo de indices de cada uno atravez de un mapeo para ser añadidos en la misma posicion
+            setNotes(notes.map(note =>{
+                
+                if (note._id === noteId){
+                    return {
+                        ...note,
+                        descripcion: [...note.descripcion, descripcion],
+                        precio: [...note.precio, precio],
+                        fecha: [...note.fecha, new Date(fecha)],
+                    }
+                }
+
+                return note;
+            }))
+        } catch (err) {
+            console.error("Error al agregar:", err);
+        }
+    }
+
 
     const deleteNote = (id) => {
         const token = localStorage.getItem('token');
@@ -62,11 +130,37 @@ export function useNotes() {
         })
         .then(() => {
             setNotes(notes.filter(note => note._id !== id));
+                toast.error('Nota eliminada', {
+                    position: 'top-right'
+                })
         })
         .catch(error => {
             console.log(error);
         });
     };
+
+    
+    const deleteNewIndex = (id, noteIndex) => {
+        const token = localStorage.getItem('token');
+      axios.delete(`${serverFront}/api/note/${id}/delete-note/${noteIndex}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true,
+        })
+        .then((response) => {
+        
+            setNotes(notes.map(note => 
+                note._id === id ? response.data : note
+            ));
+                toast.error('Nota adicional eliminada', {
+                    position: 'top-right'
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
 
     const editNote = (id, newData) => {
         const token = localStorage.getItem('token');
@@ -80,13 +174,42 @@ export function useNotes() {
                 if (note._id === id) {
                     return response.data;
                 }
+                
                 return note;
             }));
+            
+            toast.success('Cambios guardados con exito', {
+                    position: 'top-right'
+                })
         })
         .catch(error => {
             console.log(error);
         });
     };
 
-    return { notes, addNote, deleteNote, editNote };
+    // editar notas y fechas nuevas
+    const handleSaveItem = async (noteId, idx, descripcion, fecha, precio) => {
+        try{
+            const token = localStorage.getItem('token')
+            const response = await axios.put(`${serverFront}/api/note/${noteId}/edit-note/${idx}`,
+            { descripcion, fecha ,precio},  
+            { headers: { Authorization: `Bearer ${token}` }}
+        );
+
+            setNotes(notes.map(note =>
+                note._id === noteId ? response.data : note
+            ));
+
+            toast.success('Cambios guardados con exito', {
+                    position: 'top-right'
+                })
+             return response.data
+            
+        } catch (error) {
+            console.error("Error al guardar la edicion ")
+        }
+    }
+
+
+    return { notes, addNote, deleteNote, editNote,deleteNewIndex, addNoteWithDate,handleSaveItem};
 }

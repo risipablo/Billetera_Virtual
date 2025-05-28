@@ -67,8 +67,6 @@ export const SubMenu = ({ setIsAuthenticated }) => {
             
             // Limpiar datos de usuario
             localStorage.removeItem('token');
-            setUser(null);
-            
         
             if (setIsAuthenticated) {
             setIsAuthenticated(false);

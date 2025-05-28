@@ -3,10 +3,18 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography, Grid } from 
 import { dataAhorro } from "./dataAhorro";
 import { motion } from "framer-motion";
 import "./consejo.css";
+import { Helmet } from "react-helmet";
 
 export function Consejo() {
     return (
         <div className="consejo-container">
+
+            <Helmet>
+                <title> Consejos Financieros </title>
+            </Helmet>
+            
+            <h1>Consejos Financieros</h1>
+
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
