@@ -79,6 +79,7 @@ export function NotasPage() {
         // Si todo está bien, procede a agregar
         addNoteWithDate(noteId, newItem.descripcion, newItem.fecha, newItem.precio);
         setNewItem({ descripcion: "", fecha: "", precio: "" });  
+        setExpandedNoteId(null)
     };
 
     const [editingState, setEditingState] = useState(null); // id de la nota
@@ -165,8 +166,10 @@ export function NotasPage() {
                                 onChange={(e) => setCuotas(e.target.value)}
                                 variant="outlined"
                             >
+                                
                                 <MenuItem value="">Seleccionar Cuotas</MenuItem>
-                                {[...Array(12)].map((_, index) => (
+                                
+                                {[...Array(100)].map((_, index) => (
                                     <MenuItem key={index + 1} value={index + 1}>{index + 1}</MenuItem>
                                 ))}
                             </TextField>
@@ -246,7 +249,7 @@ export function NotasPage() {
                                         <Typography variant="h6" style={{ fontWeight: "bold" }}>
                                             {nota.titulo}
                                         </Typography>
-                                        <Typography variant="caption" style={{ display: 'block', marginTop: 2 }}>
+                                        <Typography variant="body2" style={{ display: 'block', marginTop: 2 }}>
                                             {nota.cuotas} Cuotas
                                         </Typography>
                                     </div>
@@ -291,6 +294,7 @@ export function NotasPage() {
                                                                     style={{
                                                                         fontWeight: '700',
                                                                         borderRadius: 4,
+                                                                        fontSize:"1rem",
                                                                         margin: '7px 0',
                                                                         display: 'inline-block',
                                                                         
@@ -300,7 +304,7 @@ export function NotasPage() {
                                                                 </Typography>
                                                             
                                                                 <Typography variant="body2"
-                                                                      style={{fontSize:".92rem", fontWeight: '700',
+                                                                      style={{fontSize:"1rem", fontWeight: '700',
                                                                     }}>
                                                                     ${(
                                                                         Array.isArray(nota.precio) 
@@ -312,7 +316,7 @@ export function NotasPage() {
                                                             </div>
 
                                                             {nota.fecha && nota.fecha[idx] && (
-                                                                <Typography variant="caption" style={{ display: 'block', marginTop: 1 }}>
+                                                                <Typography variant="body2" style={{ display: 'block', marginTop: 1 }}>
                                                                     {formatDate(nota.fecha[idx])}
                                                                 </Typography>
                                                             )}
@@ -412,43 +416,55 @@ export function NotasPage() {
                                                                     
                                         {/*agregar nueva descripción, fecha y precios */}
                                         {expandedNoteId === nota._id && (
-                                            <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: 'center' }}>
+                                            <div
+                                                style={{
+                                                    marginTop: 12,
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    gap: 12,
+                                                    alignItems: "center",
+                                                }}
+                                            >
                                                 <TextField
-                                                fullWidth
-                                                size="small"
-                                                label="Nueva descripción"
-                                                value={newItem.descripcion}
-                                                onChange={(e) => setNewItem({...newItem, descripcion: e.target.value})}
+                                                    fullWidth
+                                                    size="small"
+                                                    label="Nueva descripción"
+                                                    value={newItem.descripcion}
+                                                    onChange={(e) =>
+                                                        setNewItem({ ...newItem, descripcion: e.target.value })
+                                                    }
                                                 />
 
                                                 <TextField
-                                                fullWidth
-                                                size="small"
-                                                type="number"
-                                                label="Nueva precio"
-                                                InputLabelProps={{ shrink: true }}
-                                                value={newItem.precio}
-                                                onChange={(e) => setNewItem({...newItem, precio: e.target.value})}
+                                                    fullWidth
+                                                    size="small"
+                                                    type="number"
+                                                    label="Nueva precio"
+                                                    InputLabelProps={{ shrink: true }}
+                                                    value={newItem.precio}
+                                                    onChange={(e) =>
+                                                        setNewItem({ ...newItem, precio: e.target.value })
+                                                    }
                                                 />
-
 
                                                 <TextField
-                                                fullWidth
-                                                size="small"
-                                                type="date"
-                                                label="Nueva fecha"
-                                                InputLabelProps={{ shrink: true }}
-                                                value={newItem.fecha}
-                                                onChange={(e) => setNewItem({...newItem, fecha: e.target.value})}
+                                                    fullWidth
+                                                    size="small"
+                                                    type="date"
+                                                    label="Nueva fecha"
+                                                    InputLabelProps={{ shrink: true }}
+                                                    value={newItem.fecha}
+                                                    onChange={(e) =>
+                                                        setNewItem({ ...newItem, fecha: e.target.value })
+                                                    }
                                                 />
 
-                                                <Button 
-                                                variant="contained" 
-                                                color="primary" 
-                                                onClick={() => handleAddItem(nota._id)}
-                                                // disabled={!newItem.descripcion?.trim() || !newItem.fecha}
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => handleAddItem(nota._id)}
                                                 >
-                                                <Check/>
+                                                    <Check />
                                                 </Button>
                                             </div>
                                         )}
