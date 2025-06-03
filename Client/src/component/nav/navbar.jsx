@@ -3,7 +3,6 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
-import StorefrontIcon from '@mui/icons-material/Storefront';
 import {  useState } from "react";
 import { Tooltip} from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -94,14 +93,6 @@ export function Navbar({setIsAuthenticated}) {
                         </Tooltip>
                     </NavLink>
 
-                    {/* <NavLink to="/productos" onMouseEnter={() => open('precio productos')} onMouseLeave={close}>
-                        <Tooltip title={active === 'precio productos' ? 'Precio Productos' : ""}>
-                            <div className="icon notas-icon">
-                                <StorefrontIcon />
-                                <span className="text">Precio Productos</span> 
-                            </div>
-                        </Tooltip>
-                    </NavLink> */}
 
 
                     <NavLink to="/consejos" onMouseEnter={() => open('consejos')} onMouseLeave={close}>
