@@ -1,11 +1,13 @@
 import { Helmet } from "react-helmet";
 import { useList } from "../../utils/hooks/useList";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { Card, CardContent, Container, Grid, IconButton, TextField, Typography ,Tooltip} from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Card, CardContent, Container, Grid, IconButton, TextField, Typography ,Tooltip, Box} from "@mui/material";
 import { Add, Cancel, Check, Delete, Edit, Save } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { Toaster } from "react-hot-toast";
+import { ListInfo } from "../../component/common/Info/listInfo";
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 
 export function Listado(){
     const {list, addList, deleteNoteList, addListNote, deleteNewNote, editListNote, toggleCompleteDescription} = useList()
@@ -64,11 +66,61 @@ const saveNewItem = async () => {
     
 };
 
+
+    const recognition = useRef(null);
+    const [loading, setLoading] = useState(false);
+    
+    useEffect(() => {
+        recognition.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.current.lang = 'es-ES'; // Idioma en español
+        recognition.current.interimResults = false;
+    
+        recognition.current.onstart = () => {
+            setLoading(true);
+        };
+    
+        recognition.current.onend = () => {
+            setLoading(false);
+        };
+    
+        recognition.current.onresult = (event) => {
+            const transcript = event.results[0][0].transcript.toLowerCase();
+
+    
+            if (!titulo) {
+                setTitulo(transcript); // tarea
+            } else if (!fecha || fecha === '0000-00-00') {
+                const parsedDate = parseSpeechDate(transcript)
+                if (parsedDate){
+                    setFecha(parsedDate)
+                }
+            }
+    
+            // Si ambos campos están llenos, agrega la nota automáticamente
+            if (titulo.trim() && fecha !== '0000-00-00') {
+                addTarea();
+            }
+        };
+    }, [titulo, fecha]);
+    
+    const iniciarReconocimiento = () => {
+        if (recognition.current) {
+            recognition.current.start();
+        }
+    };
+
     return(
         <div className="gastos-container">
             <Helmet>
                 <title> Listado de compras </title>
             </Helmet>
+
+            <Box display="flex" justifyContent="flex-end" alignItems="flex-start" sx={{ width: '100%' }}>
+                <Tooltip title="Términos" arrow>
+                    <ListInfo/>
+                </Tooltip>
+            </Box>
+            
 
             <h1> Listado de compras </h1>
             
@@ -104,14 +156,25 @@ const saveNewItem = async () => {
                         </motion.div>
                     </Grid>
                     <Grid item xs={12} sm={2}>
-                        <Button 
-                            variant="contained" 
-                            color="primary" 
-                            onClick={addNoteList}
-                            style={{ height: 56, minWidth: 56 }} // Igual altura
-                        >
-                            <Check/>
-                        </Button>
+                        <Box display="flex" gap={3}>
+                            <Button 
+                                variant="contained" 
+                                color="primary" 
+                                onClick={addNoteList}
+                                style={{ height: 56, minWidth: 56 }}
+                            >
+                                <Check/>
+                            </Button>
+
+                            <Button 
+                                variant="contained" 
+                                color="primary" 
+                                onClick={iniciarReconocimiento}
+                                style={{ height: 56, minWidth: 56 }}
+                            >
+                                <RecordVoiceOverIcon/>
+                            </Button>
+                        </Box>
                     </Grid>
                 </Grid>
             </Container>

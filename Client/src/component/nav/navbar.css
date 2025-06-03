@@ -9,7 +9,7 @@
     top:0;
 }
 
-@media (max-width: 551px){
+@media (max-width: 580px){
     .icon-container{
         position: none;
     }
@@ -47,7 +47,7 @@
 }
 
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
 
     .icon-container {
         position: relative; 
@@ -124,7 +124,7 @@
 
 }
 
-@media (min-width: 551px) {
+@media (min-width: 680px) {
     .text {
         display: none;
     }

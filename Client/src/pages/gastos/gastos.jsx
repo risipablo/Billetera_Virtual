@@ -1,9 +1,10 @@
-import  React, { useState, useEffect, useMemo} from 'react';
+import  React, { useState, useEffect, useMemo, useRef} from 'react';
 import axios from 'axios';
 import {Box,Button,useMediaQuery,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,
 ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField, Paper, IconButton, ListItem,
 Collapse,
-Skeleton,} from '@mui/material';
+Skeleton,
+Tooltip,} from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -23,6 +24,7 @@ import Cash from "../../assets/cash.mp3"
 import Ok from '../../assets/ok.mp3'
 import { Notas } from '../../component/notas/notas';
 import { config } from '../../component/variables/config';
+import { GastoInfo } from '../../component/common/Info/gastoInfo';
 
 
 const serverFront = config.apiUrl;
@@ -275,13 +277,24 @@ const serverFront = config.apiUrl;
         setShowInputs(isMobile)
       },[isMobile])
 
+
     
     return (
         <Box className="gastos-container" sx={{ p: 3, marginTop:3, marginBottom:4 ,fontFamily: "Montserrat, sans-serif" }}>
-
             <Helmet>
+                
                 <title>Gastos Mensuales</title>
             </Helmet>
+
+            <Box
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="flex-start"
+            >
+                <Tooltip title="Términos" arrow>
+                    <GastoInfo />
+                </Tooltip>
+            </Box>
 
             <h1> Gastos Mensuales</h1> 
 
@@ -341,6 +354,7 @@ const serverFront = config.apiUrl;
                     <Button variant="contained" color="secondary" className="limpiar" sx={{ fontFamily: "Montserrat, sans-serif", marginLeft:3 }} onClick={() => {
                         setCondicion(''); setDia(''); setMes(''); setMetodo(''); setMonto(''); setProducto('');}}> Borrar </Button>
                 </Grid>
+
                 
             </Grid>
 

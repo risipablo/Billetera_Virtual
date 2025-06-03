@@ -6,6 +6,7 @@ import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import {  useState } from "react";
 import { Tooltip} from "@mui/material";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import "./navbar.css"
 
@@ -84,14 +85,24 @@ export function Navbar({setIsAuthenticated}) {
                         </Tooltip>
                     </NavLink>
 
-                    <NavLink to="/listado" onMouseEnter={() => open('listado')} onMouseLeave={close}>
-                        <Tooltip title={active === 'listado' ? 'Listado' : ""}>
+                    <NavLink to="/listado" onMouseEnter={() => open('lista de compras')} onMouseLeave={close}>
+                        <Tooltip title={active === 'lista de compras' ? 'Lista de compras' : ""}>
                             <div className="icon notas-icon">
-                                <StorefrontIcon />
-                                <span className="text">Listado</span> 
+                                <AddShoppingCartIcon />
+                                <span className="text">Lista de compras </span> 
                             </div>
                         </Tooltip>
                     </NavLink>
+
+                    {/* <NavLink to="/productos" onMouseEnter={() => open('precio productos')} onMouseLeave={close}>
+                        <Tooltip title={active === 'precio productos' ? 'Precio Productos' : ""}>
+                            <div className="icon notas-icon">
+                                <StorefrontIcon />
+                                <span className="text">Precio Productos</span> 
+                            </div>
+                        </Tooltip>
+                    </NavLink> */}
+
 
                     <NavLink to="/consejos" onMouseEnter={() => open('consejos')} onMouseLeave={close}>
                         <Tooltip title={active === 'consejos' ? 'Consejos' : ""}>

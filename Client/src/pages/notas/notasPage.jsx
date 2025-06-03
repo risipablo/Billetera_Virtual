@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Container, Grid, Card, CardContent, TextField, Button, IconButton, Typography, Tooltip } from "@mui/material";
+import { Container, Grid, Card, CardContent, TextField, Button, IconButton, Typography, Tooltip, Box } from "@mui/material";
 import { Delete, Edit, Save, Cancel, Check, Add, Close, CheckBox } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { useNotes } from "../../utils/hooks/useNotes";
 import "./notasPage.css";
+import { Skeleton } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Menu, MenuItem } from "@mui/material";
 import { Toaster } from 'react-hot-toast';
 import { ScrollTop } from "../../component/common/scrollTop";
+import { NoteInfo } from "../../component/common/Info/noteInfo";
 
 export function NotasPage() {
     const { notes, addNote, deleteNote, editNote, addNoteWithDate, deleteNewIndex, handleSaveItem } = useNotes();
@@ -30,6 +32,7 @@ export function NotasPage() {
         precio: ''
     });
 
+    const [loading, setLoading] = useState(false);
 
     const handleAddNote = () => {
         addNote(titulo, descripcion, fecha, cuotas, precio);
@@ -138,8 +141,11 @@ export function NotasPage() {
                 <title> Notas </title>
             </Helmet>
 
-
-
+            <Box display="flex" justifyContent="flex-end" alignItems="flex-start" sx={{ width: '100%' }}>
+                <Tooltip title="Términos" arrow>
+                    <NoteInfo/>
+                </Tooltip>
+            </Box>
             
             <h1>Notas</h1>
 
@@ -225,9 +231,21 @@ export function NotasPage() {
                 </Grid>
             </Container>
 
-            <Container style={{ marginTop: 50 }}>
+            <Container style={{ marginTop: "5rem" }}>
                 <Grid container spacing={6}>
-                    {notes.map((nota, index) => (
+                     {(loading || notes.length === 0)
+                        ? Array.from({ length: 3 }).map((_, idx) => (
+                            <Grid item xs={12} sm={6} md={4} key={idx}>
+                                <Card className="note-card" sx={{ borderRadius: 2, minHeight: 180 }}>
+                                    <CardContent>
+                                        <Skeleton variant="text" width="60%" height={32} />
+                                        <Skeleton variant="text" width="40%" height={24} />
+                                        <Skeleton variant="rectangular" width="100%" height={60} style={{ marginTop: 16 }} />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))
+                    : notes.map((nota, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}

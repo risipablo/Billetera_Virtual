@@ -3,10 +3,12 @@ import { Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,ArcElement } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 import { motion } from 'framer-motion';
+import { Skeleton } from "@mui/material";
 import "./chart.css"
 
 
-const GastoChart = ({ gastos}) => {
+const GastoChart = ({ gastos, loading}) => {
+     const isLoading = loading || !gastos || gastos.length === 0;
     
 
     const isMobile = window.innerWidth <= 768; // ajusta de font size donuts para mobile
@@ -551,8 +553,19 @@ const GastoChart = ({ gastos}) => {
         },0
     )
 
+        const promedioGasto = gastos.reduce((acc, gasto) => {
+            const condiciones = gasto.condicion.toLowerCase();
+            const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas'];
+            
+            if (conditionsReduce.includes(condiciones)) {
+                return acc;
+            }
+            
+            return acc + gasto.monto;
+        }, 0) / 12;
 
-   const promedioGasto = gastos.reduce((acc, gasto) => {
+
+   const promedioPorDia = gastos.reduce((acc,gasto) => {
         const monto = gasto.monto;
         const condiciones = gasto.condicion.toLowerCase()
 
@@ -560,12 +573,11 @@ const GastoChart = ({ gastos}) => {
         if (conditionsReduce.includes(condiciones)){
             return acc
         }
-            
 
-        const total = monto / 12
+        const total = monto / 365
 
         return acc + total
-   },0)
+   }, 0)
 
    const totalGasto = gastos.reduce((acc,gasto) => {
     let total = 0;
@@ -585,7 +597,7 @@ const GastoChart = ({ gastos}) => {
 
     return (
         <div className="chart-container">
-          
+            {/* Gastos por mes */}
             <motion.div 
                 className="month-container"
                 initial={{ opacity: 0, y: -50 }}
@@ -593,11 +605,16 @@ const GastoChart = ({ gastos}) => {
                 transition={{ duration: 0.8 }}
             >
                 <h2>Gastos por mes</h2>
-                <div className="bar-container">
-                    <Bar data={dataSpentMonth} options={options} />
+                <div className="bar-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Bar data={dataSpentMonth} options={options} />
+                    )}
                 </div>
             </motion.div>
 
+            {/* Productos por mes */}
             <motion.div 
                 className="product-container"
                 initial={{ opacity: 0, x: -50 }}
@@ -605,12 +622,16 @@ const GastoChart = ({ gastos}) => {
                 transition={{ duration: 0.8, delay: 0.3 }}
             >
                 <h2>Productos por mes</h2>
-                <div className="doughnut-container">
-                    <Doughnut data={dataSpentProduct} options={optionsDonut} />
+                <div className="doughnut-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Doughnut data={dataSpentProduct} options={optionsDonut} />
+                    )}
                 </div>
             </motion.div>
 
-            
+            {/* Metodos de pago */}
             <motion.div 
                 className="product-container"
                 initial={{ opacity: 0, x: 50 }}
@@ -618,11 +639,16 @@ const GastoChart = ({ gastos}) => {
                 transition={{ duration: 0.8, delay: 0.6 }}
             >
                 <h2>Metodos de pago</h2>
-                <div className="doughnut-container">
-                    <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
+                <div className="doughnut-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
+                    )}
                 </div>
             </motion.div>
 
+            {/* Gastos por año */}
             <motion.div 
                 className="month-container"
                 initial={{ opacity: 0, y: -50 }}
@@ -630,11 +656,16 @@ const GastoChart = ({ gastos}) => {
                 transition={{ duration: 0.8 }}
             >
                 <h2>Gastos por año</h2>
-                <div className="bar-container">
-                    <Bar data={dataSpentYear} options={optionsYear} />
+                <div className="bar-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Bar data={dataSpentYear} options={optionsYear} />
+                    )}
                 </div>
             </motion.div>
 
+            {/* Inversion */}
             <motion.div 
                 className="product-container"
                 initial={{ opacity: 0, x: 50 }}
@@ -642,12 +673,16 @@ const GastoChart = ({ gastos}) => {
                 transition={{ duration: 0.8, delay: 0.6 }}
             >
                 <h2>Inversion</h2>
-                <div className="doughnut-container">
-                    <Bar data={dataSpentIncersion} options={options2} />
+                <div className="doughnut-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Bar data={dataSpentIncersion} options={options2} />
+                    )}
                 </div>
             </motion.div>
 
-
+            {/* Promedios y totales */}
             <motion.div 
                 className="promedios-container"
                 initial={{ opacity: 0, y: -50 }}
@@ -662,10 +697,19 @@ const GastoChart = ({ gastos}) => {
                         <p>$ {(totalGasto || 0).toLocaleString('en-US')}</p>
                     </div>
                 </div>
+
+
+                <div>
+                    <h3>Promedio de gasto por dia </h3>
+                    <div className="content-row">
+                      
+                        <p>$ {(promedioPorDia || 0).toLocaleString('en-US')}</p>
+                    </div>
+                </div>
                
 
                 <div>
-                    <h3>Promedio de gasto</h3>
+                    <h3>Promedio de gasto por mes</h3>
                     <div className="content-row">
                       
                         <p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p>
@@ -706,9 +750,6 @@ const GastoChart = ({ gastos}) => {
                 </div>
                 
             </motion.div>
-
-
-
         </div>
     );
 }

@@ -201,6 +201,7 @@ import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
                     <p className="moneda">$ 1 {monedaOrigen} = $ {tasaCambio[monedaDestino]} {monedaDestino}</p>
                 )}
                 <p className="fecha">Última fecha de actualización del tipo de cambio en el mercado oficial : {fechaActualizada}</p>
+                
             </motion.div>
         </div>
     );

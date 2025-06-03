@@ -1,16 +1,22 @@
-
-
-.loader{
+.loader {
     scroll-behavior: smooth;
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-    background-color: rgb(0, 0, 0,0.8);
+    background-image: url("../../assets/portada.png");
+    background-position: center center; /* centrado */
+    background-repeat: no-repeat;
     background-size: cover;
-
+    background-attachment: fixed; 
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;      
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;                   
+    
 }
 
 .loader h2 {
-    display: flex;
-    color: #ffff;
+    color: #ffffff;
+    margin-bottom: 0;
+    font-weight: 800;          
 }

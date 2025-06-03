@@ -17,6 +17,7 @@ import { ChangePassword } from './component/password/changePassword/changePasswo
 import { ResertPassword } from './component/password/reserPassword/resetPassword';
 import { Consejo } from './component/consejos/consejo';
 import { Listado } from './pages/listado/listado';
+import { PrecioProducto } from './pages/precioProducto/precioProducto';
 
 
 // const serverFront = config.apiUrl;
@@ -59,6 +60,11 @@ function App() {
           />
 
           <Route
+            path="/loader"
+            element={<Loader setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />}
+          />
+
+          <Route
             path="/register"
             element={<Register setIsAuthenticated={setIsAuthenticated} setLoading={setLoading} />}
           />
@@ -90,6 +96,13 @@ function App() {
             element={isAuthenticated ? <Listado /> : <Navigate to="/" />}
           />
 
+          
+          {/* <Route
+            path="/productos"
+            element={isAuthenticated ? <PrecioProducto /> : <Navigate to="/" />}
+          /> */}
+
+
           <Route
             path="/consejos"
             element={isAuthenticated ? <Consejo /> : <Navigate to="/" />}
@@ -115,7 +128,9 @@ function App() {
           />
 
         </Routes>
+        
       </BrowserRouter>
+      
     </UserProvider>
   );
 }

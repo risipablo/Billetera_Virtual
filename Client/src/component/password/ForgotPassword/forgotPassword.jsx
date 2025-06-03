@@ -5,16 +5,14 @@ import "./forgotPassword.css"
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
+import { motion } from "framer-motion";
 
 const serverFront = config.apiUrl;
-
 
 export function ForgotPassword() {
     const [email, setEmail] = useState("")
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    // const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,14 +29,19 @@ export function ForgotPassword() {
     }
 
     return (
-        <div className="container-forgot-password">
+        <div className="login-background">
             <Helmet>
                 <title>Restablecer Contraseña</title>
             </Helmet>
+            
             <NavLink to="/login" className="link">Volver a iniciar sesion</NavLink>
 
-            <div className="container-forgot">
-                
+            <motion.div
+                className="container-login"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+            >
                 <h3><strong>Ingrese su correo electronico </strong></h3>
             
                 <form onSubmit={handleSubmit}>
@@ -54,7 +57,7 @@ export function ForgotPassword() {
                     </button>
                     {message && <p className={`message ${message.includes("error") ? "error" : "success"}`}>{message}</p>}
                 </form>
-            </div>
+            </motion.div>
         </div>
     );
 }

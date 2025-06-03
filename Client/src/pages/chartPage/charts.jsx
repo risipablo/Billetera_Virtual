@@ -5,6 +5,8 @@ import { FiltrosChart } from "../../component/charts/filtrosChart/filtrosChart";
 import  { Helmet } from 'react-helmet';
 import { config } from "../../component/variables/config";
 import { ScrollTop } from "../../component/common/scrollTop";
+import { ChartInfo } from "../../component/common/Info/chartInfo";
+import { Box, Tooltip } from "@mui/material";
 
 
 
@@ -42,6 +44,13 @@ function Charts(){
              <Helmet>
                 <title>Estadisticas Mensuales</title>
             </Helmet>
+
+            <Box display="flex" justifyContent="flex-end" alignItems="flex-start" sx={{ width: '100%' }}>
+                <Tooltip title="Términos" arrow>
+                    <ChartInfo />
+                </Tooltip>
+            </Box>
+            
 
             <h1> Estadisticas </h1>
             <FiltrosChart 
