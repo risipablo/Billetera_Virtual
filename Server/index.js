@@ -7,6 +7,7 @@ const notaRoutes = require('./Routes/notaRoutes');
 const noteRoutes = require('./Routes/noteRoutes')
 const authRoutes = require('./Routes/authRoutes');
 const listRoutes = require('./Routes/listRoutes');
+const tokenValidate = require('./Routes/validateRoutes')
 const errorHandler = require('./Middleware/gastosMiddleware');
 const cookieParser = require('cookie-parser')
 require('dotenv').config();
@@ -33,6 +34,7 @@ app.use('/api', gastoRoutes);
 app.use('/api', notaRoutes);
 app.use('/api', noteRoutes);
 app.use('/api', listRoutes);
+app.use('/api/auth', tokenValidate)
 app.use('/api/auth', authRoutes);
 app.use(errorHandler);
 

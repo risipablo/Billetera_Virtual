@@ -1,5 +1,19 @@
-// const express = require('express');
-// const { validateToken } = require('../Controllers/authController');
-// const router = express.Router();
+const express = require('express')
+const { protect } = require('../Middleware/authMiddleware')
+const router = express.Router()
 
-// router.get('/validate-token', validateToken)
+router.get('/validate-token', protect, (req ,res) => {
+    res.status(200).json({
+        success: true,
+        user :{
+            id: req.user._id,
+            name: req.user.name,
+            email: req.user.email
+        }
+    })
+})
+
+module.exports = router;
+
+
+// En est endpoint si todo es correcto permite al front que verifique el front

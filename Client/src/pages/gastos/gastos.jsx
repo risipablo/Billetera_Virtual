@@ -329,7 +329,7 @@ const serverFront = config.apiUrl;
 
                 <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
 
-                <input type="text"  placeholder="Ingresar Monto" value={monto} onChange={(e) => setMonto(e.target.value)} />
+                <input type="number"  placeholder="Ingresar Monto" value={monto} onChange={(e) => setMonto(e.target.value)} />
 
   
             </div>    
