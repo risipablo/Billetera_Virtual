@@ -43,9 +43,7 @@ exports.loginUser = async (req, res) => {
     try {
         // Verificar las credenciales del usuario
         const user = await UserModel.findOne({ email });
-        if (!user) {
-            return res.status(401).json({ error: 'Credenciales incorrectas' });
-        }
+        
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: 'Credenciales incorrectas' });
         }
@@ -60,10 +58,13 @@ exports.loginUser = async (req, res) => {
             sameSite: 'none',   // Previene ataques CSRF
         });
 
+
         res.json({ message: 'Inicio de sesión exitoso', token, user: { 
             id: user._id,
             name: user.name,
-            email: user.email,}  }); // Enviar el token en la respuesta
+            email: user.email,}
+         }); // Enviar el token en la respuesta
+         
     } catch (err) {
         res.status(500).json({ error: 'Error en el servidor: ' + err.message });
     }

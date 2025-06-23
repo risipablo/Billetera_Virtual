@@ -4,15 +4,18 @@ const UserModel = require('../Models/User');
 
 exports.protect = async (req, res, next) => {
     let token;
+
   
-    // 1. Buscar token en headers (Bearer)
-    if (req.headers.authorization?.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
-    // 2. Buscar token en cookies
-    else if (req.cookies?.token) {
+    // 1. Buscar token en cookies
+    if (req.cookies?.token) {
       token = req.cookies.token;
     }
+
+    // 2. Buscar token en headers (Bearer)
+    else if (req.headers.authorization?.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+ 
   
     if (!token) {
       return res.status(401).json({ error: 'No autorizado. Token no proporcionado.' });

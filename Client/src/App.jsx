@@ -26,30 +26,21 @@ function App() {
 
   useEffect(() => {
     const validateToken = async () => {
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        await axios.get(`${serverFront}/api/auth/validate-token`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setIsAuthenticated(true);
-      } catch (error) {
-        localStorage.removeItem('token');
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+        try {
+            // Petición con withCredentials para enviar la cookie
+            await axios.get(`${serverFront}/api/auth/validate-token`, {
+                withCredentials: true,
+            });
+            setIsAuthenticated(true);
+        } catch (error) {
+            setIsAuthenticated(false);
+        } finally {
+            setLoading(false);
+        }
+  };
 
     validateToken();
-  }, []);
-
+}, []);
 
   
   if (isAuthenticated === null || loading) {
