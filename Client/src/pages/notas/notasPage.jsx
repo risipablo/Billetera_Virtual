@@ -18,7 +18,6 @@ export function NotasPage() {
     const [descripcion, setDescripcion] = useState("");   
     const [cuotas,setCuotas] = useState("") 
     const [precio,setPrecio] = useState("")
-    const [fecha, setFecha] = useState("0000-00-00");
     const [expandedNoteId, setExpandedNoteId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [editingData, setEditingData] = useState({
@@ -40,7 +39,7 @@ export function NotasPage() {
         setDescripcion('');
         setCuotas('')
         setPrecio(0)
-        setFecha('0000-00-00');
+        setFecha(getTodayDate()); 
     };
 
     const handleEditNote = (nota) => {
@@ -56,13 +55,15 @@ export function NotasPage() {
         setEditingId(null);
     };
 
-
-
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+    const getTodayDate = () => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
     };
 
+    const [fecha, setFecha] = useState(getTodayDate());
 
     // CRUD de notas y fechas nuevas
 
@@ -322,7 +323,7 @@ export function NotasPage() {
                                                                 </Typography>
                                                             
                                                                 <Typography variant="body2"
-                                                                      style={{fontSize:"1rem", fontWeight: '700',
+                                                                      style={{fontSize:"1rem", fontWeight: '700', fontFamily:'Poppins'
                                                                     }}>
                                                                     ${(
                                                                         Array.isArray(nota.precio) 
@@ -334,9 +335,15 @@ export function NotasPage() {
                                                             </div>
 
                                                             {nota.fecha && nota.fecha[idx] && (
-                                                                <Typography variant="body2" style={{ display: 'block', marginTop: 1 }}>
-                                                                    {formatDate(nota.fecha[idx])}
-                                                                </Typography>
+                                                            <Typography variant="body2" style={{ display: 'block', marginTop: 1 }}>
+                                                                {nota.fecha[idx] &&
+                                                                    new Date(nota.fecha[idx]).toLocaleDateString('es-ES', {
+                                                                        day: 'numeric',
+                                                                        month: 'long',
+                                                                        year: 'numeric'
+                                                                    })
+                                                                }
+                                                            </Typography>
                                                             )}
                                                         </div>
 
