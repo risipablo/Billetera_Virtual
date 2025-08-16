@@ -32,6 +32,11 @@ const gastosSchema = new mongoose.Schema({
         required:true
     }, 
 
+    necesario:{
+        type:String,
+        required:true
+    }, 
+
     monto:{
         type: Number,
         required: true
