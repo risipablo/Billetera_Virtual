@@ -11,6 +11,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
+import FlagCircleIcon from '@mui/icons-material/FlagCircle';
+import TodayIcon from '@mui/icons-material/Today';
 import  { Helmet } from 'react-helmet';
 import './gastos.css'
 import { Buscador } from '../../component/buscador/buscador';
@@ -36,6 +38,7 @@ const serverFront = config.apiUrl;
     const [mes, setMes] = useState("");
     const [metodo, setMetodo] = useState("");
     const [producto, setProducto] = useState("");
+    const [necesario, setNecesario] = useState("");
     const [monto, setMonto] = useState("");
     const [año,setAño] = useState("")
     const [condicion, setCondicion] = useState("");
@@ -85,7 +88,7 @@ const serverFront = config.apiUrl;
     
 
     const addGastos = () => {
-        if (String(dia).trim() && String(mes).trim() && String(año).trim() && String(metodo).trim() && String(monto).trim() && String(condicion).trim() && String(producto).trim() !== "") {
+        if (String(dia).trim() && String(mes).trim() && String(año).trim() && String(metodo).trim() && String(monto).trim() && String(necesario).trim() && String(condicion).trim() && String(producto).trim() !== "") {
             axios.post(`${serverFront}/api/add-gasto`, {
                 dia: dia,
                 mes: mes,
@@ -93,6 +96,7 @@ const serverFront = config.apiUrl;
                 metodo: metodo,
                 producto: producto,
                 monto: monto,
+                necesario: necesario,
                 condicion: condicion
             },{
                 headers: {
@@ -108,6 +112,7 @@ const serverFront = config.apiUrl;
                 setMes("");
                 setAño("")
                 setMetodo("");
+                setNecesario("")
                 setProducto("");
                 setMonto("");
                 setCondicion("");
@@ -171,6 +176,7 @@ const serverFront = config.apiUrl;
         año:'',
         metodo: '',
         producto: '',
+        necesario: '',
         monto: '',
         condicion: ''
     });
@@ -182,6 +188,7 @@ const serverFront = config.apiUrl;
             mes: gasto.mes,
             año: gasto.año,
             metodo: gasto.metodo,
+            necesario: gasto.necesario,
             producto: gasto.producto,
             monto: gasto.monto,
             condicion: gasto.condicion
@@ -196,6 +203,7 @@ const serverFront = config.apiUrl;
             año: '',
             metodo: '',
             producto: '',
+            necesario: '',
             monto: '',
             condicion: ''
         })
@@ -217,6 +225,7 @@ const serverFront = config.apiUrl;
         const ultimoGasto = gastos[gastos.length - 1];
         return ` ${ultimoGasto.dia} de ${ultimoGasto.mes} ${ultimoGasto.año} ${ultimoGasto.producto} $${ultimoGasto.monto} `;
       }
+      
       
       const totalMonto = (gastos) => {
         let total = 0;
@@ -241,6 +250,7 @@ const serverFront = config.apiUrl;
                 gasto.año.toLowerCase().includes(palabra) ||
                 gasto.metodo.toLowerCase().includes(palabra) ||
                 gasto.producto.toLowerCase().includes(palabra) ||
+                (gasto.necesario || '').toLowerCase().includes(palabra) ||
                 gasto.monto.toString().includes(palabra) ||
                 gasto.condicion.toLowerCase().includes(palabra) 
             )
@@ -261,8 +271,24 @@ const serverFront = config.apiUrl;
 
       }
 
-      // LocalStorage
+      //  Fecha actual
+      const fechaActual = () => {
+        const hoy = new Date();
+        setDia(String(hoy.getDate()))
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        setMes(meses[hoy.getMonth()])
+        setAño(String(hoy.getFullYear()))
+      }
 
+
+      const [active,setActive] = useState(null)
+
+      const open = (icon) => {
+        setActive(icon)
+      }
+
+
+      // LocalStorage
       useEffect(() => {
         const limiteGuardado = localStorage.getItem('limiteGasto')
             if(limiteGuardado)
@@ -276,6 +302,7 @@ const serverFront = config.apiUrl;
       useEffect(() => {
         setShowInputs(isMobile)
       },[isMobile])
+
 
 
     
@@ -298,6 +325,27 @@ const serverFront = config.apiUrl;
 
             <h1> Gastos Mensuales</h1> 
 
+            
+             <Grid item>
+                    <Button
+                        variant="contained"
+                        className="agregar"
+                        sx={{
+                            fontFamily: "Montserrat, sans-serif",
+                            backgroundColor: "#fff",
+                            color: "#302f2fff",
+                            minWidth: 0,
+                            padding: "8px",
+                            '&:hover': {
+                                backgroundColor: "#f0f0f0",
+                            }
+                        }}
+                        onClick={fechaActual}
+                    >
+                        <TodayIcon sx={{ color: "#000" }} />
+                    </Button>
+            </Grid>
+            
             <div className="form-container">
                 <select  value={dia} onChange={(e) => setDia(e.target.value)}>
                     <option value="">Seleccionar Día</option>
@@ -318,13 +366,18 @@ const serverFront = config.apiUrl;
                 </select>
 
                 <select value={metodo} onChange={(e) => setMetodo(e.target.value)}>
-                    <option value="">Seleccionar Método</option>
+                    <option value="">Seleccionar Método </option>
                     {["Débito", "Crédito", "Efectivo", "Mercado Pago"].map(metodo => <option key={metodo} value={metodo}>{metodo}</option>)}
                 </select>
 
                 <select  value={condicion} onChange={(e) => setCondicion(e.target.value)}>
                     <option value="">Seleccionar Estado</option>
                     {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversion"].map(condicion => <option key={condicion} value={condicion}>{condicion}</option>)}
+                </select>
+
+                <select  value={necesario} onChange={(e) => setNecesario(e.target.value)}>
+                    <option value="">Seleccionar Condición</option>
+                    {["Fijo","Necesario","Innecesario"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
                 </select>
 
                 <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
@@ -342,6 +395,7 @@ const serverFront = config.apiUrl;
                     Agregar Gasto
                 </Button>
             )}
+
             
                 <Grid item>
                     <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={handleAddGastoDebounced}> 
@@ -448,6 +502,7 @@ const serverFront = config.apiUrl;
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Monto</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Método</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Estado</TableCell>
+                            <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Condición</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}></TableCell>
                         </TableRow>
                     </TableHead>
@@ -496,18 +551,48 @@ const serverFront = config.apiUrl;
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: '600' }}>
                                             {element.condicion}
                                         </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: '600' }}>
+                                               {element.necesario === "Fijo" && (
+                                                    <Tooltip title="Fijo">
+                                                        <FlagCircleIcon sx={{ color: "#f1e508ff", verticalAlign: 'middle', fontSize:'2rem' }} />
+                                                    </Tooltip>
+                                                 
+                                                )}
+
+                                                {element.necesario === "Necesario" && (
+                                                    <Tooltip title="Necesario">
+                                                        <FlagCircleIcon sx={{ color: "#193271ff", verticalAlign: 'middle', fontSize:'2rem' }} />
+                                                    </Tooltip>
+                                                 
+                                                )}
+                                                {element.necesario === "Innecesario" && (
+                                                    <Tooltip title="Innesario">
+                                                        <FlagCircleIcon sx={{ color: "#ff4136", verticalAlign: 'middle', fontSize:'2rem' }} />
+                                                    </Tooltip>
+                                                    
+                                                )}
+                                        </TableCell>
+
                                         <TableCell align="center">
                                             <Box className="actions" sx={{ display: 'flex', gap: 1, justifyContent: 'center', fontFamily: "Montserrat, sans-serif" }}>
+                                              <Tooltip title="Eliminar">
                                                 <IconButton className="trash" sx={{ color: 'red', fontFamily: "Montserrat, sans-serif" }} onClick={() => deleteGastos(element._id)}>
                                                     <DeleteIcon />
                                                 </IconButton>
+                                              </Tooltip>
+                                     
+                                              
                                                 {editingId === element._id ? null : (
+                                                 <Tooltip title="Editar">
                                                     <IconButton className="edit" sx={{ color: 'grey', fontFamily: "Montserrat, sans-serif" }} onClick={() => editGastos(element)}>
                                                         <EditIcon />
                                                     </IconButton>
+                                                 </Tooltip>
+                                                
                                                 )}
                                             </Box>
                                         </TableCell>
+
                                     </TableRow>
 
 
@@ -534,6 +619,7 @@ const serverFront = config.apiUrl;
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
+
                                             <TableCell align="center">
                                                 <FormControl fullWidth>
                                                     <Select
@@ -547,14 +633,20 @@ const serverFront = config.apiUrl;
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
+
                                             <TableCell align="center">
-                                                <TextField
-                                                    value={editingData.año}
-                                                    onChange={(e) => setEditingData({ ...editingData, año: e.target.value })}
-                                                    size="small"
-                                                    fullWidth
-                                                />
+                                                <FormControl fullWidth>
+                                                   <Select 
+                                                   value={editingData.año}
+                                                   onChange={(e) => setEditingData({...editingData, año: e.target.value})}
+                                                   size='small'
+                                                   >
+                                                    {["2024", "2025", "2026", "2027", "2028"].map(año => <MenuItem key={año} value={año}>{año}</MenuItem>)}
+                                                   </Select>
+                                                </FormControl>
+                                                
                                             </TableCell>
+
                                             <TableCell align="center">
                                                 <TextField
                                                     value={editingData.producto}
@@ -563,6 +655,7 @@ const serverFront = config.apiUrl;
                                                     fullWidth
                                                 />
                                             </TableCell>
+
                                             <TableCell align="center">
                                                 <TextField
                                                     type="number"
@@ -572,6 +665,7 @@ const serverFront = config.apiUrl;
                                                     fullWidth
                                                 />
                                             </TableCell>
+
                                             <TableCell align="center">
                                                 <FormControl fullWidth>
                                                     <Select
@@ -585,6 +679,7 @@ const serverFront = config.apiUrl;
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
+
                                             <TableCell align="center">
                                                 <FormControl fullWidth>
                                                     <Select
@@ -598,14 +693,56 @@ const serverFront = config.apiUrl;
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
+                                            
+                                            <TableCell align="center">
+                                                <FormControl fullWidth>
+                                                    <Select
+                                                        value={editingData.necesario}
+                                                        onChange={(e) => setEditingData({ ...editingData, necesario: e.target.value })}
+                                                        size="small"
+                                                    >
+
+                                                        <MenuItem value="Fijo">
+                                                            <FlagCircleIcon sx={{ color: "#dcd108ff", verticalAlign: 'middle', fontSize:'1.2rem' }} />
+                                                            Fijo
+                                                        </MenuItem>
+
+                                                        <MenuItem value="Necesario">
+                                                            <FlagCircleIcon sx={{ color: "#193271ff", verticalAlign: 'middle', fontSize:'1.2rem' }} />
+                                                            Necesario
+                                                        </MenuItem>
+
+                                                        <MenuItem value="Innecesario">
+                                                            <FlagCircleIcon sx={{ color: "#ff4136", verticalAlign: 'middle', fontSize:'1.2rem' }} />
+                                                            Innecesario
+                                                        </MenuItem>
+                                                        
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
+                                            
                                             <TableCell align="center" className="actions">
                                                 <Box className="btn-edit" sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                                                    <IconButton className="check" sx={{ color: 'green', backgroundColor: 'lightgreen', borderRadius: '4px', padding: '5px' }} onClick={() => handleSaveEditDebounced(element._id)}>
-                                                        <CheckIcon />
-                                                    </IconButton>
-                                                    <IconButton className="cancel" sx={{ color: 'white', backgroundColor: 'red', borderRadius: '4px', padding: '5px' }} onClick={cancelEdit}>
-                                                        <CancelIcon />
-                                                    </IconButton>
+                                                    <Tooltip title="Guardar">
+                                                        <IconButton
+                                                            className="check"
+                                                            sx={{ color: 'green', backgroundColor: 'lightgreen', borderRadius: '4px', padding: '5px' }}
+                                                            onClick={() => handleSaveEditDebounced(element._id)}
+                                                        >
+                                                            <CheckIcon />
+                                                        
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    
+                                                    <Tooltip title="Cancelar">
+                                                        <IconButton
+                                                            className="cancel"
+                                                            sx={{ color: 'white', backgroundColor: 'red', borderRadius: '4px', padding: '5px' }}
+                                                            onClick={cancelEdit}
+                                                        >
+                                                            <CancelIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 </Box>
                                             </TableCell>
                                         </TableRow>
