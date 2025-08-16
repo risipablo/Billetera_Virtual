@@ -11,9 +11,9 @@ exports.getGastos = async (req, res) => {
 };
 
 exports.addGasto = async (req, res) => {
-    const { dia, mes, año, producto, metodo, condicion, monto } = req.body;
+    const { dia, mes, año, producto, metodo, condicion, necesario, monto } = req.body;
 
-    if (!dia || !mes || !año ||!producto || !metodo || !condicion || !monto) {
+    if (!dia || !mes || !año ||!producto || !metodo || !condicion || !necesario || !monto) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
@@ -25,6 +25,7 @@ exports.addGasto = async (req, res) => {
             producto,
             metodo,
             condicion,
+            necesario,
             monto,
             userId: req.user.id 
         });
@@ -55,12 +56,12 @@ exports.deleteGasto = async (req, res) => {
 
 exports.editGasto = async (req, res) => {
     const { id } = req.params;
-    const { dia, mes,año, producto, metodo, condicion, monto } = req.body;
+    const { dia, mes,año, producto, metodo, condicion, monto, necesario } = req.body;
 
     try {
         const gasto = await GastosModel.findOneAndUpdate(
             { _id: id, userId: req.user.id }, 
-            { dia, mes,año, producto, metodo, condicion, monto },
+            { dia, mes,año, producto, metodo, condicion, monto,necesario },
             { new: true }
         );
 
