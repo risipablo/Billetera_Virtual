@@ -597,160 +597,120 @@ const GastoChart = ({ gastos, loading}) => {
 
     return (
         <div className="chart-container">
-            {/* Gastos por mes */}
-            <motion.div 
-                className="month-container"
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
-                <h2>Gastos por mes</h2>
-                <div className="bar-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
-                    {isLoading ? (
-                        <Skeleton variant="circular" width={180} height={180} />
-                    ) : (
-                        <Bar data={dataSpentMonth} options={options} />
-                    )}
-                </div>
-            </motion.div>
 
-            {/* Productos por mes */}
-            <motion.div 
-                className="product-container"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-            >
-                <h2>Productos por mes</h2>
-                <div className="doughnut-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
-                    {isLoading ? (
-                        <Skeleton variant="circular" width={180} height={180} />
-                    ) : (
-                        <Doughnut data={dataSpentProduct} options={optionsDonut} />
-                    )}
-                </div>
-            </motion.div>
+        {/* Resumen Financiero */}
+        <motion.div className="card promedios"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+        >
+            <h2>Resumen Financiero</h2>
+            <ul className="metrics-list">
+            <li><h3>Total de gastos</h3><p>$ {(totalGasto || 0).toLocaleString('en-US')}</p></li>
+            <li><h3>Dinero Invertido</h3><p>$ {(totalInversion || 0).toLocaleString('en-US')}</p></li>
+            <li><h3>Promedio de gasto por mes</h3><p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p></li>
+            <li><h3>Promedio de gasto por día</h3><p>$ {(promedioPorDia || 0).toLocaleString('en-US')}</p></li>
+            </ul>
+        </motion.div>
 
-            {/* Metodos de pago */}
-            <motion.div 
-                className="product-container"
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-            >
-                <h2>Metodos de pago</h2>
-                <div className="doughnut-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
-                    {isLoading ? (
-                        <Skeleton variant="circular" width={180} height={180} />
-                    ) : (
-                        <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
-                    )}
-                </div>
-            </motion.div>
+        {/*  Gastos por Mes */}
+        <motion.div className="card chart"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+        >
+            <h2>Gastos por Mes</h2>
+            <div className="chart-box">
+            {isLoading ? (
+                <Skeleton variant="circular" width={180} height={180} />
+            ) : (
+                <Bar data={dataSpentMonth} options={options} />
+            )}
+            </div>
+            <div className="info-chart">
+            <h3>Mes con mayor gasto: </h3>
+                <p className="dato1">{spentMonthMax}</p>
+                <p className="dato2">$ {(totalMes || 0).toLocaleString('en-US')}</p>
+            </div>
+        </motion.div>
 
-            {/* Gastos por año */}
-            <motion.div 
-                className="month-container"
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
-                <h2>Gastos por año</h2>
-                <div className="bar-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
-                    {isLoading ? (
-                        <Skeleton variant="circular" width={180} height={180} />
-                    ) : (
-                        <Bar data={dataSpentYear} options={optionsYear} />
-                    )}
-                </div>
-            </motion.div>
+        {/* Categorías de Gastos */}
+        <motion.div className="card chart"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+        >
+            <h2>Distribución por Productos</h2>
+            <div className="chart-box">
+            {isLoading ? (
+                <Skeleton variant="circular" width={180} height={180} />
+            ) : (
+                <Doughnut data={dataSpentProduct} options={optionsDonut} />
+            )}
+            </div>
+            <div className="info-chart">
+            <h3>Producto con mayor gasto: </h3>
+                <p className="dato1">{maxProducto}</p>
+                <p className="dato2">$ {(totalProducto || 0).toLocaleString('en-US')}</p>
+            </div>
+        </motion.div>
 
-            {/* Inversion */}
-            <motion.div 
-                className="product-container"
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-            >
-                <h2>Inversion</h2>
-                <div className="doughnut-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
-                    {isLoading ? (
-                        <Skeleton variant="circular" width={180} height={180} />
-                    ) : (
-                        <Bar data={dataSpentIncersion} options={options2} />
-                    )}
-                </div>
-            </motion.div>
+        {/*  Métodos de Pago */}
+        <motion.div className="card chart"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+        >
+            <h2>Métodos de Pago</h2>
+            <div className="chart-box">
+            {isLoading ? (
+                <Skeleton variant="circular" width={180} height={180} />
+            ) : (
+                <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
+            )}
+            </div>
+            <div className="info-chart">
+                <h3>Método más utilizado</h3>
+                <p className="dato1">{metodoMax}</p>
+                <p className="dato2">$ {(totalMetodoMax || 0).toLocaleString('en-US')}</p>
+            </div>
 
-            {/* Promedios y totales */}
-            <motion.div 
-                className="promedios-container"
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
+        </motion.div>
 
-                <div>
-                    <h3>Total de gastos</h3>
-                    <div className="content-row">
-                      
-                        <p>$ {(totalGasto || 0).toLocaleString('en-US')}</p>
-                    </div>
-                </div>
+        {/*  Tendencias Anuales */}
+        <motion.div className="card chart"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+        >
+            <h2>Gastos Anuales</h2>
+            <div className="chart-box">
+            {isLoading ? (
+                <Skeleton variant="circular" width={180} height={180} />
+            ) : (
+                <Bar data={dataSpentYear} options={optionsYear} />
+            )}
+            </div>
+        </motion.div>
 
+        {/*  Inversiones */}
+        <motion.div className="card chart"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+        >
+            <h2>Inversiones</h2>
+            <div className="chart-box">
+            {isLoading ? (
+                <Skeleton variant="circular" width={180} height={180} />
+            ) : (
+                <Bar data={dataSpentIncersion} options={options2} />
+            )}
+            </div>
+        </motion.div>
 
-                <div>
-                    <h3>Promedio de gasto por dia </h3>
-                    <div className="content-row">
-                      
-                        <p>$ {(promedioPorDia || 0).toLocaleString('en-US')}</p>
-                    </div>
-                </div>
-               
-
-                <div>
-                    <h3>Promedio de gasto por mes</h3>
-                    <div className="content-row">
-                      
-                        <p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p>
-                    </div>
-                </div>
-               
-                <div>
-                    <h3>Producto mayor gastado</h3>
-                    <div className="content-row">
-                        <p>{maxProducto}</p>
-                        <p>$ {(totalProducto || 0).toLocaleString('en-US')}</p>
-                    </div>
-                </div>
-                
-                <div>
-                    <h3>Método de pago más usado</h3>
-                    <div className="content-row">
-                        <p>{metodoMax}</p>
-                        <p>$ {(totalMetodoMax || 0).toLocaleString('en-US')}</p>
-                    </div>
-                </div>
-               
-                <div>
-                    <h3>Mes más gastado</h3>
-                    <div className="content-row">
-                        <p>{spentMonthMax}</p>
-                        <p>$ {(totalMes || 0).toLocaleString('en-US')}</p>
-                    </div>
-                </div>
-
-                
-                <div>
-                    <h3>Dinero Invertido</h3>
-                    <div className="content-row">
-                        <p>$ {(totalInversion || 0).toLocaleString('en-US')}</p>
-                        
-                    </div>
-                </div>
-                
-            </motion.div>
         </div>
+
     );
 }
 

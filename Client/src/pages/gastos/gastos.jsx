@@ -6,7 +6,7 @@ Collapse,
 Skeleton,
 Tooltip,} from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
-import { ExpandMore, ExpandLess } from '@mui/icons-material';
+import { ExpandMore, ExpandLess, ArrowUpward, ArrowBack, ArrowDownward } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -27,6 +27,7 @@ import Ok from '../../assets/ok.mp3'
 import { Notas } from '../../component/notas/notas';
 import { config } from '../../component/variables/config';
 import { GastoInfo } from '../../component/common/Info/gastoInfo';
+import ModalConfirmacion from '../../component/modal/modalConfirm'
 
 
 const serverFront = config.apiUrl;
@@ -128,24 +129,36 @@ const serverFront = config.apiUrl;
 
     const handleAddGastoDebounced = useMemo(() => Debounce(addGastos, 100), [addGastos]);
 
-    const deleteGastos = (id) => {
-        axios.delete(`${serverFront}/api/delete-gasto/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            withCredentials: true, 
-        })
-        .then(response => {
-            setGastos(gastos.filter((gasto) => gasto._id !== id))
-            setGastosFiltrados(gastosFiltrados.filter((gasto) => gasto._id !== id))
-            toast.error('Gasto eliminado ', {
-                position: 'top-right',
+
+    const [showModal, setShowModal] = useState(false)
+    const [deleteId,setDeleteId] = useState(null)
+
+    const modalDelete = (id) => {
+        setShowModal(true)
+        setDeleteId(id)
+      }
+
+    const deleteGastos = async () => {
+        try {
+            
+            setGastos(gastos.filter((gasto) => gasto._id !== deleteId));
+            setGastosFiltrados(gastosFiltrados.filter((gasto) => gasto._id !== deleteId));
+            setShowModal(false);
+
+            
+            await axios.delete(`${serverFront}/api/delete-gasto/${deleteId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
             });
-        })
-        .catch(err => console.log(err))
-    }
 
-
+            toast.error('Gasto eliminado', { position: 'top-right' });
+        } catch (err) {
+            console.error("Error al eliminar:", err);
+            
+            setGastos([...gastos]); // Forzar re-render si es necesario
+            toast.error('No se pudo eliminar el gasto');
+        }
+    };
 
     const saveEdit = (id) => {
         console.log(`Cambios guardadoss: ${id}`);
@@ -288,6 +301,19 @@ const serverFront = config.apiUrl;
       }
 
 
+      const [ordenar,setOrdenar] = useState(true)
+
+      const diaOrden = () => {
+        const productosFiltrados = [...gastosFiltrados].sort((a,b) => {
+            const dia1 = parseInt(a.dia)
+            const dia2 = parseInt(b.dia)
+
+            return ordenar ? dia1 - dia2 : dia2 - dia1
+        }) 
+        setGastosFiltrados(productosFiltrados)
+        setOrdenar(!ordenar)
+      }
+
       // LocalStorage
       useEffect(() => {
         const limiteGuardado = localStorage.getItem('limiteGasto')
@@ -326,7 +352,7 @@ const serverFront = config.apiUrl;
             <h1> Gastos Mensuales</h1> 
 
             
-             <Grid item>
+            <Grid item>
                     <Button
                         variant="contained"
                         className="agregar"
@@ -377,7 +403,7 @@ const serverFront = config.apiUrl;
 
                 <select  value={necesario} onChange={(e) => setNecesario(e.target.value)}>
                     <option value="">Seleccionar Condición</option>
-                    {["Fijo","Necesario","Innecesario"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
+                    {[" ","Fijo","Necesario","Innecesario"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
                 </select>
 
                 <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
@@ -495,7 +521,12 @@ const serverFront = config.apiUrl;
                 <Table>
                     <TableHead>  
                         <TableRow className='fila' sx={{ mt: 2 }}>
-                            <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Día</TableCell>
+                            <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>
+                                Día
+                                <IconButton onClick={diaOrden} className="ordenar" size="small" sx={{ color: "rgb(245, 243, 239)" }}>
+                                    {ordenar ? <ArrowUpward /> : <ArrowDownward />}
+                                </IconButton>
+                            </TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Mes</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Año</TableCell>
                             <TableCell align="center" sx={{ fontSize: '1.2rem', fontWeight: '600', fontFamily: "Montserrat, sans-serif", color:"rgb(245, 243, 239)" }}>Producto</TableCell>
@@ -536,21 +567,27 @@ const serverFront = config.apiUrl;
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
                                             {element.mes}
                                         </TableCell>
+                                        
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
                                             {element.año}
                                         </TableCell>
-                                        <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
+                                       
+                                        <TableCell align="center" sx={{ fontSize: '1rem',margin: ' 0 12rem' ,fontFamily: "Montserrat, sans-serif" }}>
                                             {element.producto}
                                         </TableCell>
+                                        
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: 'bold' }}>
-                                            ${element.monto}
+                                            ${(element.monto || 0 ).toLocaleString('en-US')}
+                                       
                                         </TableCell>
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif" }}>
                                             {element.metodo}
                                         </TableCell>
+                                        
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: '600' }}>
                                             {element.condicion}
                                         </TableCell>
+
                                         <TableCell align="center" sx={{ fontSize: '1rem', fontFamily: "Montserrat, sans-serif", fontWeight: '600' }}>
                                                {element.necesario === "Fijo" && (
                                                     <Tooltip title="Fijo">
@@ -576,11 +613,10 @@ const serverFront = config.apiUrl;
                                         <TableCell align="center">
                                             <Box className="actions" sx={{ display: 'flex', gap: 1, justifyContent: 'center', fontFamily: "Montserrat, sans-serif" }}>
                                               <Tooltip title="Eliminar">
-                                                <IconButton className="trash" sx={{ color: 'red', fontFamily: "Montserrat, sans-serif" }} onClick={() => deleteGastos(element._id)}>
+                                                <IconButton className="trash" sx={{ color: 'red', fontFamily: "Montserrat, sans-serif" }} onClick={() => modalDelete(element._id)}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                               </Tooltip>
-                                     
                                               
                                                 {editingId === element._id ? null : (
                                                  <Tooltip title="Editar">
@@ -702,6 +738,10 @@ const serverFront = config.apiUrl;
                                                         size="small"
                                                     >
 
+                                                        <MenuItem value=" ">
+                                                            
+                                                        </MenuItem>
+
                                                         <MenuItem value="Fijo">
                                                             <FlagCircleIcon sx={{ color: "#dcd108ff", verticalAlign: 'middle', fontSize:'1.2rem' }} />
                                                             Fijo
@@ -762,11 +802,16 @@ const serverFront = config.apiUrl;
                             <TableCell></TableCell>
                         </TableRow>
                     </tfoot>
+
+                       
+                       
                 </Table>
+                <ModalConfirmacion isOpen={showModal} onClose={() => setShowModal(false)}  onConfirm={deleteGastos}/>
             </TableContainer>
             <Notas/>
             <Toaster/>
             <ScrollTop/>
+         
         </Box>
     );
 };
