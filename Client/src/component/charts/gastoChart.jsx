@@ -1,4 +1,3 @@
-
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,ArcElement } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
@@ -7,11 +6,12 @@ import { Skeleton } from "@mui/material";
 import "./chart.css"
 
 
-const GastoChart = ({ gastos, loading}) => {
-     const isLoading = loading || !gastos || gastos.length === 0;
-    
+
+const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
+    const isLoading = loading || !gastos || gastos.length === 0;
 
     const isMobile = window.innerWidth <= 768; // ajusta de font size donuts para mobile
+    
 
     // Gastos por mes
     const spentMonth = gastos.reduce((acc, gasto) => {
@@ -553,33 +553,36 @@ const GastoChart = ({ gastos, loading}) => {
         },0
     )
 
-        const promedioGasto = gastos.reduce((acc, gasto) => {
-            const condiciones = gasto.condicion.toLowerCase();
+    const promedioGasto = !mesSeleccionado ?
+        gastos.reduce((acc,gasto) => {
+            const conditions = gasto.condicion.toLowerCase();
             const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas'];
-            
-            if (conditionsReduce.includes(condiciones)) {
+
+            if (conditionsReduce.includes(conditions))
                 return acc;
+
+
+                return acc  + gasto.monto 
+        },0) / 12 : null
+
+
+
+    const promedioDiaMes = mesSeleccionado ?
+        gastos.reduce((acc,gasto) => {
+            const conditions = gasto.condicion.toLowerCase();
+            const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas'];
+
+            if (conditionsReduce.includes(conditions))
+                return acc;
+
+            if (gasto.mes.toLowerCase() === mesSeleccionado.toLowerCase())
+            {
+                return acc + gasto.monto
             }
-            
-            return acc + gasto.monto;
-        }, 0) / 12;
-
-
-   const promedioPorDia = gastos.reduce((acc,gasto) => {
-        const monto = gasto.monto;
-        const condiciones = gasto.condicion.toLowerCase()
-
-        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
-        if (conditionsReduce.includes(condiciones)){
             return acc
-        }
+        },0) / 30 : null
 
-        const total = monto / 365
-
-        return acc + total
-   }, 0)
-
-   const totalGasto = gastos.reduce((acc,gasto) => {
+    const totalGasto = gastos.reduce((acc,gasto) => {
     let total = 0;
         const monto = gasto.monto
 
@@ -608,8 +611,16 @@ const GastoChart = ({ gastos, loading}) => {
             <ul className="metrics-list">
             <li><h3>Total de gastos</h3><p>$ {(totalGasto || 0).toLocaleString('en-US')}</p></li>
             <li><h3>Dinero Invertido</h3><p>$ {(totalInversion || 0).toLocaleString('en-US')}</p></li>
-            <li><h3>Promedio de gasto por mes</h3><p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p></li>
-            <li><h3>Promedio de gasto por día</h3><p>$ {(promedioPorDia || 0).toLocaleString('en-US')}</p></li>
+            {
+                !mesSeleccionado ? (
+                    <li><h3>Promedio de gasto por mes</h3><p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p></li>
+                ) : (
+                    <li><h3>Promedio de gasto por mes</h3><p>$ {(promedioGasto || 0).toLocaleString('en-US')}</p></li>
+                )
+            }
+            
+            
+            <li><h3>Promedio de gasto por dia</h3><p>$ {(promedioDiaMes || 0).toLocaleString('en-US')}</p></li>
             </ul>
         </motion.div>
 
@@ -631,6 +642,8 @@ const GastoChart = ({ gastos, loading}) => {
             <h3>Mes con mayor gasto: </h3>
                 <p className="dato1">{spentMonthMax}</p>
                 <p className="dato2">$ {(totalMes || 0).toLocaleString('en-US')}</p>
+                                
+            
             </div>
         </motion.div>
 
@@ -649,9 +662,9 @@ const GastoChart = ({ gastos, loading}) => {
             )}
             </div>
             <div className="info-chart">
-            <h3>Producto con mayor gasto: </h3>
-                <p className="dato1">{maxProducto}</p>
-                <p className="dato2">$ {(totalProducto || 0).toLocaleString('en-US')}</p>
+                <h3>Mes con mayor gasto: </h3>
+                <p className="dato1">{spentMonthMax}</p>
+                <p className="dato2">$ {(totalMes || 0).toLocaleString('en-US')}</p>
             </div>
         </motion.div>
 
@@ -715,7 +728,6 @@ const GastoChart = ({ gastos, loading}) => {
 }
 
 export default GastoChart;
-
 
 
 

@@ -4,7 +4,7 @@ import { TextField, Select, MenuItem, IconButton, Grid, InputLabel, FormControl,
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { motion } from 'framer-motion';
 
-export function FiltrosChart({ gastos, setGastosFiltrados}) {
+export function FiltrosChart({ gastos, setGastosFiltrados, setMesFiltrado}) {
     const [filterMonth, setFilterMonth] = useState('');
     const [filterProduct, setFilterProduct] = useState('');
     const [filterMetodo, setfilterMetodo] = useState('');
@@ -15,8 +15,13 @@ export function FiltrosChart({ gastos, setGastosFiltrados}) {
     const filtros = () => {
         let gastosFiltrados = gastos;
 
-        if (filterMonth.trim() !== '')
+        if (filterMonth.trim() !== '') {
             gastosFiltrados = gastosFiltrados.filter(gasto => gasto.mes.toLowerCase() === filterMonth.toLowerCase());
+            setMesFiltrado(filterMonth); 
+        } else {
+            setMesFiltrado(''); 
+        }
+
 
         if (filterProduct.trim() !== "")
             gastosFiltrados = gastosFiltrados.filter(gasto => gasto.producto.toLowerCase() === filterProduct.toLowerCase());
@@ -39,6 +44,7 @@ export function FiltrosChart({ gastos, setGastosFiltrados}) {
         setfilterMetodo('');
         setFilterAño('')
         setFilterCondition('')
+        setMesFiltrado('')
     };
 
     useEffect(() => {
@@ -75,7 +81,10 @@ export function FiltrosChart({ gastos, setGastosFiltrados}) {
                                     <InputLabel>Mes</InputLabel>
                                     <Select
                                         value={filterMonth}
-                                        onChange={(event) => setFilterMonth(event.target.value)}
+                                         onChange={(event) => {
+        setFilterMonth(event.target.value);
+        setMesFiltrado(event.target.value); // ← Actualizar directamente
+    }}
                                         label="Mes"
                                     >
                                         <MenuItem value="">Todos</MenuItem>

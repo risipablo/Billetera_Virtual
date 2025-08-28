@@ -17,6 +17,7 @@ function Charts(){
     
     const [gastos,setGastos] = useState([])
     const [gastosFiltrados, setGastosFiltrados] = useState([])
+    const [mesFiltrado, setMesFiltrado] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token') // se guarda el token de cada usuario
@@ -56,10 +57,12 @@ function Charts(){
             <FiltrosChart 
                 gastos={gastos} 
                 setGastosFiltrados={setGastosFiltrados}
+                setMesFiltrado={setMesFiltrado}
             />
 
             <GastoChart 
                 gastos={gastosFiltrados}
+                mesSeleccionado={mesFiltrado}
             />
 
             <ScrollTop/>
