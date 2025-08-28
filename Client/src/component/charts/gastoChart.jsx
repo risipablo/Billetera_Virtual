@@ -279,6 +279,10 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
         return spentProduct[key] > spentProduct[max] ? key : max;
     }, Object.keys(spentProduct)[0])
 
+    const top5Product = Object.entries(spentProduct).sort((a,b) => {
+        return b[1] -a[1]
+    }).slice(0,5)
+
     const totalProducto = spentProduct[maxProducto]
 
 
@@ -538,8 +542,6 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
         categoryPercentage: 0.8,
     };
 
-
-
     const totalInversion = gastos.reduce((acc,gasto) => {
         const conditions = gasto.condicion.toLowerCase();
 
@@ -621,6 +623,16 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             
             
             <li><h3>Promedio de gasto por dia</h3><p>$ {(promedioDiaMes || 0).toLocaleString('en-US')}</p></li>
+            
+            <li>
+                <h3>Productos con más gastos</h3>
+                {top5Product.map(([producto, monto]) => (
+                    <p key={producto}>
+                        {producto} : ${monto.toLocaleString('en-US')}
+                    </p>
+                ))}
+            </li>
+            
             </ul>
         </motion.div>
 
@@ -662,9 +674,9 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             )}
             </div>
             <div className="info-chart">
-                <h3>Mes con mayor gasto: </h3>
-                <p className="dato1">{spentMonthMax}</p>
-                <p className="dato2">$ {(totalMes || 0).toLocaleString('en-US')}</p>
+                <h3>Producto con mayor gasto: </h3>
+                <p className="dato1">{maxProducto}</p>
+                <p className="dato2">$ {(totalProducto || 0).toLocaleString('en-US')}</p>
             </div>
         </motion.div>
 
@@ -683,7 +695,7 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             )}
             </div>
             <div className="info-chart">
-                <h3>Método más utilizado</h3>
+                <h3>Método más utilizado: </h3>
                 <p className="dato1">{metodoMax}</p>
                 <p className="dato2">$ {(totalMetodoMax || 0).toLocaleString('en-US')}</p>
             </div>
