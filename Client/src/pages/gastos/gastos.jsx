@@ -1,12 +1,12 @@
-import  React, { useState, useEffect, useMemo, useRef} from 'react';
+import  React, { useState, useEffect, useMemo} from 'react';
 import axios from 'axios';
-import {Box,Button,useMediaQuery,FormControl,Grid,InputLabel,MenuItem,Select,Table,TableBody,
+import {Box,Button,useMediaQuery,FormControl,Grid,MenuItem,Select,Table,TableBody,
 ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField, Paper, IconButton, ListItem,
 Collapse,
 Skeleton,
 Tooltip,} from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
-import { ExpandMore, ExpandLess, ArrowUpward, ArrowBack, ArrowDownward } from '@mui/icons-material';
+import { ExpandMore, ExpandLess, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -403,7 +403,7 @@ const serverFront = config.apiUrl;
 
                 <select  value={necesario} onChange={(e) => setNecesario(e.target.value)}>
                     <option value="">Seleccionar Condición</option>
-                    {[" ","Fijo","Necesario","Innecesario"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
+                    {["Fijo","Necesario","Innecesario"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
                 </select>
 
                 <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />

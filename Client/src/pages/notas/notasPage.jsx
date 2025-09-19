@@ -1,24 +1,30 @@
 import { useState } from "react";
-import { Container, Grid, Card, CardContent, TextField, Button, IconButton, Typography, Tooltip, Box } from "@mui/material";
-import { Delete, Edit, Save, Cancel, Check, Add, Close, CheckBox } from "@mui/icons-material";
+import { Container, Grid, Card, CardContent, TextField, Button, IconButton, Typography, Tooltip, Box, Collapse } from "@mui/material";
+import { Delete, Edit, Save, Cancel, Check, Add, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { useNotes } from "../../utils/hooks/useNotes";
 import "./notasPage.css";
 import { Skeleton } from "@mui/material";
+import { TransitionGroup } from 'react-transition-group'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Menu, MenuItem } from "@mui/material";
 import { Toaster } from 'react-hot-toast';
 import { ScrollTop } from "../../component/common/scrollTop";
 import { NoteInfo } from "../../component/common/Info/noteInfo";
+import ModalConfirmacion from "../../component/modal/modalConfirm";
+import UndoIcon from '@mui/icons-material/Undo';
+import React from "react";
 
 export function NotasPage() {
-    const { notes, addNote, deleteNote, editNote, addNoteWithDate, deleteNewIndex, handleSaveItem } = useNotes();
+    const { notes, addNote, deleteNote, editNote, addNoteWithDate, deleteNewIndex, handleSaveItem, completeNote } = useNotes();
     const [titulo, setTitulo] = useState("");
     const [descripcion, setDescripcion] = useState("");   
     const [cuotas,setCuotas] = useState("") 
     const [precio,setPrecio] = useState("")
+
     const [expandedNoteId, setExpandedNoteId] = useState(null);
+
     const [editingId, setEditingId] = useState(null);
     const [editingData, setEditingData] = useState({
         titulo: '',
@@ -30,12 +36,24 @@ export function NotasPage() {
         fecha: '',
         precio: ''
     });
+    const [showInputs, setShowInputs] = useState({}) // {} => para ir tarjeta por tarjeta
 
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
+
+    const [showModal, setShowModal] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
+
+    const modalDelete = (id) => {
+        setShowModal(true)
+        setDeleteId(id)
+    }
+
+
 
     const handleAddNote = () => {
+
         addNote(titulo, descripcion, fecha, cuotas, precio);
-        setTitulo('');
+        setTitulo(''); 
         setDescripcion('');
         setCuotas('')
         setPrecio(0)
@@ -55,13 +73,18 @@ export function NotasPage() {
         setEditingId(null);
     };
 
-    const getTodayDate = () => {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
-        return `${yyyy}-${mm}-${dd}`;
-    };
+    // const getTodayDate = () => {
+    //     const today = new Date();
+    //     const yyyy = today.getFullYear();
+    //     const mm = String(today.getMonth() + 1).padStart(2, '0');
+    //     const dd = String(today.getDate()).padStart(2, '0');
+    //     return `${yyyy}-${mm}-${dd}`;
+    // };
+
+
+    const getTodayDate = (dateString) => {
+        new Date(dateString).toLocaleDateString('es-ES',{timeZone: 'UTC' })
+    }
 
     const [fecha, setFecha] = useState(getTodayDate());
 
@@ -88,7 +111,7 @@ export function NotasPage() {
 
     const [editingState, setEditingState] = useState(null); // id de la nota
     const [editingIdx, setEditingIdx] = useState(null);     // índice del ítem
-    const [editingItem, setEditingItem] = useState({ fecha: '', descripcion: '', fecha: '' });
+    const [editingItem, setEditingItem] = useState({ fecha: '', descripcion: ''});
 
     const editingRoutine = (nota, idx) => {
         setEditingState(nota._id);
@@ -111,13 +134,6 @@ export function NotasPage() {
         deleteNewIndex(id, noteIndex)
     }
 
-    const [selected, setSelected] = useState([])
-
-    const handleChange = (id) => {
-        setSelected(prev => prev.includes(id) ? prev.filter(noteId => noteId !== id): [...prev, id])
-    }
-
-    
     const [anchorEl, setAnchorEl] = useState(null);
     const [menuNoteId, setMenuNoteId] = useState(null);
     const [menuIdx, setMenuIdx] = useState(null);
@@ -163,6 +179,7 @@ export function NotasPage() {
                             />
                         </motion.div>
                     </Grid>
+
                     <Grid item xs={12} sm={2}>
                         <motion.div initial={{ opacity: 0, x: 0 }} animate={{ opacity: 1, x: 0 }}>
                             <TextField
@@ -182,7 +199,8 @@ export function NotasPage() {
                             </TextField>
                         </motion.div>
                     </Grid>
-                    <Grid item xs={12} sm={2.5}>
+                    
+                     <Grid item xs={12} sm={2.5}>
                         <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }}>
                             <TextField 
                                 fullWidth
@@ -192,7 +210,8 @@ export function NotasPage() {
                                 onChange={(e) => setDescripcion(e.target.value)}
                             />
                         </motion.div>
-                    </Grid>
+                    </Grid> 
+                    
                     <Grid item xs={12} sm={1.5}>
                         <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }}>
                             <TextField 
@@ -205,6 +224,7 @@ export function NotasPage() {
                             />
                         </motion.div>
                     </Grid>
+
                     <Grid item xs={12} sm={2.5}>
                         <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }}>
                             <TextField
@@ -224,6 +244,7 @@ export function NotasPage() {
                             variant="contained" 
                             color="primary" 
                             onClick={handleAddNote}
+                            disabled={!titulo || !descripcion || !cuotas || !precio || !fecha}
                             fullWidth
                         >
                             <Check/>
@@ -234,7 +255,7 @@ export function NotasPage() {
 
             <Container style={{ marginTop: "5rem" }}>
                 <Grid container spacing={6}>
-                     {(loading || notes.length === 0)
+                     {( notes.length === 0)
                         ? Array.from({ length: 3 }).map((_, idx) => (
                             <Grid item xs={12} sm={6} md={4} key={idx}>
                                 <Card className="note-card" sx={{ borderRadius: 2, minHeight: 180 }}>
@@ -242,320 +263,370 @@ export function NotasPage() {
                                         <Skeleton variant="text" width="60%" height={32} />
                                         <Skeleton variant="text" width="40%" height={24} />
                                         <Skeleton variant="rectangular" width="100%" height={60} style={{ marginTop: 16 }} />
+                                        <Skeleton variant="circular" width={32} height={32} style={{ marginTop: 16 }} />
                                     </CardContent>
                                 </Card>
                             </Grid>
                         ))
-                    : notes.map((nota, index) => (
-                        <Grid item xs={12} sm={6} md={4} key={index}>
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                whileHover={{ scale: 1.01 }}
-                            >
-                        <Card className="note-card" sx={{
-                                borderRadius: 2,
-                                border:'2px solid rgba(105, 104, 104, 0.1)' ,
-                                boxShadow: "0 4px 8px 0 rgba(56, 56, 56, 0.2)",
-                        }}>
-                            <CardContent   
-                              sx={{
-                                backgroundColor: "rgba(248, 246, 246, 0.1)", 
-                            }}>
-                                
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <div style={{ display: "flex", flexDirection: "column" }}>
-                                        <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                                            {nota.titulo}
-                                        </Typography>
-                                        <Typography variant="body2" style={{ display: 'block', marginTop: 2 }}>
-                                            {nota.cuotas} Cuotas
-                                        </Typography>
-                                    </div>
-                                    <div>
-                                        <IconButton color="warning" onClick={() => handleEditNote(nota)}>
-                                            <Edit />
-                                        </IconButton>
-                                        <IconButton color="error" onClick={() => deleteNote(nota._id)}>
-                                            <Delete />
-                                        </IconButton>
-                                    </div>
-                                </div>
+                         : notes.map((nota, index) => {
+                         if(!nota) return null;
+                            return (
+                                <React.Fragment key={nota._id || index}>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            whileHover={{ scale: 1.01 }}
+                                        >
+                                            <Card
+                                                className={`note-card${nota.completed ? ' completed-note' : ''}`}
+                                                sx={{
+                                                    borderRadius: 2,
+                                                    border: '2px solid rgba(105, 104, 104, 0.3)',
+                                                    boxShadow: "0 4px 8px 0 rgba(56, 56, 56, 0.3)",
+                                                }}
+                                            >
+                                                <CardContent
+                                                    sx={{
+                                                        backgroundColor: "rgba(248, 246, 246, 0.3)",
+                                                    }}
+                                                >
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                                        <div style={{ display: "flex", flexDirection: "column" }}>
+                                                            <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                                                                {nota.titulo}
+                                                            </Typography>
+                                                            <Typography variant="body2" style={{ display: 'block', marginTop: 2 }}>
+                                                                {nota.cuotas} Cuotas
+                                                            </Typography>
+                                                        </div>
 
-                                
-                                <div style={{ marginTop: 12 }}>
-                                    <td  
-                                        checked={selected.includes(nota._id)} 
-                                        onChange={() => handleChange(nota._id)}>
-        
-                                    </td>
-
-                                    {Array.isArray(nota.descripcion) && nota.descripcion.map((desc, idx) => {
-                                                const isExpanded = expandedNoteId === `${nota._id}-${idx}`;
-                                                return (
-                                                    <div 
-                                                        key={idx} 
-                                                        style={{ 
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center',
-                                                            marginBottom: 4,
-                                                            padding: "4px 8px",                                    
-                                                            borderRadius: 4,
-                                                            cursor: 'pointer',
-                                                            backgroundColor: isExpanded ? '#f5f5f5' : 'transparent'
-                                                        }}
-                                                        onClick={() => setExpandedNoteId(isExpanded ? null : `${nota._id}-${idx}`)}
-                                                    >
-                                                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: 18, }}>
-                                                                <Typography variant="body2"
-                                                                    style={{
-                                                                        fontWeight: '700',
-                                                                        borderRadius: 4,
-                                                                        fontSize:"1rem",
-                                                                        margin: '7px 0',
-                                                                        display: 'inline-block',
-                                                                        
+                                                        <Box display="flex" alignItems="center" gap={1}>
+                                                            <Button
+                                                                style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+                                                            >
+                                                                <IconButton
+                                                                    color={nota.completed ? "success" : "primary"}
+                                                                    onClick={e => {
+                                                                        e.stopPropagation();
+                                                                        completeNote(nota._id);
+                                                                    }}
+                                                                    size="small"
+                                                                >
+                                                                    {nota.completed ? <UndoIcon /> : <Check />}
+                                                                </IconButton>
+                                                            </Button>
+                                                            <IconButton
+                                                                color="primary"
+                                                                onClick={(e) => handleMenuOpen(e, nota._id, null)}
+                                                            >
+                                                                <MoreVertIcon />
+                                                            </IconButton>
+                                                            <Menu
+                                                                anchorEl={anchorEl}
+                                                                open={Boolean(anchorEl) && menuNoteId === nota._id && menuIdx === null}
+                                                                onClose={handleMenuClose}
+                                                            >
+                                                                <MenuItem
+                                                                    onClick={() => {
+                                                                        handleEditNote(nota);
+                                                                        handleMenuClose();
                                                                     }}
                                                                 >
-                                                                    {desc}
-                                                                </Typography>
-                                                            
-                                                                <Typography variant="body2"
-                                                                      style={{fontSize:"1rem", fontWeight: '700', fontFamily:'Poppins'
-                                                                    }}>
-                                                                    ${(
-                                                                        Array.isArray(nota.precio) 
-                                                                            ? Number(nota.precio[idx] ?? 0) 
-                                                                            : Number(nota.precio ?? 0)
-                                                                    ).toLocaleString('en-US')}
-                                                                </Typography>
+                                                                    <Edit fontSize="small" color="warning" style={{ marginRight: 8 }} /> <Typography color="warning">Editar</Typography>
+                                                                </MenuItem>
+                                                                <MenuItem
+                                                                    onClick={() => {
+                                                                        modalDelete(nota._id);
+                                                                        handleMenuClose();
+                                                                    }}
+                                                                >
+                                                                    <Delete fontSize="small" color="error" style={{ marginRight: 8 }} /> <Typography color="error">Eliminar nota</Typography>
+                                                                </MenuItem>
+                                                            </Menu>
+                                                            <Button
+                                                                onClick={() => setShowInputs(prev => ({ ...prev, [nota._id]: !prev[nota._id] }))}
+                                                                startIcon={showInputs[nota._id] ? <ExpandLess /> : <ExpandMore />}
+                                                                sx={{ minWidth: 36, padding: 0 }}
+                                                            />
+                                                        </Box>
                                                         
-                                                            </div>
-
-                                                            {nota.fecha && nota.fecha[idx] && (
-                                                            <Typography variant="body2" style={{ display: 'block', marginTop: 1 }}>
-                                                                {nota.fecha[idx] &&
-                                                                    new Date(nota.fecha[idx]).toLocaleDateString('es-ES', {
-                                                                        day: 'numeric',
-                                                                        month: 'long',
-                                                                        year: 'numeric'
-                                                                    })
-                                                                }
-                                                            </Typography>
-                                                            )}
-                                                        </div>
-
-                                                     
-                                                        <div style={{ display: 'flex', gap: 4, marginLeft: 16 }}>
-                                                            <IconButton
-                                                                size="small"
-                                                                onClick={e => {
-                                                                    e.stopPropagation();
-                                                                    handleMenuOpen(e, nota._id, idx);
-                                                                }}
-                                                            >
-                                                                <MoreVertIcon fontSize="small" />
-                                                            </IconButton>
-                                                        </div>
                                                     </div>
-                                                );
-                                    })}
 
-                                </div>
-                                
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={Boolean(anchorEl)}
-                                            onClose={handleMenuClose}
-                                        >
-                                            <MenuItem
-                                                onClick={() => {
-                                                    editingRoutine(notes.find(n => n._id === menuNoteId), menuIdx);
-                                                    handleMenuClose();
-                                                }}
-                                            >
-                                                <Edit fontSize="small" color="warning" style={{ marginRight: 8 }} /> <Typography color="warning"> Editar </Typography> 
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() => {
-                                                    deleteNoteIndex(menuNoteId, menuIdx);
-                                                    handleMenuClose();
-                                                }}
-                                            >
-                                                <Delete fontSize="small" color="error" style={{ marginRight: 8 }} /> <Typography color="error"> Eliminar </Typography>
-                                            </MenuItem>
-                                        </Menu>
-            
-                                        {/* Edicion de notas */}
-                                        {editingState === nota._id && (
-                                            
-                                            <div style={{ marginTop: 18, display: "block", gap: 12, alignItems: 'center' }}>
-                                                <TextField 
-                                                    fullWidth
-                                                    size="small"
-                                                    label="Editar notas"
-                                                    variant="outlined"
-                                                    value={editingItem.descripcion}
-                                                    onChange={(e) => setEditingItem({ ...editingItem, descripcion: e.target.value })}
-                                                    style={{ margin: '8px auto'}}
-                                                />
+                                                    <TransitionGroup>
+                                                        {showInputs[nota._id] && (
+                                                            <Collapse>
+                                                                <div style={{ marginTop: 12 }}>
+                                                                    <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
+                                                                        <IconButton
+                                                                            size="small"
+                                                                            onClick={() =>
+                                                                                setExpandedNoteId(expandedNoteId === nota._id ? null : nota._id)
+                                                                            }
+                                                                        >
+                                                                            {expandedNoteId === nota._id ? <Close /> : <Add />}
+                                                                        </IconButton>
+                                                                    </div>
 
-                                                <TextField 
-                                                    fullWidth
-                                                    size="small"
-                                                    type="number"
-                                                    variant="outlined"
-                                                    value={editingItem.precio || ''}
-                                                    onChange={(e) => setEditingItem({ ...editingItem, precio: e.target.value })}
-                                                />
-                                                
-                                                <TextField 
-                                                    fullWidth
-                                                    size="small"
-                                                    type="date"
-                                                    variant="outlined"
-                                                    value={editingItem.fecha || ''}
-                                                    onChange={(e) => setEditingItem({ ...editingItem, fecha: e.target.value })}
-                                                />
+                                                                    {Array.isArray(nota.descripcion) && nota.descripcion.map((desc, idx) => {
+                                                                        const isExpanded = expandedNoteId === `${nota._id}-${idx}`;
+                                                                        return (
+                                                                            <div
+                                                                                key={idx}
+                                                                                style={{
+                                                                                    display: 'flex',
+                                                                                    justifyContent: 'space-between',
+                                                                                    alignItems: 'center',
+                                                                                    marginBottom: 4,
+                                                                                    padding: "4px 8px",
+                                                                                    borderRadius: 4,
+                                                                                    cursor: 'pointer',
+                                                                                    backgroundColor: isExpanded ? '#f5f5f5' : 'transparent'
+                                                                                }}
+                                                                                onClick={() => setExpandedNoteId(isExpanded ? null : `${nota._id}-${idx}`)}
+                                                                            >
+                                                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 18, }}>
+                                                                                        <Typography variant="body2"
+                                                                                            style={{
+                                                                                                fontWeight: '700',
+                                                                                                borderRadius: 4,
+                                                                                                fontSize: "1rem",
+                                                                                                margin: '7px 0',
+                                                                                                display: 'inline-block',
+                                                                                            }}
+                                                                                        >
+                                                                                            {desc}
+                                                                                        </Typography>
 
-                                                <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 12, alignItems: 'center' }}>
-                                                    <Button 
-                                                        variant="contained" 
-                                                        color="success" 
-                                                        startIcon={<Save />} 
-                                                        onClick={() => saveNewItem(nota._id)}
-                                                        size="small"
-                                                    />
-                                                    <Button 
-                                                        variant="contained" 
-                                                        color="secondary" 
-                                                        startIcon={<Cancel />} 
-                                                        onClick={() => setEditingState(null)}
-                                                        size="small"
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                                                    
-                                        {/*agregar nueva descripción, fecha y precios */}
-                                        {expandedNoteId === nota._id && (
-                                            <div
-                                                style={{
-                                                    marginTop: 12,
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    gap: 12,
-                                                    alignItems: "center",
-                                                }}
-                                            >
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    label="Nueva descripción"
-                                                    value={newItem.descripcion}
-                                                    onChange={(e) =>
-                                                        setNewItem({ ...newItem, descripcion: e.target.value })
-                                                    }
-                                                />
+                                                                                        <Typography variant="body2"
+                                                                                            style={{
+                                                                                                fontSize: "1rem",
+                                                                                                fontWeight: '700',
+                                                                                                fontFamily: 'Poppins'
+                                                                                            }}>
+                                                                                            ${(
+                                                                                                Array.isArray(nota.precio)
+                                                                                                    ? Number(nota.precio[idx] ?? 0)
+                                                                                                    : Number(nota.precio ?? 0)
+                                                                                            ).toLocaleString('en-US')}
+                                                                                        </Typography>
+                                                                                    </div>
 
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    type="number"
-                                                    label="Nueva precio"
-                                                    InputLabelProps={{ shrink: true }}
-                                                    value={newItem.precio}
-                                                    onChange={(e) =>
-                                                        setNewItem({ ...newItem, precio: e.target.value })
-                                                    }
-                                                />
+                                                                                    {nota.fecha && nota.fecha[idx] && (
+                                                                                        <Typography variant="body2" style={{ display: 'block', marginTop: 1 }}>
+                                                                                            {nota.fecha[idx] &&
+                                                                                                new Date(nota.fecha[idx]).toLocaleDateString('es-ES', {
+                                                                                                    day: 'numeric',
+                                                                                                    month: 'long',
+                                                                                                    year: 'numeric'
+                                                                                                })
+                                                                                            }
+                                                                                        </Typography>
+                                                                                    )}
+                                                                                </div>
 
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    type="date"
-                                                    label="Nueva fecha"
-                                                    InputLabelProps={{ shrink: true }}
-                                                    value={newItem.fecha}
-                                                    onChange={(e) =>
-                                                        setNewItem({ ...newItem, fecha: e.target.value })
-                                                    }
-                                                />
+                                                                                <div style={{ display: 'flex', gap: 4, marginLeft: 16 }}>
+                                                                                    <IconButton
+                                                                                        size="small"
+                                                                                        onClick={e => {
+                                                                                            e.stopPropagation();
+                                                                                            handleMenuOpen(e, nota._id, idx);
+                                                                                        }}
+                                                                                    >
+                                                                                        <MoreVertIcon fontSize="small" />
+                                                                                    </IconButton>
+                                                                                </div>
+                                                                            </div>
+                                                                        );
+                                                                    })}
 
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={() => handleAddItem(nota._id)}
-                                                >
-                                                    <Check />
-                                                </Button>
-                                            </div>
-                                        )}
+                                                                </div>
+                                                            </Collapse>
+                                                        )}
+                                                    </TransitionGroup>
 
-                                
+                                                    {/* Edicion de notas */}
+                                                    {editingState === nota._id && (
+                                                        <div style={{ marginTop: 18, display: "block", gap: 12, alignItems: 'center' }}>
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                label="Editar notas"
+                                                                variant="outlined"
+                                                                value={editingItem.descripcion}
+                                                                onChange={(e) => setEditingItem({ ...editingItem, descripcion: e.target.value })}
+                                                                style={{ margin: '8px auto' }}
+                                                            />
 
-                                        {/* Botón para expandir/contraer el formulario */}
-                                        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
-                                        <IconButton 
-                                            size="small" 
-                                            onClick={() => setExpandedNoteId(expandedNoteId === nota._id ? null : nota._id)}
-                                        >
-                                            {expandedNoteId === nota._id ? <Close /> : <Add />}
-                                        </IconButton>
-                                        </div>
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                type="number"
+                                                                variant="outlined"
+                                                                value={editingItem.precio || ''}
+                                                                onChange={(e) => setEditingItem({ ...editingItem, precio: e.target.value })}
+                                                            />
 
-                                        {/* edición de título */}
-                                        {editingId === nota._id && (
-                                        <div style={{ marginTop: 12 }}>
-                                            <TextField 
-                                            fullWidth
-                                            size="small"
-                                            label="Editar título"
-                                            variant="outlined"
-                                            value={editingData.titulo}
-                                            onChange={(e) => setEditingData({ ...editingData, titulo: e.target.value })}
-                                            />
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                type="date"
+                                                                variant="outlined"
+                                                                value={editingItem.fecha || ''}
+                                                                onChange={(e) => setEditingItem({ ...editingItem, fecha: e.target.value })}
+                                                            />
 
-                                            <TextField 
-                                            fullWidth
-                                            size="small"
-                                            label="Editar Cuotas"
-                                            variant="outlined"
-                                            value={editingData.cuotas}
-                                            onChange={(e) => setEditingData({ ...editingData, cuotas: e.target.value })}
-                                            />
+                                                            <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 12, alignItems: 'center' }}>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="success"
+                                                                    startIcon={<Save />}
+                                                                    onClick={() => saveNewItem(nota._id)}
+                                                                    size="small"
+                                                                />
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="secondary"
+                                                                    startIcon={<Cancel />}
+                                                                    onClick={() => setEditingState(null)}
+                                                                    size="small"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
 
+                                                    {/*agregar nueva descripción, fecha y precios */}
+                                                    {expandedNoteId === nota._id && (
+                                                        <div
+                                                            style={{
+                                                                marginTop: 12,
+                                                                display: "flex",
+                                                                flexDirection: "column",
+                                                                gap: 12,
+                                                                alignItems: "center",
+                                                            }}
+                                                        >
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                label="Nueva descripción"
+                                                                value={newItem.descripcion}
+                                                                onChange={(e) =>
+                                                                    setNewItem({ ...newItem, descripcion: e.target.value })
+                                                                }
+                                                            />
 
-                                            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
-                                            <Button 
-                                                variant="contained" 
-                                                color="success" 
-                                                startIcon={<Save />} 
-                                                onClick={() => handleSaveEditNote(nota._id)}
-                                                size="small"
-                                            />
-                                            <Button 
-                                                variant="contained" 
-                                                color="secondary" 
-                                                startIcon={<Cancel />} 
-                                                onClick={() => setEditingId(null)}
-                                                size="small"
-                                            />
-                                            </div>
-                                        </div>
-                                        )}
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                type="number"
+                                                                label="Nueva precio"
+                                                                InputLabelProps={{ shrink: true }}
+                                                                value={newItem.precio}
+                                                                onChange={(e) =>
+                                                                    setNewItem({ ...newItem, precio: e.target.value })
+                                                                }
+                                                            />
 
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                type="date"
+                                                                label="Nueva fecha"
+                                                                InputLabelProps={{ shrink: true }}
+                                                                value={newItem.fecha}
+                                                                onChange={(e) =>
+                                                                    setNewItem({ ...newItem, fecha: e.target.value })
+                                                                }
+                                                            />
 
+                                                            <Button
+                                                                variant="contained"
+                                                                color="primary"
+                                                                onClick={() => handleAddItem(nota._id)}
+                                                            >
+                                                                <Check />
+                                                            </Button>
+                                                        </div>
+                                                    )}
 
-                            </CardContent>
-                        </Card>
+                                                    {/* despliegue de ediciones */}
+                                                    <Menu
+                                                        anchorEl={anchorEl}
+                                                        open={Boolean(anchorEl) && menuNoteId === nota._id && menuIdx !== null}
+                                                        onClose={handleMenuClose}
+                                                    >
+                                                        <MenuItem
+                                                            onClick={() => {
+                                                                editingRoutine(notes.find(n => n._id === menuNoteId), menuIdx);
+                                                                handleMenuClose();
+                                                            }}
+                                                        >
+                                                            <Edit fontSize="small" color="warning" style={{ marginRight: 8 }} /> <Typography color="warning">Editar</Typography>
+                                                        </MenuItem>
+                                                        <MenuItem
+                                                            onClick={() => {
+                                                                deleteNoteIndex(menuNoteId, menuIdx);
+                                                                handleMenuClose();
+                                                            }}
+                                                        >
+                                                            <Delete fontSize="small" color="error" style={{ marginRight: 8 }} /> <Typography color="error">Eliminar</Typography>
+                                                        </MenuItem>
+                                                    </Menu>
 
-                            </motion.div>
-                        </Grid>
-                    ))}
+                                                    {/* edición de título principal */}
+                                                    {editingId === nota._id && (
+                                                        <div style={{ marginTop: 12 }}>
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                label="Editar título"
+                                                                variant="outlined"
+                                                                value={editingData.titulo}
+                                                                onChange={(e) => setEditingData({ ...editingData, titulo: e.target.value })}
+                                                            />
+
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                label="Editar Cuotas"
+                                                                variant="outlined"
+                                                                value={editingData.cuotas}
+                                                                onChange={(e) => setEditingData({ ...editingData, cuotas: e.target.value })}
+                                                            />
+
+                                                            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="success"
+                                                                    startIcon={<Save />}
+                                                                    onClick={() => handleSaveEditNote(nota._id)}
+                                                                    size="small"
+                                                                />
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="secondary"
+                                                                    startIcon={<Cancel />}
+                                                                    onClick={() => setEditingId(null)}
+                                                                    size="small"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </CardContent>
+                                            </Card>
+                                        </motion.div>
+                                    </Grid>
+                                </React.Fragment>
+                            )
+
+                            })}
                 </Grid>
+                <ModalConfirmacion isOpen={showModal} onClose={() => setShowModal(false)} onConfirm={() => {
+                    deleteNote(deleteId)
+                    setShowModal(false)
+                }}/>
             </Container>
 
             <Toaster/>

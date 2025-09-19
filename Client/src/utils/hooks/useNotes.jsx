@@ -22,7 +22,8 @@ export function useNotes() {
             withCredentials: true,
         })
         .then(response => {
-            setNotes(response.data);
+            const validNotes = response.data.filter(note => note != null) // filtrar notas si son null/undefined
+            setNotes(validNotes);
         })
         .catch(error => {
             console.log(error);
@@ -210,6 +211,39 @@ export function useNotes() {
         }
     }
 
+    const completeNote = async (noteId) => {
+        try{
+            const token = localStorage.getItem('token');
 
-    return { notes, addNote, deleteNote, editNote,deleteNewIndex, addNoteWithDate,handleSaveItem};
+            const currentNote = notes.find(note => note._id === noteId)
+            if (!currentNote) return
+
+            const newCompleted = !currentNote.completed
+
+            const response = await axios.patch(`${serverFront}/api/note/${noteId}/completed`,
+                {completed : newCompleted},
+                {
+                    headers:{
+                        Authorization: `Bearer ${token}`
+                    },
+                     withCredentials: true,
+                }
+            )
+
+            setNotes(notes.map(note => 
+                note._id === noteId ? response.data : note
+            ))
+
+            toast.success(newCompleted ? 'Nota completada' : 'Nota reactivada', {
+            position: 'top-right'
+            });
+
+        } catch (error){
+            console.error("Error al completar la nota:", error);
+            toast.error('Error al actualizar la nota');
+        }   
+
+    }
+
+    return { notes, addNote, deleteNote, editNote,deleteNewIndex, addNoteWithDate,handleSaveItem, completeNote};
 }

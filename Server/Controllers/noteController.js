@@ -230,4 +230,22 @@ exports.editItem = async (req, res) => {
     }
 }
 
+exports.NoteCompleted = async (req,res) => {
+    const {id} = req.params;
+    const {completed} = req.body;
 
+    if (typeof completed !== 'boolean'){
+        return res.status(400).json({error: "Completed status is required and should be a boolean"})
+    }
+
+    try{
+        const updateTask = await noteModel.findByIdAndUpdate(id, {completed}, {new: true})
+        
+        if(!updateTask){
+            return res.status(404).json({error: "Task not found"})
+        }
+        res.json(updateTask)
+    } catch (err) {
+        res.status(500).json({ error: err.message})
+    }
+}

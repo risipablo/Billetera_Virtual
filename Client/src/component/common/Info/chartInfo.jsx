@@ -21,7 +21,7 @@ export function ChartInfo() {
                 <div className="custom-modal-overlay" onClick={handleClose}>
                     <div className="custom-modal" onClick={e => e.stopPropagation()}>
                         <span className="close-btn" onClick={handleClose}>&times;</span>
-                          <div class="info-content">
+                          <div className="info-content">
                             <p>
                               <strong>En esta sección encontrarás todos tus datos de gastos organizados en gráficos y estadísticas.</strong>
                             </p>

@@ -4,6 +4,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 import { motion } from 'framer-motion';
 import { Skeleton } from "@mui/material";
 import "./chart.css"
+import { useCallback, useMemo } from 'react';
 
 
 
@@ -14,155 +15,129 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
     
 
     // Gastos por mes
-    const spentMonth = gastos.reduce((acc, gasto) => {
-        const mes = gasto.mes;
-        const monto = gasto.monto;
-        const conditions = gasto.condicion.toLowerCase();
+    const spentMonth = useMemo(() => {
+        return gastos.reduce((acc, gasto) => {
+            const mes = gasto.mes;
+            const monto = gasto.monto;
+            const conditions = gasto.condicion.toLowerCase();
 
-        // verificar las condiciones del metodo de pago
-        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+            // verificar las condiciones del metodo de pago
+            const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
 
-        if (conditionsReduce.includes(conditions)) {
-            return acc;
-            // no suma en los gastos
-        }
-
-        if (!acc[mes]) acc[mes] = 0;
-        acc[mes] += monto;
-
-        return acc;
-    }, {})
-
-    const spentMonthMax = Object.keys(spentMonth).reduce((max,key) => {
-        return spentMonth[key] > spentMonth[max] ? key : max;
-    }, Object.keys(spentMonth)[0])
-
-    const dataSpentMonth = {
-        labels: Object.keys(spentMonth),
-        datasets: [
-            {
-                label: 'Total de Gastos',
-                data: Object.values(spentMonth), 
-                backgroundColor: Object.keys(spentMonth).map((producto) => producto === spentMonthMax ? 'rgba(209, 25, 25, 0.7)' : 'rgba(164, 11, 235,0.7)'),
-                borderWidth: 0.5, 
-                borderRadius: 5,  
-                hoverBackgroundColor: Object.keys(spentMonth).map((producto) => producto === spentMonthMax ? 'rgba(200, 25, 25)' : 'rgba(160, 11, 235)'),
-                barPercentage: 1, 
+            if (conditionsReduce.includes(conditions)) {
+                return acc;
+                // no suma en los gastos
             }
-        ]
-    };
 
-    const options = {
+            if (!acc[mes]) acc[mes] = 0;
+            acc[mes] += monto;
+
+            return acc;
+        }, {})
+    },[gastos])
+
+
+    const spentMonthMax = useMemo(()=> {
+        return Object.keys(spentMonth).reduce((max,key) => {
+            return spentMonth[key] > spentMonth[max] ? key : max;
+        }, Object.keys(spentMonth)[0])
+    },[spentMonth])
+
+    const dataSpentMonth = useMemo(() => ({
+        labels: Object.keys(spentMonth),
+        datasets: [{
+            label: 'Total de Gastos',
+            data: Object.values(spentMonth), 
+            backgroundColor: Object.keys(spentMonth).map((producto) => 
+                producto === spentMonthMax ? 'rgba(209, 25, 25, 0.7)' : 'rgba(164, 11, 235,0.7)'),
+            borderWidth: 0.5, 
+            borderRadius: 5,  
+            hoverBackgroundColor: Object.keys(spentMonth).map((producto) => 
+                producto === spentMonthMax ? 'rgba(200, 25, 25)' : 'rgba(160, 11, 235)'),
+            barPercentage: 1, 
+        }]
+    }), [spentMonth, spentMonthMax]);
+
+     // Función optimizada para tooltips
+    const tooltipLabelCallback = useCallback(function(tooltipItem) {
+        return `Monto: $ ${tooltipItem.raw.toLocaleString()} `;
+    }, []);
+
+    
+    const options = useMemo(() => ({
         responsive: true,
-        maintainAspectRatio: false, // Permite que el gráfico se adapte mejor a la pantalla
+        maintainAspectRatio: false,
         scales: {
             y: {
                 beginAtZero: true,
                 suggestedMax: Math.max(...Object.values(spentMonth)) * 1.2, 
-                title: {
-                    display: true,
-                    text: 'Monto',
-                    font: {
-                        size: 18, 
-                        family: 'Poppins, sans-serif',
-                    },
-                    color: '#333', 
-                },
-                ticks: {
-                    color: '#666', 
-                },
-                grid: {
-                    color: 'rgba(200, 200, 200, 0.3)',
-                }
+                title: { display: true, text: 'Monto', font: { size: 18, family: 'Poppins, sans-serif' }, color: '#333' },
+                ticks: { color: '#666' },
+                grid: { color: 'rgba(200, 200, 200, 0.3)' }
             },
             x: {
-                title: {
-                    display: true,
-                    text: 'Mes',
-                    font: {
-                        size: 14,
-                        family: 'Poppins, sans-serif',
-                    },
-                    color: '#333', 
-                },
-                ticks: {
-                    color: '#666', 
-                },
-                grid: {
-                    display: false, 
-                }
+                title: { display: true, text: 'Mes', font: { size: 14, family: 'Poppins, sans-serif' }, color: '#333' },
+                ticks: { color: '#666' },
+                grid: { display: false }
             }
         },
         plugins: {
             legend: {
                 display: true,
                 position: 'top',
-                labels: {
-                    color: '#333', 
-                    font: {
-                        size: 18,
-                    },
-                }
+                labels: { color: '#333', font: { size: 18 } }
             },
             tooltip: {
                 backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                titleFont: {
-                    size: 18,
-                    weight: 'bold',
-                },
-                bodyFont: {
-                    size: 14,
-                },
+                titleFont: { size: 18, weight: 'bold' },
+                bodyFont: { size: 14 },
                 borderColor: '#666',
                 borderWidth: 1,
-                callbacks: {
-                    label: function(tooltipItem) {
-                        return `Monto:  $ ${tooltipItem.raw.toLocaleString()} `;
-                    }
-                }
-            },
+                callbacks: { label: tooltipLabelCallback }
+            }
         },
-        animation: {
-            duration: 1500, 
-            easing: 'easeInOutCubic',
-        },
+        animation: { duration: 1500, easing: 'easeInOutCubic' },
         barPercentage: 0.9,
         categoryPercentage: 0.8,
-    };
+    }), [spentMonth, tooltipLabelCallback]);
 
     const totalMes = spentMonth[spentMonthMax]
 
-      // Por año
-      const spentYear = gastos.reduce((acc,gasto) => {
+    // Por año
+    const spentYear = useMemo(() => {
+        return gastos.reduce((acc,gasto) => {
 
-        const year = gasto.año;
-        const monto = gasto.monto;
-        const conditions = gasto.condicion.toLowerCase()
+            const year = gasto.año;
+            const monto = gasto.monto;
+            const conditions = gasto.condicion.toLowerCase()
 
-        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+            const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
 
-        if(conditionsReduce.includes(conditions)) {
-            return acc;
-        }
+            if(conditionsReduce.includes(conditions)) {
+                return acc;
+            }
 
-        if(!acc[year])
-            acc[year] = 0
-        acc[year] += monto
-        return acc
+            if(!acc[year])
+                acc[year] = 0
+            acc[year] += monto
+            return acc
 
-      },{}) 
+        },{}) 
+    }, [gastos])
+        
 
-      // Año con mayor gasto
-      const spentYearMax = Object.keys(spentMonth).reduce((max,key) => {
+    // Año con mayor gasto
+    const spentYearMax = useMemo(() => {
+        return Object.keys(spentMonth).reduce((max,key) => {
         return spentYear[key] > spentYear[max] ? key: max
-      }, Object.keys(spentYear)[0])
+        }, Object.keys(spentYear)[0])
+    },[spentYear])
       
-
       
-      const dataSpentYear = {
+    const dataSpentYear = useMemo(() => (
+        {
         labels: Object.keys(spentYear),
-        datasets: [
-          {
+        datasets: [{
             label: '',
             data: Object.values(spentYear),
             borderColor: Object.keys(spentYear).map((producto) => producto === spentYearMax ? 'rgba(82, 74, 230)' : 'rgba(82, 74, 230)'),
@@ -171,11 +146,12 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             pointRadius: 2,
             fill: false, 
             hoverBackgroundColor: Object.keys(spentYear).map((producto) => producto === spentYearMax ? 'rgba(82, 74, 230)' : 'rgba(82, 74, 230)'),
-          }
-        ]
-      };
-      
-      const optionsYear = {
+            }]
+        }
+    ),[spentYear,spentYearMax]) 
+    
+    
+    const optionsYear = {
         responsive: true,
         maintainAspectRatio: false, 
        
@@ -256,53 +232,61 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
 
 
     // Gasto de productos
-    const spentProduct = gastos.reduce((acc,gasto) => {
+    const spentProduct = useMemo(() => {
+        return gastos.reduce((acc,gasto) => {
 
-        const producto = gasto.producto;
-        const monto = gasto.monto;
-        const conditions = gasto.condicion.toLowerCase();
+            const producto = gasto.producto;
+            const monto = gasto.monto;
+            const conditions = gasto.condicion.toLowerCase();
 
-        const conditionsReduce2 = ['cajero', 'inversion', 'deben', 'cuotas']
+            const conditionsReduce2 = ['cajero', 'inversion', 'deben', 'cuotas']
 
-        if(conditionsReduce2.includes(conditions)) {
-            return acc;
-        }
+            if(conditionsReduce2.includes(conditions)) {
+                return acc;
+            }
 
 
-        if(!acc[producto])
-            acc[producto] = 0
-        acc[producto] += monto
-        return acc
-    },{})
+            if(!acc[producto])
+                acc[producto] = 0
+            acc[producto] += monto
+            return acc
+        },{})
+    },[gastos]) 
 
-    const maxProducto = Object.keys(spentProduct).reduce((max,key) => {
-        return spentProduct[key] > spentProduct[max] ? key : max;
-    }, Object.keys(spentProduct)[0])
+    const maxProducto = useMemo(() => {
+        return Object.keys(spentProduct).reduce((max,key) => {
+            return spentProduct[key] > spentProduct[max] ? key : max;
+        }, Object.keys(spentProduct)[0])
+    },[spentProduct]) 
+    
 
-    const top5Product = Object.entries(spentProduct).sort((a,b) => {
-        return b[1] -a[1]
-    }).slice(0,5)
+    const top5Product = useMemo(() => {
+            return Object.entries(spentProduct).sort((a,b) => {
+            return b[1] -a[1]
+        }).slice(0,5)
+    },[spentProduct])
 
     const totalProducto = spentProduct[maxProducto]
 
 
-    const dataSpentProduct = {
-        labels: Object.keys(spentProduct),
-        datasets: [
-            {
-                label: 'Total de Ventas',
-                data: Object.values(spentProduct),
-                backgroundColor:
-                    Object.keys(spentProduct).map((producto) => 
-                    producto === maxProducto ? 'rgba(209, 25, 25, 0.7)': 'rgba(47, 39, 206,0.6)')
-                ,
-                borderColor: 'rgba(255, 255, 255, 1)', 
-                borderWidth: 5, 
-                hoverOffset: 10, 
-            }
-        ]
-    };
-
+    const dataSpentProduct = useMemo(() => (
+        {
+            labels: Object.keys(spentProduct),
+            datasets: [
+                {
+                    label: 'Total de Ventas',
+                    data: Object.values(spentProduct),
+                    backgroundColor:
+                        Object.keys(spentProduct).map((producto) => 
+                        producto === maxProducto ? 'rgba(209, 25, 25, 0.7)': 'rgba(47, 39, 206,0.6)')
+                    ,
+                    borderColor: 'rgba(255, 255, 255, 1)', 
+                    borderWidth: 5, 
+                    hoverOffset: 10, 
+                }
+            ]
+        }) ,[spentProduct, maxProducto])
+    
     const optionsDonut = {
         responsive: true,
         cutout: '20%', // Hace la dona más delgada
@@ -345,15 +329,15 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
     };
 
 
-    
     // Metodos de pagos
-    const spentMetodo = gastos.reduce((acc,gasto) => {
+    const spentMetodo = useMemo(() => {
+        return gastos.reduce((acc,gasto) => {
 
         const metodo = gasto.metodo;
         const monto = gasto.monto;
         const conditions = gasto.condicion.toLowerCase();
 
-        const conditionsReduce2 = ['cajero', 'inversion', 'deben', 'cuotas']
+        const conditionsReduce2 = ['cajero', 'inversion', 'deben']
         if (conditionsReduce2.includes(conditions)){
             return acc;
         }
@@ -362,17 +346,23 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             acc[metodo] = 0
         acc[metodo] += monto
         return acc
-    },{})
+        },{})
+    },[gastos])
+    
 
 
-    const metodoMax = Object.keys(spentMetodo).reduce((max,key) => {
-        return spentMetodo[key] > spentMetodo[max] ? key : max;
-    }, Object.keys(spentMetodo)[0])
+    const metodoMax = useMemo(() => {
+            return Object.keys(spentMetodo).reduce((max,key) => {
+            return spentMetodo[key] > spentMetodo[max] ? key : max;
+        }, Object.keys(spentMetodo)[0])
+    },[spentMetodo])
+    
 
 
-    const totalMetodoMax = spentMetodo[metodoMax]// se obtiene el objeto spentMetode y metodoMax como clave 
+    const totalMetodoMax = spentMetodo[metodoMax] // se obtiene el objeto spentMetodo y metodoMax como clave 
 
-    const dataSpentMetodo = {
+    const dataSpentMetodo = useMemo(() => (
+        {
         labels: Object.keys(spentMetodo),
         datasets: [
             {
@@ -384,7 +374,8 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
                 hoverOffset: 8, 
             }
         ]
-    }
+    }), [spentMetodo, metodoMax])
+    
 
     const optionsDonut2 = {
         responsive: true,
@@ -426,9 +417,95 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
     };
 
 
-    // Metodo de inversion
+    // Metodos de necesario e innecesario
+    const condicionGasto = useMemo(() => {
+        return gastos.reduce((acc,gasto) => {
+            const condicion = gasto.necesario;
+            const monto = gasto.monto;
+            const conditions = gasto.condicion.toLowerCase();
 
-    const inversion = gastos.reduce((acc,gasto) => {
+            const conditionsReduce2 = ['cajero', 'inversion', 'deben', 'cuotas' ]
+            if (conditionsReduce2.includes(conditions)){
+                return acc;
+            }
+
+            if(!acc[condicion])
+                acc[condicion] = 0
+            acc[condicion] += monto
+            return acc
+
+        },{})
+    }, [gastos])
+
+    const condicionMax = useMemo(() => {
+            return Object.keys(condicionGasto).reduce((max,key) => {
+            return condicionGasto[key] > condicionGasto[max] ? key : max
+        }, Object.keys(condicionGasto)[0])
+    },[condicionGasto])
+
+
+
+    const dataSpentCondicion = useMemo(() => (
+        {
+        labels: Object.keys(condicionGasto),
+        datasets: [
+            {
+                label: 'Total de Ventas',
+                data: Object.values(condicionGasto),
+                backgroundColor: Object.keys(condicionGasto).map((producto) =>  producto === condicionMax ? 'rgba(209, 25, 25, 0.7)': 'rgba(47, 39, 206,0.6)' || 'rgba(243, 124, 260, 0.6)' ) ,
+                borderColor: 'rgba(255, 255, 255)', 
+                borderWidth: 8, 
+                hoverOffset: 8, 
+            }
+        ]
+    }), [condicionGasto, condicionMax])
+    
+
+    const optionDonut3 = {
+        responsive: true,
+        cutout: '70%', 
+        plugins: {
+            legend: {
+                display: true,
+                position: 'left',
+                labels: {
+                    color: '#333', 
+                    font: {
+                        size: isMobile ? 12 : 18,
+                    },
+                    padding: isMobile ? 1  : 20, 
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0)',
+                titleFont: {
+                    size: 12,
+                    weight: 'bold',
+                },
+                bodyFont: {
+                    size: 16,
+                },
+                borderColor: '#666',
+                borderWidth: 1,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return `Monto: $ ${tooltipItem.raw.toLocaleString()} `;
+                    }
+                }
+            },
+        },
+        animation: {
+            animateScale: true, 
+            animateRotate: true,
+        },
+    };
+
+    const SpentcondicionMax = condicionGasto[condicionMax]
+
+
+    // Metodo de inversion
+    const inversion = useMemo(() => {
+       return  gastos.reduce((acc,gasto) => {
         const estado = gasto.mes;
         const monto = gasto.monto;
         const conditions = gasto.condicion.toLowerCase();
@@ -443,14 +520,19 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
         acc[estado] += monto
         return acc
 
-    },{})
+        },{})
+    },[gastos])
+    
 
-    const maxInversion = Object.keys(inversion).reduce((max,key) => {
+    const maxInversion = useMemo(() => {
+        return Object.keys(inversion).reduce((max,key) => {
         return inversion[key] > inversion[max] ? key : max;
-    }, Object.keys(inversion)[0])
+        }, Object.keys(inversion)[0])
+    },[inversion])
+    
 
-
-    const dataSpentIncersion = {
+    const dataSpentIncersion = useMemo(() =>(
+         {
         labels: Object.keys(inversion),
         datasets: [
             {
@@ -462,7 +544,7 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
                 hoverOffset: 8, 
             }
         ]
-    }
+    }),[inversion,maxInversion])
 
     const options2 = {
         responsive: true,
@@ -542,7 +624,8 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
         categoryPercentage: 0.8,
     };
 
-    const totalInversion = gastos.reduce((acc,gasto) => {
+    const totalInversion = useMemo(() => {
+        return gastos.reduce((acc,gasto) => {
         const conditions = gasto.condicion.toLowerCase();
 
             const conditionsReduce2 = ['pagado', 'impago', 'deben', 'cuotas', 'devolver', 'cajero']
@@ -553,9 +636,12 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
            return  acc + gasto.monto
             
         },0
-    )
+    )},[gastos])
 
-    const promedioGasto = !mesSeleccionado ?
+
+    // Promedio de gastos por año
+    const promedioGasto = useMemo(() => {
+        return !mesSeleccionado ? // si se seleciona un mes esta funcion pasa a tener un valor nulo
         gastos.reduce((acc,gasto) => {
             const conditions = gasto.condicion.toLowerCase();
             const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas'];
@@ -567,9 +653,12 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
                 return acc  + gasto.monto 
         },0) / 12 : null
 
+    })
+    
 
-
-    const promedioDiaMes = mesSeleccionado ?
+    // Promedio de gastos por dia durante el mes
+    const promedioDiaMes = useMemo(() => {
+        return mesSeleccionado ?
         gastos.reduce((acc,gasto) => {
             const conditions = gasto.condicion.toLowerCase();
             const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas'];
@@ -583,22 +672,26 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             }
             return acc
         },0) / 30 : null
+    },[gastos])
+     
 
-    const totalGasto = gastos.reduce((acc,gasto) => {
-    let total = 0;
-        const monto = gasto.monto
+    const totalGasto = useMemo(() => {
+        return gastos.reduce((acc,gasto) => {
+        let total = 0;
+            const monto = gasto.monto
 
-        const condiciones = gasto.condicion.toLowerCase()
-        const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
-        if (conditionsReduce.includes(condiciones)){
-            return acc
-        }
+            const condiciones = gasto.condicion.toLowerCase()
+            const conditionsReduce = ['cajero', 'inversion', 'deben', 'cuotas']
+            if (conditionsReduce.includes(condiciones)){
+                return acc
+            }
 
-        total += monto
+            total += monto
 
-        return acc + total
-        
-   },0)
+            return acc + total
+            
+    },0
+    )},[gastos])  
 
     return (
         <div className="chart-container">
@@ -625,114 +718,143 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             <li><h3>Promedio de gasto por dia</h3><p>$ {(promedioDiaMes || 0).toLocaleString('en-US')}</p></li>
             
             <li>
-                <h3>Productos con más gastos</h3>
-                {top5Product.map(([producto, monto]) => (
+            <h3>Productos con más gastos</h3>
+                <div className="top-products-list">
+                    {top5Product.map(([producto, monto]) => (
                     <p key={producto}>
                         {producto} : ${monto.toLocaleString('en-US')}
                     </p>
-                ))}
+                    ))}
+                </div>
             </li>
             
             </ul>
         </motion.div>
 
+        <div className="charts-grid">
         {/*  Gastos por Mes */}
-        <motion.div className="card chart"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-        >
-            <h2>Gastos por Mes</h2>
-            <div className="chart-box">
-            {isLoading ? (
-                <Skeleton variant="circular" width={180} height={180} />
-            ) : (
-                <Bar data={dataSpentMonth} options={options} />
-            )}
-            </div>
-            <div className="info-chart">
-            <h3>Mes con mayor gasto: </h3>
-                <p className="dato1">{spentMonthMax}</p>
-                <p className="dato2">$ {(totalMes || 0).toLocaleString('en-US')}</p>
-                                
-            
-            </div>
-        </motion.div>
+                <motion.div className="card chart"
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <h2>Gastos por Mes</h2>
+                    <div className="chart-box">
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Bar data={dataSpentMonth} options={options} />
+                    )}
+                    </div>
+                    <div className="info-chart">
+                    <h3>Mes con mayor gasto: </h3>
+                        <p className="dato1">{spentMonthMax}</p>
+                        <p className="dato2">$ {(totalMes || 0).toLocaleString('en-US')}</p>
+                                        
+                    
+                    </div>
+                </motion.div>
 
-        {/* Categorías de Gastos */}
-        <motion.div className="card chart"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-        >
-            <h2>Distribución por Productos</h2>
-            <div className="chart-box">
-            {isLoading ? (
-                <Skeleton variant="circular" width={180} height={180} />
-            ) : (
-                <Doughnut data={dataSpentProduct} options={optionsDonut} />
-            )}
-            </div>
-            <div className="info-chart">
-                <h3>Producto con mayor gasto: </h3>
-                <p className="dato1">{maxProducto}</p>
-                <p className="dato2">$ {(totalProducto || 0).toLocaleString('en-US')}</p>
-            </div>
-        </motion.div>
+                {/* Categorías de Gastos */}
+                <motion.div className="card chart"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                >
+                    <h2>Distribución por Productos</h2>
+                    <div className="chart-box">
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Doughnut data={dataSpentProduct} options={optionsDonut} />
+                    )}
+                    </div>
+                    <div className="info-chart">
+                        <h3>Producto con mayor gasto: </h3>
+                        <p className="dato1">{maxProducto}</p>
+                        <p className="dato2">$ {(totalProducto || 0).toLocaleString('en-US')}</p>
+                    </div>
+                </motion.div>
 
-        {/*  Métodos de Pago */}
-        <motion.div className="card chart"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-        >
-            <h2>Métodos de Pago</h2>
-            <div className="chart-box">
-            {isLoading ? (
-                <Skeleton variant="circular" width={180} height={180} />
-            ) : (
-                <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
-            )}
-            </div>
-            <div className="info-chart">
-                <h3>Método más utilizado: </h3>
-                <p className="dato1">{metodoMax}</p>
-                <p className="dato2">$ {(totalMetodoMax || 0).toLocaleString('en-US')}</p>
-            </div>
+                
 
-        </motion.div>
+                {/*  Métodos de Pago */}
+                <motion.div className="card chart"
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                >
+                    <h2>Métodos de Pago</h2>
+                    <div className="chart-box">
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Doughnut data={dataSpentMetodo} options={optionsDonut2} />
+                    )}
+                    </div>
+                    <div className="info-chart">
+                        <h3>Método más utilizado: </h3>
+                        <p className="dato1">{metodoMax}</p>
+                        <p className="dato2">$ {(totalMetodoMax || 0).toLocaleString('en-US')}</p>
+                    </div>
 
-        {/*  Tendencias Anuales */}
-        <motion.div className="card chart"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-        >
-            <h2>Gastos Anuales</h2>
-            <div className="chart-box">
-            {isLoading ? (
-                <Skeleton variant="circular" width={180} height={180} />
-            ) : (
-                <Bar data={dataSpentYear} options={optionsYear} />
-            )}
-            </div>
-        </motion.div>
+                </motion.div>
 
-        {/*  Inversiones */}
-        <motion.div className="card chart"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-        >
-            <h2>Inversiones</h2>
-            <div className="chart-box">
-            {isLoading ? (
-                <Skeleton variant="circular" width={180} height={180} />
-            ) : (
-                <Bar data={dataSpentIncersion} options={options2} />
-            )}
-            </div>
-        </motion.div>
+                {/* Condicion de gasto */}
+
+                <motion.div className="card chart"
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                >
+                    <h2>Promedio de utilidad</h2>
+                    <div className="chart-box">
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Doughnut data={dataSpentCondicion} options={optionDonut3} />
+                    )}
+                    </div>
+                    <div className="info-chart">
+                        <h3>Método más utilizado: </h3>
+                        <p className="dato1">{condicionMax}</p>
+                        <p className="dato2">$ {(SpentcondicionMax || 0).toLocaleString('en-US')}</p>
+                    </div>
+
+                </motion.div>
+
+                {/*  Tendencias Anuales */}
+                <motion.div className="card chart"
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <h2>Gastos Anuales</h2>
+                    <div className="chart-box">
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Bar data={dataSpentYear} options={optionsYear} />
+                    )}
+                    </div>
+                </motion.div>
+
+                {/*  Inversiones */}
+                <motion.div className="card chart"
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                >
+                    <h2>Inversiones</h2>
+                    <div className="chart-box">
+                    {isLoading ? (
+                        <Skeleton variant="circular" width={180} height={180} />
+                    ) : (
+                        <Bar data={dataSpentIncersion} options={options2} />
+                    )}
+                    </div>
+                </motion.div>
+        </div>
 
         </div>
 

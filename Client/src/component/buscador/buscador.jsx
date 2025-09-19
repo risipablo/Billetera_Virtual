@@ -43,15 +43,15 @@ export function Buscador({filtrarDatos}){
 
 
     const buscarChange = (event) => {
-        if(event.key === 'Enter') return;
-        {
+        event.preventDefault();
+        
             const value = inputValue; // se toma el valor
             const palabraClave = value.trim().toLowerCase().split(/\s+/);
             // setBuscar(value);
             filtrarDatos(palabraClave);
             filtrarDebounce(palabraClave)
             setSearching(true)
-        }
+        
     }
 
     const Reset = () => {

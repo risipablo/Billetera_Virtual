@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const { getNotes, addNotes, deleteNote, editNote, addMoreNotes, deleteIndividualNote, addMoreDates, deleteIndividualDate, editItem, addMorePrecios } = require('../Controllers/noteController');
+const { getNotes, addNotes, deleteNote, editNote, addMoreNotes, deleteIndividualNote, addMoreDates, deleteIndividualDate, editItem, addMorePrecios, NoteCompleted } = require('../Controllers/noteController');
 const {protect} = require('../Middleware/authMiddleware')
 
 
@@ -15,5 +15,6 @@ router.delete('/note/:id/delete-note/:noteIndex', protect, deleteIndividualNote)
 router.delete('/note/:id/delete-date/:dateIndex', protect, deleteIndividualDate)
 router.put('/note/:id/edit-note/:idx', protect, editItem)
 router.patch('/note/:id', protect, editNote)
+router.patch('/note/:id/completed', protect, NoteCompleted)
 
 module.exports = router;

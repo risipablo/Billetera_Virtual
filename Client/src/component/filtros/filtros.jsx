@@ -100,9 +100,6 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                         </Select>
                     </Grid>
 
-
-    
-    
                     <Grid item xs>
                         <Select
                             fullWidth
@@ -162,22 +159,6 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="diciembre">Diciembre</MenuItem>
                         </Select>
                     </Grid>
-    
-                    <Grid item xs={12}>
-                        <Select
-                            fullWidth
-                            value={metodo}
-                            onChange={(e) => setMetodo(e.target.value)}
-                            displayEmpty
-                            size="small" 
-                        >
-                            <MenuItem value=""><em>Seleccionar Pago</em></MenuItem>
-                            <MenuItem value="Débito">Débito</MenuItem>
-                            <MenuItem value="Crédito">Crédito</MenuItem>
-                            <MenuItem value="Efectivo">Efectivo</MenuItem>
-                            <MenuItem value="Mercado Pago">Mercado Pago</MenuItem>
-                        </Select>
-                    </Grid>
 
                     <Grid item xs>
                         <Select
@@ -196,6 +177,23 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                         </Select>
                     </Grid>
     
+    
+                    <Grid item xs={12}>
+                        <Select
+                            fullWidth
+                            value={metodo}
+                            onChange={(e) => setMetodo(e.target.value)}
+                            displayEmpty
+                            size="small" 
+                        >
+                            <MenuItem value=""><em>Seleccionar Pago</em></MenuItem>
+                            <MenuItem value="Débito">Débito</MenuItem>
+                            <MenuItem value="Crédito">Crédito</MenuItem>
+                            <MenuItem value="Efectivo">Efectivo</MenuItem>
+                            <MenuItem value="Mercado Pago">Mercado Pago</MenuItem>
+                        </Select>
+                    </Grid>
+
     
                     <Grid item xs={12}>
                         <Select

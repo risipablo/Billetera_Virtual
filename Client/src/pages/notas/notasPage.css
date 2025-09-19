@@ -1,8 +1,42 @@
 .note-card {
     width: 100%;
-    height: auto; /* Ajusta la altura según sea necesario */
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
- /* Sombras suaves */
+    transition: background 0.3s;
+}
+
+
+.note-card.completed-note {
+    text-decoration: line-through;
+    color: rgb(156, 159, 155);
+    background: rgb(245, 245, 245,.5);
+    opacity: 0.7;
+}
+
+
+.note-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.completed-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0 8px 0 0;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.completed-btn:hover {
+    background-color: #eef0ee;
+}
+
+.completed-btn .MuiSvgIcon-root {
+    color: #388e3c;
 }

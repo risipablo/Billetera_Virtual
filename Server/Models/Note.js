@@ -28,6 +28,10 @@ const noteSchema = new moongose.Schema({
         required: true,
         default: []
     },
+    completed: {
+        type: Boolean,
+        default: false,
+    },
     userId: {
         type: moongose.Schema.Types.ObjectId,
         ref: 'User',
