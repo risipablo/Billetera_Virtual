@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Container, Grid, Card, CardContent, TextField, Button, IconButton, Typography, Tooltip, Box, Collapse } from "@mui/material";
 import { Delete, Edit, Save, Cancel, Check, Add, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 import { motion } from "framer-motion";
@@ -15,6 +15,7 @@ import { NoteInfo } from "../../component/common/Info/noteInfo";
 import ModalConfirmacion from "../../component/modal/modalConfirm";
 import UndoIcon from '@mui/icons-material/Undo';
 import React from "react";
+import { Debounce } from "../../component/common/debounce";
 
 export function NotasPage() {
     const { notes, addNote, deleteNote, editNote, addNoteWithDate, deleteNewIndex, handleSaveItem, completeNote } = useNotes();
@@ -59,6 +60,8 @@ export function NotasPage() {
         setPrecio(0)
         setFecha(getTodayDate()); 
     };
+
+    const handleDebounce = useMemo(() => Debounce(handleAddNote,100), [handleAddNote])
 
     const handleEditNote = (nota) => {
         setEditingId(nota._id);
@@ -243,7 +246,7 @@ export function NotasPage() {
                         <Button 
                             variant="contained" 
                             color="primary" 
-                            onClick={handleAddNote}
+                            onClick={handleDebounce}
                             disabled={!titulo || !descripcion || !cuotas || !precio || !fecha}
                             fullWidth
                         >

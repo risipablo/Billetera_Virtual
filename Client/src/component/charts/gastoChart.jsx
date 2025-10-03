@@ -702,7 +702,7 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
         >
-            <h2>Resumen Financiero</h2>
+            <h2 style={{padding:'1.2rem 0'}}>Resumen Financiero</h2>
             <ul className="metrics-list">
             <li><h3>Total de gastos</h3><p>$ {(totalGasto || 0).toLocaleString('en-US')}</p></li>
             <li><h3>Dinero Invertido</h3><p>$ {(totalInversion || 0).toLocaleString('en-US')}</p></li>

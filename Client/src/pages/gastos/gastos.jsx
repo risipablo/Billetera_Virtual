@@ -6,7 +6,7 @@ Collapse,
 Skeleton,
 Tooltip,} from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
-import { ExpandMore, ExpandLess, ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { ExpandMore, ExpandLess, ArrowUpward, ArrowDownward, Undo } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -47,7 +47,6 @@ const serverFront = config.apiUrl;
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     const token = localStorage.getItem('token');
-    console.log(token); 
     const [isAdmin, setIsAdmin] = useState(false);
     const [showInputs,setShowInputs] = useState(true)
     const isMobile = useMediaQuery('(max-width:500px)');
@@ -240,70 +239,77 @@ const serverFront = config.apiUrl;
       }
       
       
-      const totalMonto = (gastos) => {
-        let total = 0;
-    
-        gastos.forEach(producto => {
-          if ([ 'cajero', 'cuotas', 'deben', 'inversion'].includes(producto.condicion.toLowerCase())) {
+    const totalMonto = (gastos) => {
+    let total = 0;
 
-          } else {
-            total += producto.monto;
-          }
-        });
-    
-        return total.toLocaleString('en-US');
-      };
+    gastos.forEach(producto => {
+        if ([ 'cajero', 'cuotas', 'deben', 'inversion'].includes(producto.condicion.toLowerCase())) {
+
+        } else {
+        total += producto.monto;
+        }
+    });
+
+    return total.toLocaleString('en-US');
+    };
 
 
-      const searchGastos = (palabraClave) => {
-        setGastosFiltrados(gastos.filter(gasto => {
-            return palabraClave.every(palabra =>
-                gasto.dia.toLowerCase().includes(palabra) ||
-                gasto.mes.toLowerCase().includes(palabra) ||
-                gasto.año.toLowerCase().includes(palabra) ||
-                gasto.metodo.toLowerCase().includes(palabra) ||
-                gasto.producto.toLowerCase().includes(palabra) ||
-                (gasto.necesario || '').toLowerCase().includes(palabra) ||
-                gasto.monto.toString().includes(palabra) ||
-                gasto.condicion.toLowerCase().includes(palabra) 
-            )
-        }))
-    }
-    
-      const limiteSpend = (gastos) => {
-        const conditionsOptions = ['cajero', 'inversion', 'deben', 'cuotas',]
-
-        const gastosFiltrados = gastos.filter(gasto => 
-            !conditionsOptions.includes(gasto.condicion.toLowerCase())
+    const searchGastos = (palabraClave) => {
+    setGastosFiltrados(gastos.filter(gasto => {
+        return palabraClave.every(palabra =>
+            gasto.dia.toLowerCase().includes(palabra) ||
+            gasto.mes.toLowerCase().includes(palabra) ||
+            gasto.año.toLowerCase().includes(palabra) ||
+            gasto.metodo.toLowerCase().includes(palabra) ||
+            gasto.producto.toLowerCase().includes(palabra) ||
+            (gasto.necesario || '').toLowerCase().includes(palabra) ||
+            gasto.monto.toString().includes(palabra) ||
+            gasto.condicion.toLowerCase().includes(palabra) 
         )
+    }))
+    }
 
-        const totalLimiter = gastosFiltrados.reduce((acc,gasto) => acc + gasto.monto, 0)
+    const limiteSpend = (gastos) => {
+    const conditionsOptions = ['cajero', 'inversion', 'deben', 'cuotas',]
 
-        return limite < totalLimiter
-        ? {monto:totalLimiter, color:"red"} : {monto:totalLimiter, color:"black"} 
+    const gastosFiltrados = gastos.filter(gasto => 
+        !conditionsOptions.includes(gasto.condicion.toLowerCase())
+    )
 
-      }
+    const totalLimiter = gastosFiltrados.reduce((acc,gasto) => acc + gasto.monto, 0)
 
-      //  Fecha actual
-      const fechaActual = () => {
+    return limite < totalLimiter
+    ? {monto:totalLimiter, color:"red"} : {monto:totalLimiter, color:"black"} 
+
+    }
+
+    //  Fecha actual
+    const fechaActual = () => {
         const hoy = new Date();
         setDia(String(hoy.getDate()))
         const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         setMes(meses[hoy.getMonth()])
         setAño(String(hoy.getFullYear()))
+    }
+
+
+
+    // Fecha de ayer
+    const fechaAyer = () => {
+        const ayer = new Date();
+        ayer.setDate(ayer.getDate() - 1)
+        setDia(String(ayer.getDate()))
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        setMes(meses[ayer.getMonth()])
+        setAño(String(ayer.getFullYear()))
       }
 
 
-      const [active,setActive] = useState(null)
-
-      const open = (icon) => {
-        setActive(icon)
-      }
 
 
-      const [ordenar,setOrdenar] = useState(true)
+    const [ordenar,setOrdenar] = useState(true)
 
-      const diaOrden = () => {
+    const diaOrden = () => {
         const productosFiltrados = [...gastosFiltrados].sort((a,b) => {
             const dia1 = parseInt(a.dia)
             const dia2 = parseInt(b.dia)
@@ -315,25 +321,25 @@ const serverFront = config.apiUrl;
       }
 
       // LocalStorage
-      useEffect(() => {
-        const limiteGuardado = localStorage.getItem('limiteGasto')
-            if(limiteGuardado)
-                setLimite(parseInt(limiteGuardado))
-      },[])
+    useEffect(() => {
+    const limiteGuardado = localStorage.getItem('limiteGasto')
+        if(limiteGuardado)
+            setLimite(parseInt(limiteGuardado))
+    },[])
 
-      useEffect(() => {
-        localStorage.setItem('limiteGasto', limite);
-      }, [limite]);
-    
-      useEffect(() => {
-        setShowInputs(isMobile)
-      },[isMobile])
+    useEffect(() => {
+    localStorage.setItem('limiteGasto', limite);
+    }, [limite]);
+
+    useEffect(() => {
+    setShowInputs(isMobile)
+    },[isMobile])
 
 
 
     
     return (
-        <Box className="gastos-container" sx={{ p: 3, marginTop:3, marginBottom:4 ,fontFamily: "Montserrat, sans-serif" }}>
+        <Box className="gastos-container">
             <Helmet>
                 
                 <title>Gastos Mensuales</title>
@@ -344,15 +350,36 @@ const serverFront = config.apiUrl;
                 justifyContent="flex-end"
                 alignItems="flex-start"
             >
-                <Tooltip title="Términos" arrow>
+                <Tooltip title="Términos" arrow >
                     <GastoInfo />
                 </Tooltip>
             </Box>
 
             <h1> Gastos Mensuales</h1> 
 
-            
-            <Grid item>
+
+            <div style={{ display: 'flex', gap: '22px', margin:'1.2rem 0'}}>
+                <Tooltip title="Fecha de ayer" arrow>
+                    <Button
+                        variant="contained"
+                        className="agregar"
+                        sx={{
+                            fontFamily: "Montserrat, sans-serif",
+                            backgroundColor: "#fff",
+                            color: "#302f2fff",
+                            minWidth: 0,
+                            padding: "8px",
+                            '&:hover': {
+                                backgroundColor: "#f0f0f0",
+                            }
+                        }}
+                        onClick={fechaAyer}
+                    >
+                        <Undo sx={{ color: "#000" }} />
+                    </Button>
+                </Tooltip>
+                
+                <Tooltip title="Fecha de hoy" arrow>
                     <Button
                         variant="contained"
                         className="agregar"
@@ -370,7 +397,9 @@ const serverFront = config.apiUrl;
                     >
                         <TodayIcon sx={{ color: "#000" }} />
                     </Button>
-            </Grid>
+                </Tooltip>
+            </div>
+
             
             <div className="form-container">
                 <select  value={dia} onChange={(e) => setDia(e.target.value)}>
@@ -403,7 +432,7 @@ const serverFront = config.apiUrl;
 
                 <select  value={necesario} onChange={(e) => setNecesario(e.target.value)}>
                     <option value="">Seleccionar Condición</option>
-                    {["Fijo","Necesario","Innecesario"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
+                    {["Fijo","Necesario","Innecesario", "Sin Valor"].map(necesario => <option key={necesario} value={necesario}>{necesario}</option>)}
                 </select>
 
                 <input type="text"  placeholder="Ingresar Productos" value={producto} onChange={(e) => setProducto(e.target.value)} />
@@ -424,7 +453,10 @@ const serverFront = config.apiUrl;
 
             
                 <Grid item>
-                    <Button variant="contained" color="primary" className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }} onClick={handleAddGastoDebounced}> 
+                    <Button variant="contained" color="primary" 
+                    className="agregar" sx={{ fontFamily: "Montserrat, sans-serif" }}
+                     onClick={handleAddGastoDebounced}
+                     disabled={!monto || !producto || !necesario || !dia || !mes || !año || !metodo || !condicion}> 
                         Agregar 
                     </Button>
                 </Grid>
@@ -437,6 +469,8 @@ const serverFront = config.apiUrl;
 
                 
             </Grid>
+
+
 
             <Filtros gastos={gastos} setGastosFiltrados={setGastosFiltrados} />
 
@@ -489,6 +523,7 @@ const serverFront = config.apiUrl;
                                     $ {totalMonto(gastosFiltrados)}
                                     </Typography>
                                 </ListItemText>
+                            
                             </ListItem>
 
 
@@ -593,21 +628,20 @@ const serverFront = config.apiUrl;
                                                     <Tooltip title="Fijo">
                                                         <FlagCircleIcon sx={{ color: "#f1e508ff", verticalAlign: 'middle', fontSize:'2rem' }} />
                                                     </Tooltip>
-                                                 
                                                 )}
 
                                                 {element.necesario === "Necesario" && (
                                                     <Tooltip title="Necesario">
                                                         <FlagCircleIcon sx={{ color: "#193271ff", verticalAlign: 'middle', fontSize:'2rem' }} />
                                                     </Tooltip>
-                                                 
                                                 )}
                                                 {element.necesario === "Innecesario" && (
                                                     <Tooltip title="Innesario">
                                                         <FlagCircleIcon sx={{ color: "#ff4136", verticalAlign: 'middle', fontSize:'2rem' }} />
-                                                    </Tooltip>
-                                                    
+                                                    </Tooltip> 
                                                 )}
+
+
                                         </TableCell>
 
                                         <TableCell align="center">

@@ -127,8 +127,11 @@ export function useList(){
                     ...lis,
                     descripcion: lis.descripcion.filter((_,idx) => idx !== indexList)
                 }
+                
                 :lis
+                
             ))
+            console.log(response)
             toast.error('Nota de la lista eliminada', {
                 position: 'top-right'
             })
@@ -162,6 +165,50 @@ export function useList(){
         }
     }
 
+    const listComplete = async (noteId) => {
+    try {
+        const token = localStorage.getItem('token');
+        const currentList = list.find(note => note._id === noteId);
+        if (!currentList) {
+            console.warn('listComplete: no se encontró la nota con id', noteId);
+            return;
+        }
+
+        const newCompleted = !currentList.completed;
+
+        // Actualización optimista
+        setList(prev => prev.map(n => n._id === noteId ? { ...n, completed: newCompleted } : n));
+
+        // Llamada al backend
+        const response = await axios.patch(
+            `${serverFront}/api/list/${noteId}/completed`,
+            { completed: newCompleted },
+            {
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
+            }
+        );
+
+        // Si el backend responde correctamente, usar esa data
+        if (response?.data && response.data._id) {
+            setList(prev => prev.map(n => n._id === noteId ? response.data : n));
+        }
+
+        toast.success(newCompleted ? 'Lista completada' : 'Lista incompleta', {
+            position: 'top-right'
+        });
+
+    } catch (error) {
+        console.error("Error al completar la nota:", error);
+
+        // Revertir cambio optimista
+        // setList(prev => prev.map(n => n._id === noteId ? { ...n, completed: !newCompleted } : n));
+
+        toast.error('Error al actualizar la nota');
+    }
+    };
+
+
     const toggleCompleteDescription = async (noteId, idx) => {
         try {
             const token = localStorage.getItem('token');
@@ -189,5 +236,5 @@ export function useList(){
         }
     }
 
-    return {list, addList, deleteNoteList, addListNote, deleteNewNote, editListNote, toggleCompleteDescription}
+    return {list, listComplete ,addList, deleteNoteList, addListNote, deleteNewNote, editListNote,toggleCompleteDescription}
 }

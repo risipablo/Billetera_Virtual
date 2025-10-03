@@ -18,6 +18,10 @@ const listSchema = new moongose.Schema({
         }],
         required:true
     },
+     completed: {
+        type: Boolean,
+        default: false,
+    },
     userId: {
         type: moongose.Schema.Types.ObjectId,
         ref:'User',

@@ -1,12 +1,14 @@
 
 import { useEffect, useState } from "react";
-import {  Grid, Select, MenuItem, Button, Hidden } from "@mui/material";
+import {  Grid, Select, MenuItem, Button, Hidden, Box } from "@mui/material";
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 export function Filtros({ gastos, setGastosFiltrados }) {
     const [mes, setMes] = useState('');
     const [metodo, setMetodo] = useState('');
     const [condicion, setCondicion] = useState('');
     const [año, setAño] = useState('')
+    const [necesario, setNecesario] = useState('')
 
     const filtros = () => {
         let gastosFiltrados = gastos;
@@ -24,6 +26,10 @@ export function Filtros({ gastos, setGastosFiltrados }) {
             gastosFiltrados = gastosFiltrados.filter(gasto => gasto.año.toLowerCase() === año.toLowerCase());
         }
 
+        if(necesario.trim() !== ''){
+            gastosFiltrados = gastosFiltrados.filter(gasto => gasto.necesario === necesario)
+        }
+
 
         setGastosFiltrados(gastosFiltrados);
     };
@@ -33,14 +39,49 @@ export function Filtros({ gastos, setGastosFiltrados }) {
         setMetodo("");
         setCondicion("");
         setAño('')
+        setNecesario("")
+        
     };
+
+  const mesActual = () => {
+    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    const fecha = new Date();
+    setMes(meses[fecha.getMonth()]);
+    setAño(String(fecha.getFullYear()));
+};
+
 
     useEffect(() => {
         filtros();
-    }, [mes, metodo, condicion, año]);
+    }, [mes, metodo, condicion, año, necesario, mesActual]);
+
+
+  
 
     return (
         <>
+
+            <Grid item>
+                    <Button
+                        variant="contained"
+                        className="agregar"
+                        sx={{
+                            fontFamily: "Montserrat, sans-serif",
+                            backgroundColor: "#fff",
+                            color: "#302f2fff",
+                            minWidth: 0,
+                            padding: "8px",
+                            margin:".6rem 0",
+                            '&:hover': {
+                                backgroundColor: "#f0f0f0",
+                            }
+                        }}
+                        onClick={mesActual}
+                    >
+                        <DateRangeIcon sx={{ color: "#000" }} />
+                    </Button>
+            </Grid>
+
             <Hidden smDown>
                 <Grid container spacing={2} alignItems="center" marginTop={1} marginBottom={2}>
                     <Grid item xs>
@@ -119,6 +160,22 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                         </Select>
                     </Grid>
 
+                 <Grid item xs>
+                        <Select
+                            fullWidth
+                            value={necesario}
+                            onChange={(e) => setNecesario(e.target.value)}
+                            displayEmpty
+                            size="small" 
+                        >
+                            <MenuItem value=""><em>Seleccionar Condición</em></MenuItem>
+                            <MenuItem value="Fijo">Fijo</MenuItem>
+                            <MenuItem value="Necesario">Necesario</MenuItem>
+                            <MenuItem value="Innecesario">Innecesario</MenuItem>
+                        </Select>
+                    </Grid>
+
+
 
                     <Grid item>
                         <Button
@@ -135,6 +192,8 @@ export function Filtros({ gastos, setGastosFiltrados }) {
     
             {/* Vista de mobile */}
             <Hidden smUp>
+
+                
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Select
@@ -208,6 +267,22 @@ export function Filtros({ gastos, setGastosFiltrados }) {
                             <MenuItem value="Impago">Impago</MenuItem>
                         </Select>
                     </Grid>
+
+                    <Grid item xs>
+                        <Select
+                            fullWidth
+                            value={necesario}
+                            onChange={(e) => setNecesario(e.target.value)}
+                            displayEmpty
+                            size="small" 
+                        >
+                            <MenuItem value=""><em>Seleccionar Condición</em></MenuItem>
+                            <MenuItem value="Fijo">Fijo</MenuItem>
+                            <MenuItem value="Necesario">Necesario</MenuItem>
+                            <MenuItem value="Innecesario">Innecesario</MenuItem>
+                        </Select>
+                    </Grid>
+
     
                     <Grid item xs={12}>
                         <Button

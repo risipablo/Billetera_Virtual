@@ -96,6 +96,9 @@ exports.deleteIndexList = async (req,res) => {
     }
 }
 
+
+
+
 exports.editListItem = async (req,res) => {
     const {id, idx} = req.params;
     const {descripcion} = req.body
@@ -124,6 +127,7 @@ exports.editListItem = async (req,res) => {
 }
 
 
+// Completar notas internas
 exports.toggleCompleteDescription = async (req, res) => {
     const { id, idx } = req.params;
     
@@ -158,3 +162,27 @@ exports.toggleCompleteDescription = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+
+// Completar listado 
+exports.ListCompleted = async (req,res) => {
+    const {id} = req.params
+    const {completed} = req.body
+
+    if (typeof completed !== 'boolean'){
+        return res.status(400).json({error: "Completed status is required and should be a boolean"})
+    }
+
+    try{
+        const updateList = await ListModel.findByIdAndUpdate(id, {completed}, {new:true})
+    
+        if(!updateList){
+            return res.status(404).json({error: "List not found"})
+        }
+        res.json(updateList)
+
+    } catch(err){
+        res.status(500).json({error:err.message})
+    }
+
+}

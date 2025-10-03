@@ -8,15 +8,15 @@
 
 h1{
     text-align: center;
-    margin: 2rem auto ;
+    margin: 1.2rem auto 3rem ;
     font-weight: 600;
 }
 
 .form-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin: 12px auto;
+    gap: 12px;
+    margin: 1.2rem auto;
     justify-content: space-between; 
   }
   

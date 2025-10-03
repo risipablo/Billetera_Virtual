@@ -1,8 +1,9 @@
 
 import { useEffect, useState } from "react";
-import { TextField, Select, MenuItem, IconButton, Grid, InputLabel, FormControl, Box, Button } from '@mui/material';
+import { TextField, Select, MenuItem, IconButton, Grid, InputLabel, FormControl, Box, Button, Tooltip } from '@mui/material';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { motion } from 'framer-motion';
+import { Today } from "@mui/icons-material";
 
 export function FiltrosChart({ gastos, setGastosFiltrados, setMesFiltrado}) {
     const [filterMonth, setFilterMonth] = useState('');
@@ -47,9 +48,17 @@ export function FiltrosChart({ gastos, setGastosFiltrados, setMesFiltrado}) {
         setMesFiltrado('')
     };
 
+    const mesActual = () => {
+        const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+        const fecha = new Date();
+        setFilterMonth(meses[fecha.getMonth()]);
+        setFilterAño(String(fecha.getFullYear()));
+    };
+
     useEffect(() => {
         filtros();
-    }, [filterMonth, filterMetodo, filterProduct, filterAño,filterCondition, gastos]);
+    }, [filterMonth, filterMetodo, filterProduct, filterAño,filterCondition, gastos,mesActual]);
+
 
 
     const containerVariants = {
@@ -65,7 +74,27 @@ export function FiltrosChart({ gastos, setGastosFiltrados, setMesFiltrado}) {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, marginTop: 8 }}>
+        <Box sx={{ flexGrow: 1}}>
+            <Button
+                variant="contained"
+                onClick={mesActual}
+                className="agregar"
+                sx={{
+                fontFamily: "Montserrat, sans-serif",
+                backgroundColor: "#fff",
+                color: "#302f2fff",
+                minWidth: 0,
+                margin: '1.2rem auto',
+                
+                '&:hover': {
+                    backgroundColor: "#f0f0f0",
+                }
+                
+            }}>
+                <Today/>
+            </Button>
+
+
             <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
                     <Grid container spacing={2} alignItems="center">
@@ -82,10 +111,10 @@ export function FiltrosChart({ gastos, setGastosFiltrados, setMesFiltrado}) {
                                     <Select
                                         value={filterMonth}
                                          onChange={(event) => {
-        setFilterMonth(event.target.value);
-        setMesFiltrado(event.target.value); // ← Actualizar directamente
-    }}
-                                        label="Mes"
+                                                setFilterMonth(event.target.value);
+                                                setMesFiltrado(event.target.value); 
+                                            }}
+                                            label="Mes"
                                     >
                                         <MenuItem value="">Todos</MenuItem>
                                         <MenuItem value="enero">Enero</MenuItem>

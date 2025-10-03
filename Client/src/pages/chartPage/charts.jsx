@@ -38,10 +38,12 @@ function Charts(){
 
         fechtGastos();
     },{})
+
+
     
 
     return(
-        <div className="gastos-container">
+        <Box className="gastos-container">
              <Helmet>
                 <title>Estadisticas Mensuales</title>
             </Helmet>
@@ -54,6 +56,8 @@ function Charts(){
             
 
             <h1> Estadisticas </h1>
+
+        
             <FiltrosChart 
                 gastos={gastos} 
                 setGastosFiltrados={setGastosFiltrados}
@@ -67,7 +71,7 @@ function Charts(){
 
             <ScrollTop/>
 
-        </div>
+        </Box>
     )
 }
 

@@ -1,0 +1,20 @@
+/* Si usas clases (en tu ejemplo ya las tienes): */
+.completed-note {
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+/* evita que los iconos se vean permanentes tachados (opcional) */
+.completed-note .MuiIconButton-root,
+.completed-note .MuiSvgIcon-root {
+  text-decoration: none;
+}
+
+/* si prefieres que sólo el texto se tache, mantén la card sin text-decoration
+   y aplica esta regla solo a los textos */
+.completed-note .note-title,
+.completed-note .note-date,
+.completed-note .item-text {
+  text-decoration: line-through;
+  color: #757575;
+}

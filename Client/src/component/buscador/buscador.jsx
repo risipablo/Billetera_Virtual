@@ -1,5 +1,5 @@
 
-import { Grid,IconButton,TextField,Box, Button, } from "@mui/material";
+import { Grid,IconButton,TextField,Box} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { styled } from '@mui/system';
 import { useMemo, useState } from "react";
@@ -61,7 +61,7 @@ export function Buscador({filtrarDatos}){
     }
 
     return(
-        <Grid item sx={{  margin: '2rem 0 0.2rem auto' ,display: 'flex', alignItems: 'center' }}>
+        <Grid item sx={{  margin: '3rem auto 1.5rem' ,display: 'flex', alignItems: 'center' }}>
            
             <IconButton color="primary" aria-label="search" onClick={() => setShowSearch(!showSearch)} >
                 <RemoveRedEyeIcon />
