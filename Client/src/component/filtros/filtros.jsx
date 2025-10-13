@@ -53,7 +53,7 @@ export function Filtros({ gastos, setGastosFiltrados }) {
 
     useEffect(() => {
         filtros();
-    }, [mes, metodo, condicion, año, necesario, mesActual]);
+    }, [mes, metodo, condicion, año, necesario]);
 
 
   

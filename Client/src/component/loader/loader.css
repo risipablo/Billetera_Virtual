@@ -1,10 +1,11 @@
 .loader {
     scroll-behavior: smooth;
-    background-image: url("../../assets/portada.png");
-    background-position: center center; /* centrado */
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed; 
+    /* background-image: url("../../assets/portada.png"); */
+    /* background-position: center center; */
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+    /* background-attachment: fixed;  */
+    background-color: #ffffff;
     width: 100vw;
     min-height: 100vh;
     display: flex;
@@ -16,7 +17,7 @@
 }
 
 .loader h2 {
-    color: #ffffff;
+    color: #000000;
     margin-bottom: 0;
     font-weight: 800;          
 }
