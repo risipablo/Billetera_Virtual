@@ -356,8 +356,8 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
             return spentMetodo[key] > spentMetodo[max] ? key : max;
         }, Object.keys(spentMetodo)[0])
     },[spentMetodo])
-    
 
+  
 
     const totalMetodoMax = spentMetodo[metodoMax] // se obtiene el objeto spentMetodo y metodoMax como clave 
 

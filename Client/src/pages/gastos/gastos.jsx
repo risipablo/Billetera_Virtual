@@ -5,7 +5,7 @@ ListItemText,TableCell,TableContainer,TableHead,Typography, TableRow, TextField,
 Collapse,
 Skeleton,
 Tooltip,} from '@mui/material';
-
+import ReactPaginate from 'react-paginate';
 import { TransitionGroup } from 'react-transition-group';
 import { ExpandMore, ExpandLess, ArrowUpward, ArrowDownward, Undo } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -356,6 +356,15 @@ const serverFront = config.apiUrl;
     },[isMobile])
 
 
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemPerPage, setItemsPerPage] = useState(12)
+
+    const pageCount = Math.ceil(gastosFiltrados.length / itemPerPage)
+    const offset = currentPage * itemPerPage
+    const currentItems = gastosFiltrados.slice(offset, offset + itemPerPage)
+
+
+
     
     return (
         <Box className="gastos-container">
@@ -646,7 +655,7 @@ const serverFront = config.apiUrl;
                                 </TableRow>
                             ))
                         ) : (
-                            gastosFiltrados.map((element, index) => (
+                            currentItems.map((element, index) => (
                                 <React.Fragment key={index}>
                                     <TableRow style={{ background: condicionPago(element.condicion || '') }}                                            sx={{
                                                 '&:hover': {
@@ -893,7 +902,7 @@ const serverFront = config.apiUrl;
                     <tfoot>
                         <TableRow>
                             <TableCell></TableCell>
-                            <TableCell colSpan={2} align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif" }}>Total</TableCell>
+                            <TableCell colSpan={2} align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif",fontSize: '1.1rem' }}>Total</TableCell>
                             <TableCell></TableCell>
                             <TableCell  align="center" sx={{ fontWeight: 'bold', fontFamily: "Montserrat, sans-serif", fontSize: '1rem' }}>${totalMonto(gastosFiltrados)}</TableCell>
                             <TableCell></TableCell>
@@ -904,6 +913,29 @@ const serverFront = config.apiUrl;
                        
                 </Table>
                 <ModalConfirmacion isOpen={showModal} onClose={() => setShowModal(false)}  onConfirm={deleteGastos}/>
+            {
+                pageCount > 1 && (
+                    <ReactPaginate
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente"
+                    pageCount={pageCount}
+                    onPageChange={({ selected }) => setCurrentPage(selected)}
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item previous"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item next"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item break"
+                    breakLinkClassName="page-link"
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    />
+                )
+            }
             </TableContainer>
             <Notas/>
             <Toaster/>

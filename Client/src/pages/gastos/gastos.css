@@ -92,3 +92,121 @@ h1{
 }
 
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 1.5rem 0;
+  margin: 0;
+  gap: 8px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.page-item {
+  margin: 0 2px;
+}
+
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: white;
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.page-link:hover {
+  background-color: #f5f5f5;
+  border-color: #c0c0c0;
+  color: #3483fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.active .page-link {
+  background-color: #3483fa;
+  border-color: #3483fa;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(52, 131, 250, 0.3);
+}
+
+.active .page-link:hover {
+  background-color: #2968c8;
+  border-color: #2968c8;
+  color: white;
+}
+
+.previous .page-link,
+.next .page-link {
+  font-weight: 600;
+  background-color: #f8f8f8;
+  border-color: #e0e0e0;
+  color: #3483fa;
+  min-width: 80px;
+}
+
+.previous .page-link:hover,
+.next .page-link:hover {
+  background-color: #f0f0f0;
+  color: #2968c8;
+}
+
+.previous .page-link:disabled,
+.next .page-link:disabled {
+  color: #c0c0c0;
+  cursor: not-allowed;
+  background-color: #f8f8f8;
+}
+
+.previous .page-link:disabled:hover,
+.next .page-link:disabled:hover {
+  transform: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: #c0c0c0;
+}
+
+.break .page-link {
+  background-color: transparent;
+  border: none;
+  color: #666;
+  cursor: default;
+}
+
+.break .page-link:hover {
+  background-color: transparent;
+  color: #666;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .page-link {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+    padding: 0 6px;
+  }
+  
+  .previous .page-link,
+  .next .page-link {
+    min-width: 70px;
+  }
+}
