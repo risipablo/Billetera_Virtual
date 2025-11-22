@@ -2,9 +2,10 @@
 const UserModel = require('../Models/User');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const bcrypt = require('bcrypt');
-const { error } = require('console');
-const { sendResetEmail } = require('./emailSender');
+// const bcrypt = require('bcrypt');
+// const { error } = require('console');
+
+const emailService = require('../services/emailService')
 require('dotenv').config();
 
 exports.registerUser = async (req, res) => {
@@ -114,12 +115,16 @@ exports.changeUsername = async (req, res) => {
         }
 
         const nameExists = await UserModel.findOne({ name: newName });
-        if (nameExists) {
-            return res.status(400).json({ error: 'El nombre ya está registrado' });
-        }
+            if (nameExists) {
+                return res.status(400).json({ error: 'El nombre ya está registrado' });
+            }
 
+
+        const oldName = user.name    
         user.name = newName;
         await user.save();
+        
+        emailService.sendUserChangeName(user.email, oldName, newName)
 
         res.status(200).json({ message: 'Nombre de usuario actualizado exitosamente' });
     } catch (error) {
@@ -221,7 +226,6 @@ exports.resetPassword = async (req, res) => {
         res.status(500).json({ message: "Error del servidor", error: error.message });
     }
 };
-
 
 
 exports.userName = async (req, res) => {

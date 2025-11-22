@@ -16,4 +16,4 @@ router.get('/validate-token', protect, (req ,res) => {
 module.exports = router;
 
 
-// En est endpoint si todo es correcto permite al front que verifique el front
+// En est endpoint si todo es correcto permite al front que verifique si el usuario sigue conectado
