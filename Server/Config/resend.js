@@ -1,6 +1,12 @@
 const { Resend} = require('resend')
-require('dotenv').config();
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const apiKey = process.env.RESEND_API_KEY
 
-module.exports = resend;
+if(!apiKey){
+     throw new Error('RESEND_API_KEY is required')
+}
+
+const resend = new Resend(apiKey)
+
+module.exports = resend
+
