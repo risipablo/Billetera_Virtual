@@ -2,10 +2,7 @@
 const UserModel = require('../Models/User');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-// const bcrypt = require('bcrypt');
-// const { error } = require('console');
-
-const emailService = require('../services/emailService')
+const {sendUserChangeName} = require('../services/emailService')
 require('dotenv').config();
 
 exports.registerUser = async (req, res) => {
@@ -124,14 +121,13 @@ exports.changeUsername = async (req, res) => {
         user.name = newName;
         await user.save();
         
-        emailService.sendUserChangeName(user.email, oldName, newName)
+        sendUserChangeName(user.email, oldName, newName);
 
         res.status(200).json({ message: 'Nombre de usuario actualizado exitosamente' });
     } catch (error) {
         res.status(500).json({ error: 'Error interno del servidor: ' + error.message });
     }
 };
-
 
 
 

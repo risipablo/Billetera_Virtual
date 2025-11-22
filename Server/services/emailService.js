@@ -1,6 +1,13 @@
 const resend = require('../config/resend');
 
+
 exports.sendUserChangeName = async (email, oldUsername, newuserName) => {
+    // Verificar si Resend está configurado
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('📧 Email no enviado (RESEND_API_KEY no configurada)');
+        return;
+    }
+
     try {
         await resend.emails.send({
             from: `${process.env.APP_NAME} <${process.env.FROM_EMAIL}>`,
@@ -27,7 +34,8 @@ exports.sendUserChangeName = async (email, oldUsername, newuserName) => {
             </div>
         `
         });
+        console.log('✅ Email enviado a:', email);
     } catch (error) {
-        console.error('Error enviando email de cambio de usuario:', error);
+        console.error('❌ Error enviando email:', error);
     }
 };

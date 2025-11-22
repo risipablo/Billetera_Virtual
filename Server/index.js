@@ -1,6 +1,6 @@
 
 const express = require('express');
-const connectDB = require('./Config/dataBase');
+const connectDB = require('./config/dataBase');
 const cors = require('cors'); 
 const gastoRoutes = require('./Routes/gastosRoutes');
 const notaRoutes = require('./Routes/notaRoutes');
