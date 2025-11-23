@@ -11,12 +11,12 @@ try {
 }
 
 const cors = require('cors'); 
-const gastoRoutes = require('./Routes/gastosRoutes');
-const notaRoutes = require('./Routes/notaRoutes');
-const noteRoutes = require('./Routes/noteRoutes')
-const authRoutes = require('./Routes/authRoutes');
-const listRoutes = require('./Routes/listRoutes');
-const tokenValidate = require('./Routes/validateRoutes')
+const gastoRoutes = require('./routes/gastosRoutes');
+const notaRoutes = require('./routes/notaRoutes');
+const noteRoutes = require('./routes/noteRoutes')
+const authRoutes = require('./routes/authRoutes');
+const listRoutes = require('./routes/listRoutes');
+const tokenValidate = require('./routes/validateRoutes')
 const errorHandler = require('./Middleware/gastosMiddleware');
 const cookieParser = require('cookie-parser')
 require('dotenv').config();
