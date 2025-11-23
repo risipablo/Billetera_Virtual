@@ -2,7 +2,7 @@ const resend = require('../config/resend');
 
 exports.sendUserChangeName = async (email, oldUsername, newuserName) => {
     
-    if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'development') {
+    if (!process.env.RESEND_API_KEY) {
         console.log('════════════════════════════════════════');
         console.log('📧 [MODO DESARROLLO] Email simulado');
         console.log('════════════════════════════════════════');
@@ -17,9 +17,9 @@ exports.sendUserChangeName = async (email, oldUsername, newuserName) => {
     
     try {
         await resend.emails.send({
-            from: `${process.env.APP_NAME} <${process.env.FROM_EMAIL}>`,
+            from: ` Billetera Virtual Soporte - <${process.env.FROM_EMAIL}>`,
             to: email,
-            subject: `Nombre de usuario actualizado - ${process.env.APP_NAME}`,
+            subject: `Nombre de usuario actualizado `,
             html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2 style="color: #333;">¡Hola!</h2>
