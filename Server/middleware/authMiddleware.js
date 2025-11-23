@@ -1,6 +1,6 @@
 
 const jwt = require('jsonwebtoken');
-const UserModel = require('../models/User'); 
+const UserModel = require('../Models/User'); 
 
 exports.protect = async (req, res, next) => {
     let token;
@@ -34,4 +34,4 @@ exports.protect = async (req, res, next) => {
     } catch (err) {
       return res.status(401).json({ error: 'Token no válido. Acceso denegado.' });
     }
-  };
+};

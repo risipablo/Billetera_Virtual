@@ -1,6 +1,5 @@
 const resend = require('../config/resend');
 
-
 exports.sendUserChangeName = async (email, oldUsername, newuserName) => {
     
     if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'development') {

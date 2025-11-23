@@ -1,5 +1,5 @@
 
-const GastosModel = require('../models/Gastos');
+const GastosModel = require('../Models/Gastos');
 
 exports.getGastos = async (req, res) => {
     try {
