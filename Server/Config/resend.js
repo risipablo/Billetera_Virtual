@@ -1,12 +1,13 @@
-const { Resend} = require('resend')
 
-const apiKey = process.env.RESEND_API_KEY
+const { Resend } = require('resend');
 
-if(!apiKey){
-     throw new Error('RESEND_API_KEY is required')
+const apiKey = process.env.RESEND_API_KEY;
+
+
+if (!apiKey && process.env.NODE_ENV === 'development') {
+    console.log('🔧 Resend en modo desarrollo - Los emails se simularán en consola');
 }
 
-const resend = new Resend(apiKey)
+const resend = new Resend(apiKey);
 
-module.exports = resend
-
+module.exports = resend;
