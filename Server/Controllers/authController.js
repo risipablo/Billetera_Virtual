@@ -2,7 +2,9 @@
 const UserModel = require('../models/User');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const {sendUserChangeName} = require('../services/emailService')
+const bcrypt = require('bcrypt');
+const { error } = require('console');
+const sendUserChangeName = require('../services/emailService')
 require('dotenv').config();
 
 exports.registerUser = async (req, res) => {
@@ -52,7 +54,7 @@ exports.loginUser = async (req, res) => {
         // Establecer la cookie con el token
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Solo en producción
+            secure: process.env.NODE_ENV, // Solo en producción
             sameSite: 'none',   // Previene ataques CSRF
         });
 
