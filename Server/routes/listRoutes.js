@@ -1,5 +1,5 @@
 const express = require('express')
-const { getList, addList, deleteList, addNoteList, deleteIndexList, editListItem, toggleCompleteDescription, ListCompleted,  } = require('../Controllers/listController')
+const { getList, addList, deleteList, addNoteList, deleteIndexList, editListItem, toggleCompleteDescription, ListCompleted, DeleteAll,  } = require('../Controllers/listController')
 const { protect } = require('../Middleware/authMiddleware');
 const router = express.Router()
 
@@ -11,6 +11,7 @@ router.patch('/list/:id/completed', protect,ListCompleted)
 router.patch('/list/:id/toggle-complete/:idx', protect, toggleCompleteDescription);
 router.delete('/list/:id/delete-list/:indexList', protect, deleteIndexList)
 router.delete('/list/:id', protect, deleteList);
+router.delete('/delete-all', DeleteAll)
 
 
 module.exports = router;

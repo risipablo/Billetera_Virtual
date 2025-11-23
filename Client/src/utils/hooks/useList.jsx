@@ -236,5 +236,21 @@ export function useList(){
         }
     }
 
-    return {list, listComplete ,addList, deleteNoteList, addListNote, deleteNewNote, editListNote,toggleCompleteDescription}
+    const deleteAllList = () => {
+        axios.delete(`${serverFront}/api/delete-all`)
+        .then(response => {
+            setList([])
+            toast.success('Todas las listas eliminadas',{
+                position: 'top-center'
+            })
+        })
+        .catch(err => {
+                console.error("Error deleting tasks:", err);
+                toast.error('Error al eliminar las tareas', {
+                    position: 'top-center',
+                });
+            });
+    }
+
+    return {list, listComplete ,addList, deleteNoteList, addListNote, deleteNewNote, editListNote,toggleCompleteDescription, deleteAllList}
 }

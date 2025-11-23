@@ -97,8 +97,6 @@ exports.deleteIndexList = async (req,res) => {
 }
 
 
-
-
 exports.editListItem = async (req,res) => {
     const {id, idx} = req.params;
     const {descripcion} = req.body
@@ -163,7 +161,6 @@ exports.toggleCompleteDescription = async (req, res) => {
     }
 };
 
-
 // Completar listado 
 exports.ListCompleted = async (req,res) => {
     const {id} = req.params
@@ -185,4 +182,15 @@ exports.ListCompleted = async (req,res) => {
         res.status(500).json({error:err.message})
     }
 
+}
+
+
+// Eliminar todas las notas
+exports.DeleteAll = async (req,res) => {
+    try{
+        const result = await ListModel.deleteMany({})
+        res.json({message: 'Todos los listados han sido eliminadas', result })
+    } catch(err) {
+        res.status(500).json({error: 'Server error:' + err.message})
+    }
 }

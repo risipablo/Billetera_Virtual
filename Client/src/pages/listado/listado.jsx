@@ -10,10 +10,11 @@ import { ListInfo } from "../../component/common/Info/listInfo";
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import "../listado/listado.css"
+import ModalConfirmacion from "../../component/modal/modalConfirm";
 
 export function Listado() {
     
-    const { list, addList, deleteNoteList, addListNote, deleteNewNote, editListNote, listComplete,toggleCompleteDescription } = useList();
+    const { list, addList, deleteNoteList, addListNote, deleteNewNote, editListNote, listComplete,toggleCompleteDescription, deleteAllList } = useList();
     const [titulo, setTitulo] = useState(""); 
     const [newNote, setNewNote] = useState({ 
         descripcion: '',
@@ -203,22 +204,35 @@ export function Listado() {
         };
 
 
+        const [showModal,setShowModal] = useState(false)
+
+        const deleteAll = () => {
+            setShowModal(true)
+        }
+
+        const handleDeleteAll = () => {
+            deleteAllList()
+            setShowModal(false)
+        }
+
    return (
-    <div className="gastos-container">
+    <Box className="gastos-container">
         <Helmet>
             <title>Listado de compras</title>
         </Helmet>
 
         {/* Título centrado */}
-        <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mt: 2 }}>
-            Listado de compras
-        </Typography>
+     
 
         <Box display="flex" justifyContent="flex-end" alignItems="flex-start" sx={{ width: '100%' }}>
             <Tooltip title="Términos" arrow>
                 <ListInfo />
             </Tooltip>
         </Box>
+
+           <h1 >
+            Listado de compras
+        </h1>
 
         {/* Sección de inputs para crear nuevo listado */}
         <Container
@@ -286,7 +300,44 @@ export function Listado() {
             </Grid>
         </Container>
 
+   <Button 
+    onClick={deleteAll}
+    variant="contained"
+    color="error"
+    size="small"
+    startIcon={<Delete fontSize="small" />}
+    sx={{
+        mt: 3,
+        mb: 2,
+        textTransform: 'none',
+        fontWeight: 600,
+        fontSize: '0.875rem',
+        padding: '7px 18px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(239, 68, 68, 0.25)',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        '&:hover': {
+            backgroundColor: '#dc2626',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)',
+        },
+        '&:active': {
+            transform: 'translateY(-1px)',
+            boxShadow: '0 2px 8px rgba(239, 68, 68, 0.3)',
+        }
+    }}
+>
+    Eliminar todo
+</Button>
+
         {/* Sección que muestra todos los listados de compras */}
+
+        {
+            list.length === 0 &&
+            <Typography variant="h6" align="center" sx={{ mt: 4, color: '#757575' }}>
+                No hay listados de compras disponibles por el momento
+            </Typography>
+        }
         <Container style={{ marginTop: 50 }}>
             <Grid container spacing={6}>
                 {list.map((lis, index) => (
@@ -585,8 +636,12 @@ export function Listado() {
                 ))}
             </Grid>
         </Container>
+
+
+
         <Toaster />
-    </div>
+        <ModalConfirmacion isOpen={showModal} onClose={() => setShowModal(false)}  onConfirm={handleDeleteAll} />
+    </Box>
 );
 
 }

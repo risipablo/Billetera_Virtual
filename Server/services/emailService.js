@@ -17,9 +17,9 @@ exports.sendUserChangeName = async (email, oldUsername, newuserName) => {
     
     try {
         await resend.emails.send({
-            from: ` Billetera Virtual Soporte - <${process.env.FROM_EMAIL}>`,
+            from: `${process.env.APP_NAME} <${process.env.FROM_EMAIL}>`,
             to: email,
-            subject: `Nombre de usuario actualizado `,
+            subject: `Nombre de usuario actualizado - ${process.env.APP_NAME}`,
             html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2 style="color: #333;">¡Hola!</h2>
