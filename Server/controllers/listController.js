@@ -1,4 +1,4 @@
-const ListModel = require("../Models/Listado")
+const ListModel = require("../models/Listado")
 
 
 exports.getList = async (req,res) => {

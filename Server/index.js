@@ -17,7 +17,7 @@ const noteRoutes = require('./routes/noteRoutes')
 const authRoutes = require('./routes/authRoutes');
 const listRoutes = require('./routes/listRoutes');
 const tokenValidate = require('./routes/validateRoutes')
-const errorHandler = require('./Middleware/gastosMiddleware');
+const errorHandler = require('./middleware/gastosMiddleware');
 const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
