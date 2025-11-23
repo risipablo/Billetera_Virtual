@@ -1,5 +1,5 @@
 const express = require('express')
-const { protect } = require('../Middleware/authMiddleware')
+const { protect } = require('../middleware/authMiddleware')
 const router = express.Router()
 
 router.get('/validate-token', protect, (req ,res) => {

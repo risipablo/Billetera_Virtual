@@ -1,10 +1,10 @@
 
 const express = require('express');
 const router = express.Router();
-const { getGastos, addGasto, deleteGasto, editGasto } = require('../Controllers/gastosController');
+const { getGastos, addGasto, deleteGasto, editGasto } = require('../controllers/gastosController');
 
 // Proteger rutas
-const {protect} = require ('../Middleware/authMiddleware')
+const {protect} = require ('../middleware/authMiddleware')
 
 
 router.get('/gasto',protect, getGastos);

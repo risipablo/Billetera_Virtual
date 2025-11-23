@@ -1,6 +1,6 @@
 const express = require('express')
-const { getList, addList, deleteList, addNoteList, deleteIndexList, editListItem, toggleCompleteDescription, ListCompleted,  } = require('../Controllers/listController')
-const { protect } = require('../Middleware/authMiddleware');
+const { getList, addList, deleteList, addNoteList, deleteIndexList, editListItem, toggleCompleteDescription, ListCompleted,  } = require('../controllers/listController')
+const { protect } = require('../middleware/authMiddleware');
 const router = express.Router()
 
 router.get('/list', protect, getList);

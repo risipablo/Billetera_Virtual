@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router()
-const { getNotas, addNota, deleteNota, editNota } = require('../Controllers/notaController');
+const { getNotas, addNota, deleteNota, editNota } = require('../controllers/notaController');
 
-const {protect} = require('../Middleware/authMiddleware')
+const {protect} = require('../middleware/authMiddleware')
 
 
 router.get('/notas',protect, getNotas);
