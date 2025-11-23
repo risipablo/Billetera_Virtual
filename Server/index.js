@@ -1,6 +1,6 @@
 
 const express = require('express');
-const connectdb = require("./config/database")
+const connectdb = require("./config/database.js")
 const fs = require('fs');
 console.log('🔍 Buscando archivos de base de datos...');
 try {
