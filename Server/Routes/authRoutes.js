@@ -10,7 +10,7 @@ router.post('/forgot-password', authController.forgotPassword)
 router.post('/reset-password', authController.resetPassword)
 router.post('/verify-email', protect, authController.verifyEmail);
 router.post('/change-password', protect, authController.changePassword); 
-// router.post('/change-user', protect, authController.changeUsername);
+router.post('/change-user', protect, authController.changeUsername);
 router.get('/name', protect, authController.userName);
 
 

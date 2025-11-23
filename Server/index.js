@@ -1,6 +1,20 @@
 
 const express = require('express');
+
+
 const connectDB = require('./config/database');
+
+const fs = require('fs');
+
+console.log('🔍 Buscando archivos de base de datos...');
+try {
+    const files1 = fs.readdirSync('./config');
+    console.log('📁 config/:', files1);
+} catch (e) {
+    console.log('❌ No existe ./config');
+}
+
+
 const cors = require('cors'); 
 const gastoRoutes = require('./Routes/gastosRoutes');
 const notaRoutes = require('./Routes/notaRoutes');
