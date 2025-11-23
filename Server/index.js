@@ -1,6 +1,6 @@
 
 const express = require('express');
-const connectDB = require('./config/database');
+const connectdb = require("./config/database")
 const fs = require('fs');
 console.log('🔍 Buscando archivos de base de datos...');
 try {
@@ -37,7 +37,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-connectDB();
+connectdb();
 
 app.use('/api', gastoRoutes);
 app.use('/api', notaRoutes);
