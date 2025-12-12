@@ -188,7 +188,8 @@ exports.ListCompleted = async (req,res) => {
 // Eliminar todas las notas
 exports.DeleteAll = async (req,res) => {
     try{
-        const result = await ListModel.deleteMany({})
+        
+        const result = await ListModel.deleteMany({userId : req.user.id});
         res.json({message: 'Todos los listados han sido eliminadas', result })
     } catch(err) {
         res.status(500).json({error: 'Server error:' + err.message})

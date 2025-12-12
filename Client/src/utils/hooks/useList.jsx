@@ -237,7 +237,13 @@ export function useList(){
     }
 
     const deleteAllList = () => {
-        axios.delete(`${serverFront}/api/delete-all`)
+        const token = localStorage.getItem('token')
+        axios.delete(`${serverFront}/api/delete-all`, {
+            headers:{
+                Authorization: `Bearer ${token}` 
+            },
+            withCredentials:true,
+        })
         .then(response => {
             setList([])
             toast.success('Todas las listas eliminadas',{
@@ -246,7 +252,7 @@ export function useList(){
         })
         .catch(err => {
                 console.error("Error deleting tasks:", err);
-                toast.error('Error al eliminar las tareas', {
+                toast.error('Error al eliminar todas las listas', {
                     position: 'top-center',
                 });
             });

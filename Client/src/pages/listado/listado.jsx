@@ -11,6 +11,7 @@ import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import "../listado/listado.css"
 import ModalConfirmacion from "../../component/modal/modalConfirm";
+import ReactPaginate from "react-paginate";
 
 export function Listado() {
     
@@ -215,6 +216,17 @@ export function Listado() {
             setShowModal(false)
         }
 
+
+        const [currentPage, setCurrentPage] = useState(0)
+        const [itemPerPage, setItemsPerPage] = useState(3)
+    
+        const pageCount = Math.ceil(list.length / itemPerPage)
+        const offset = currentPage * itemPerPage
+        const currentItems = list.slice(offset, offset + itemPerPage)
+        
+        
+        
+
    return (
     <Box className="gastos-container">
         <Helmet>
@@ -340,7 +352,7 @@ export function Listado() {
         }
         <Container style={{ marginTop: 50 }}>
             <Grid container spacing={6}>
-                {list.map((lis, index) => (
+                {currentItems.map((lis, index) => (
                     <React.Fragment key={lis._id || index}>
                         <Grid item xs={12} sm={6} md={4}>
                             <motion.div
@@ -638,9 +650,31 @@ export function Listado() {
         </Container>
 
 
-
         <Toaster />
         <ModalConfirmacion isOpen={showModal} onClose={() => setShowModal(false)}  onConfirm={handleDeleteAll} />
+               {
+                pageCount > 1 && (
+                    <ReactPaginate
+                    previousLabel="Anterior"
+                    nextLabel="Siguiente"
+                    pageCount={pageCount}
+                    onPageChange={({ selected }) => setCurrentPage(selected)}
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item previous"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item next"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item break"
+                    breakLinkClassName="page-link"
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    />
+                )
+            }
     </Box>
 );
 

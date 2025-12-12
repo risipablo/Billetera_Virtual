@@ -8,6 +8,7 @@ import { Cancel } from '@mui/icons-material';
 import { useNotas } from '../../utils/hooks/useNotesRemind';
 import "./notas.css";
 
+
 export function Notas() {
     const {
         notas,
@@ -26,6 +27,10 @@ export function Notas() {
         editNota,
         saveEditNotas,
     } = useNotas();
+
+
+    
+
 
     return (
         <div className="notas-container">
@@ -114,6 +119,7 @@ export function Notas() {
                                 ))}
                             </tbody>
                         </table>
+
                     </DialogContentText>
                 </DialogContent>
             </Dialog>

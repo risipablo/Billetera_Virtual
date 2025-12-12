@@ -16,6 +16,7 @@ import ModalConfirmacion from "../../component/modal/modalConfirm";
 import UndoIcon from '@mui/icons-material/Undo';
 import React from "react";
 import { Debounce } from "../../component/common/debounce";
+import ReactPaginate from "react-paginate";
 
 export function NotasPage() {
     const { notes, addNote, deleteNote, editNote, addNoteWithDate, deleteNewIndex, handleSaveItem, completeNote } = useNotes();
@@ -153,6 +154,14 @@ export function NotasPage() {
         setMenuIdx(null);
     };
 
+    const [currentPage, setCurrentPage] = useState(0)
+    const [itemPerPage, setItemsPerPage] = useState(6)
+
+    const pageCount = Math.ceil(notes.length / itemPerPage)
+    const offset = currentPage * itemPerPage
+    const currentItems = notes.slice(offset, offset + itemPerPage)
+    
+    
 
 
     return (
@@ -256,9 +265,9 @@ export function NotasPage() {
                 </Grid>
             </Container>
 
-            <Container style={{ marginTop: "5rem" }}>
+            <Container style={{ marginTop: "5rem", }}>
                 <Grid container spacing={6}>
-                     {( notes.length === 0)
+                     {( currentItems.length === 0)
                         ? Array.from({ length: 3 }).map((_, idx) => (
                             <Grid item xs={12} sm={6} md={4} key={idx}>
                                 <Card className="note-card" sx={{ borderRadius: 2, minHeight: 180 }}>
@@ -271,7 +280,7 @@ export function NotasPage() {
                                 </Card>
                             </Grid>
                         ))
-                         : notes.map((nota, index) => {
+                         : currentItems.map((nota, index) => {
                          if(!nota) return null;
                             return (
                                 <React.Fragment key={nota._id || index}>
@@ -630,6 +639,32 @@ export function NotasPage() {
                     deleteNote(deleteId)
                     setShowModal(false)
                 }}/>
+
+                                 {
+                                        pageCount > 1 && (
+                                            <div style={{ margin: '30px 0' }}>
+                                                <ReactPaginate 
+                                                previousLabel="Anterior"
+                                                nextLabel="Siguiente"
+                                                pageCount={pageCount}
+                                                onPageChange={({ selected }) => setCurrentPage(selected)}
+                                                containerClassName="pagination"
+                                                activeClassName="active"
+                                                pageClassName="page-item"
+                                                pageLinkClassName="page-link"
+                                                previousClassName="page-item previous"
+                                                previousLinkClassName="page-link"
+                                                nextClassName="page-item next"
+                                                nextLinkClassName="page-link"
+                                                breakLabel="..."
+                                                breakClassName="page-item break"
+                                                breakLinkClassName="page-link"
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                />
+                                            </div>
+                                        )
+                                    }
             </Container>
 
             <Toaster/>

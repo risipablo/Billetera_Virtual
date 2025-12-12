@@ -1,7 +1,7 @@
 const { text } = require('body-parser')
-const moongose = require('mongoose')
+const mongose = require('mongoose')
 
-const listSchema = new moongose.Schema({
+const listSchema = new mongose.Schema({
     titulo:{
         type:String,
         required: true
@@ -23,11 +23,11 @@ const listSchema = new moongose.Schema({
         default: false,
     },
     userId: {
-        type: moongose.Schema.Types.ObjectId,
+        type: mongose.Schema.Types.ObjectId,
         ref:'User',
         required: true
     }
 })
 
-const ListModel = moongose.model('List', listSchema)
+const ListModel = mongose.model('List', listSchema)
 module.exports = ListModel

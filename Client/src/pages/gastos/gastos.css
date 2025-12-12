@@ -96,11 +96,13 @@ h1{
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: .8rem auto;
   list-style: none;
   padding: 1.5rem 0;
-  margin: 0;
   gap: 8px;
   font-family: "Montserrat", sans-serif;
+  width: 100%;
+  max-width: 100%;
 }
 
 .page-item {
@@ -194,7 +196,7 @@ h1{
 /* Responsive */
 @media (max-width: 768px) {
   .pagination {
-    flex-wrap: wrap;
+    padding: 1rem 0.5rem;
     gap: 6px;
   }
   

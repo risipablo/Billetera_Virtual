@@ -11,7 +11,7 @@ router.patch('/list/:id/completed', protect,ListCompleted)
 router.patch('/list/:id/toggle-complete/:idx', protect, toggleCompleteDescription);
 router.delete('/list/:id/delete-list/:indexList', protect, deleteIndexList)
 router.delete('/list/:id', protect, deleteList);
-router.delete('/delete-all', DeleteAll)
+router.delete('/delete-all', protect,DeleteAll)
 
 
 module.exports = router;
