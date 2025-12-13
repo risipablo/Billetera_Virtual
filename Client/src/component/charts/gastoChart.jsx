@@ -4,15 +4,20 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 import { motion } from 'framer-motion';
 import { Skeleton } from "@mui/material";
 import "./chart.css"
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 
 
 const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
     const isLoading = loading || !gastos || gastos.length === 0;
 
-    const isMobile = window.innerWidth <= 768; // ajusta de font size donuts para mobile
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // ajusta de font size donuts para mobile
     
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Gastos por mes
     const spentMonth = useMemo(() => {
@@ -128,7 +133,7 @@ const GastoChart = ({ gastos, loading,mesSeleccionado}) => {
 
     // Año con mayor gasto
     const spentYearMax = useMemo(() => {
-        return Object.keys(spentMonth).reduce((max,key) => {
+        return Object.keys(spentYear).reduce((max,key) => {
         return spentYear[key] > spentYear[max] ? key: max
         }, Object.keys(spentYear)[0])
     },[spentYear])

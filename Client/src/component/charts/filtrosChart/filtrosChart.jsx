@@ -57,7 +57,7 @@ export function FiltrosChart({ gastos, setGastosFiltrados, setMesFiltrado}) {
 
     useEffect(() => {
         filtros();
-    }, [filterMonth, filterMetodo, filterProduct, filterAño,filterCondition, gastos,mesActual]);
+    }, [filterMonth, filterMetodo, filterProduct, filterAño,filterCondition, gastos]);
 
 
 
