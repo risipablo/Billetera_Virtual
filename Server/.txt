@@ -1,0 +1,94 @@
+Guia de refactorizacion para el front end
+
+Rutas de endpoint
+
+Usuarios:
+/register
+/login
+/logout
+/forgot-password
+/reset-password
+/verify-email
+/change-password (cambio de contraseña)
+/change-user (cambio de nombre)
+
+Cambiar el nombre del endpoint
+Gastos:
+/bills
+/bills/filter (endpoint para eliminar todos los gastos filtrados)
+
+Fecha => Un solo input type='date
+Producto => Libre eleccion
+Monto => Libre eleccion
+Categoria => Comida y supermercado, Delivery/Restaurantes, Transporte, Vivienda, Servicios, Salud, Ocio y entretenimiento, Ropa y accesorios, Educación, Hijos, Mascotas,
+Cuidado personal, Tecnología, Regalos y donaciones, Impuestos y trámites, Viajes, Ahorro/Inversión, Otro.
+Metodo de pago => Debito, credito , efectivo , transferencia
+Condicion => Fijo, neccesario, innesecario, sin valor
+Tipo de movimiento => Gasto, inversion, ingreso, prestamo, devolver
+Estado de pago => Pagado, impago, cuotas. Se reemplaza las banderitas por puntos de colores correspondiente a cad uno
+
+
+Notas de cuotas
+/note
+/note/:id/addNote (se agrega fecha, descripcion y monto)
+
+En caso de fallar utilizar las rutas viejas:  
+router.put('/note/:id/add-note', protect, addMoreNotes)
+router.put('/note/:id/add-date', protect, addMoreDates)
+router.put('/note/:id/add-price', protect, addMorePrecios)
+router.delete('/note/:id', protect, deleteNote)
+router.delete('/note/:id/delete-note/:noteIndex', protect, deleteIndividualNote)
+router.delete('/note/:id/delete-date/:dateIndex', protect, deleteIndividualDate)
+router.put('/note/:id/edit-note/:idx', protect, editItem)
+
+Solo en el front tendra titulo,cuotas, monto y fecha
+Se imprime total a pagar + monto
+Al final de cada carta debe tener un total donde vaya calculando el monto que esta disponbile
+Debe tener un filtro para ver las cartas incompletas (pagadas y no pagadas)
+Un buscador para ver las cartas (nombres, fecha, monto)
+
+
+Listado de compras
+Todo correcto los endpoint 
+Quizas un buscador para agilizar es opcional
+
+Notas en gastos
+Todo correcto los endpoint
+Nos permitira colocar notas adiccionales en el container de Gastos
+
+
+Patron de diseño refactorizada
+src 
+    - auth => authButton, authlayout, passwordinput, passwordrequirement, changeusername,deleteaccount
+        googlelogin?, logout, resetpassword, userprofiler
+    - layout => navbar, conversion de modena, consejos de financiacion,scrolltop, contacto, pagination, modalconfirm, filtros, buscadores
+    - utils => security (validar contraseña)
+    - data => relacionado a consumos de apis
+    - common =>  debounce, iconos de informacion, loaders,callbackPage
+
+config
+    - index (varibles de url)
+    - axiosintance
+
+ context
+    - userprovider
+
+features
+    - components 
+        - gastos, listado de compras, notas de gastos, listado de cuotas, buscador, charts
+    - hooks
+        - useAuth, useGastos, useListado, useUser, UseCuotas, useNotas 
+    - inteface
+        type.=> auth,gastos,listado,cuotas,user,common (para paginate,loaders)
+
+pages
+    - auth
+        - configPage, loginPage, deleteAccount, registerPage
+    - components
+        - dashboard, gastos, conversion, cuotas, lista de compras, consejos, charts
+    Home
+
+service
+    - authService
+
+style
