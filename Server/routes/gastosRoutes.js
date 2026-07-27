@@ -7,9 +7,9 @@ const { getGastos, addGasto, deleteGasto, editGasto } = require('../controllers/
 const {protect} = require ('../middleware/authMiddleware')
 
 
-router.get('/gasto',protect, getGastos);
-router.post('/add-gasto', protect,addGasto);
-router.delete('/delete-gasto/:id', protect, deleteGasto);
-router.patch('/edit-gasto/:id', protect ,editGasto);
+router.get('/bills',protect, getGastos);
+router.post('/bills', protect,addGasto);
+router.delete('/bills/:id', protect, deleteGasto);
+router.patch('/bills/:id', protect ,editGasto);
 
 module.exports = router;

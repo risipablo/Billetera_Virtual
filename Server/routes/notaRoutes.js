@@ -1,3 +1,5 @@
+// Notas adicionales
+
 const express = require('express');
 const router = express.Router()
 const { getNotas, addNota, deleteNota, editNota } = require('../controllers/notaController');

@@ -32,6 +32,8 @@ Notas de cuotas
 /note
 /note/:id/addNote (se agrega fecha, descripcion y monto)
 
+Revisar el controller de este endpoint para agregar nuevas subnotas cuotas
+
 En caso de fallar utilizar las rutas viejas:  
 router.put('/note/:id/add-note', protect, addMoreNotes)
 router.put('/note/:id/add-date', protect, addMoreDates)

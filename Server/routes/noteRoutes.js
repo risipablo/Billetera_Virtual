@@ -4,6 +4,7 @@ const { getNotes, addNotes, deleteNote, editNote, addMoreNotes, deleteIndividual
 const {protect} = require('../middleware/authMiddleware')
 
 
+// revision de subnote
 
 router.get('/note',protect, getNotes);
 router.post('/note',protect, addNotes);
