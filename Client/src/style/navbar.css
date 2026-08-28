@@ -1,0 +1,213 @@
+:root {
+    --nav-bg: #0C447C;
+    --nav-bg-hover: rgba(255, 255, 255, 0.12);
+    --nav-bg-active: rgba(255, 255, 255, 0.2);
+    --nav-border: rgba(255, 255, 255, 0.15);
+    --sidebar-width: 220px;
+    --sidebar-width-collapsed: 72px;
+}
+
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--nav-bg);
+    z-index: 99;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .7);
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 0.6rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.menu-icon:hover {
+    background-color: var(--nav-bg-hover);
+}
+
+.menu-icon span {
+    height: 2px;
+    width: 22px;
+    background-color: rgb(234, 230, 225);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.menu-icon.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-icon.open span:nth-child(2) { opacity: 0; }
+.menu-icon.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.icons {
+    display: flex;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: .75rem;
+    margin: 1.5rem 0;
+    
+}
+
+
+.icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.icon:hover {
+    background-color: var(--nav-bg-hover);
+}
+
+
+a.active .icon {
+    background-color: var(--nav-bg-active);
+}
+
+.icon svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #ffffff;
+}
+
+.text {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+}
+
+.user svg {
+    color: rgb(255, 235, 18);
+    flex-shrink: 0;
+}
+
+.user svg:hover {
+    color: #ffffff;
+    transition: 0.4s;
+}
+
+.user p {
+    margin: 0;
+}
+
+
+@media (max-width: 680px) {
+
+    .icon-container {
+        position: relative;
+        justify-content: space-between;
+        padding: 1rem 0.8rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0);
+    }
+
+    .menu {
+        margin: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        width: 60vw;
+        height: 100lvh;
+        background-color: var(--nav-bg);
+        padding: 1rem;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .menu.open {
+        transform: translateX(0%);
+    }
+
+    .user {
+        margin-left: auto;
+    }
+}
+
+/* ============================================================
+   DESKTOP (>= 681px) — sidebar fijo, colapsable, usuario al pie
+   ============================================================ */
+@media (min-width: 681px) {
+
+    .icon-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        width: var(--sidebar-width);
+        height: 100vh;
+        padding: 1.25rem 0.9rem;
+        gap: 0.75rem;
+        transition: width 0.25s ease;
+        overflow: hidden;
+    }
+
+    .icon-container.open {
+        width: var(--sidebar-width-collapsed);
+    }
+
+    .menu-icon {
+        align-self: flex-start;
+    }
+
+    .icon-container.open .menu-icon {
+        align-self: center;
+    }
+
+    .icons,
+    .menu {
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* usuario al pie del sidebar, separado por una línea */
+    .user {
+        margin-top: auto;
+        padding-top: 0.9rem;
+        border-top: 1px solid var(--nav-border);
+    }
+
+    .icon-container.open .icon {
+        justify-content: center;
+        padding: 0.7rem;
+    }
+
+    .icon-container.open .text {
+        display: none;
+    }
+
+    
+    .icon-container.open .user {
+        justify-content: center;
+    }
+
+    .icon-container.open .user p {
+        display: none;
+    }
+}

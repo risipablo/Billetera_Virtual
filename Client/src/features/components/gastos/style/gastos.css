@@ -1,0 +1,209 @@
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #c73535;
+    --color-text: #202124;
+    --color-text-secondary: #5f6368;
+    --color-border: #dadce0;
+    --sidebar-width: 250px;
+     
+}
+
+.table-container{
+    margin-left: var(--sidebar-width);
+    padding: 24px;
+    max-width: 1400px;
+    transition: margin-left 0.3s ease;
+}
+
+@media (min-width: 851px) {
+    body.open .table-container {
+        margin-left: var(--sidebar-width-collapsed);
+    }
+}
+
+/* Headers de la tablas */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.table-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.header-actions {
+    display: flex;
+    margin: .8rem 0;
+    gap: 12px;
+    align-items: center;
+}
+
+.delete-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--danger);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.delete-all-btn:hover {
+    background-color: #fce8e6;
+    border-color: var(--danger);
+}
+
+.gastos-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: var(--header-bg) #F1F1EF;
+}
+
+.gastos-table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.gastos-table-wrapper::-webkit-scrollbar-track {
+    background: #F1F1EF;
+}
+
+.gastos-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--header-bg);
+    border-radius: 999px;
+}
+
+.gastos-table {
+    width: 100%;
+    min-width: 640px; 
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: #fff;
+}
+
+.gastos-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 14px 16px;
+    
+    font-size: .75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #fff;
+    background: var(--header-bg);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.gastos-table th:first-child { border-top-left-radius: 14px; }
+.gastos-table th:last-child { border-top-right-radius: 14px; }
+
+.th-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.gastos-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    vertical-align: middle;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.gastos-table tr:last-child td { border-bottom: none; }
+.gastos-table tbody tr:hover td { background: #F7F9FC; }
+
+.align-right { text-align: right; }
+.gasto-monto { font-weight: 600; }
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 3px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #F1F1EF;
+    color: #55554F;
+}
+
+.badge-pagado,  .badge-devolver { color: #2E7D32; background: #E8F3E4; }
+.badge-impago, .badge-innecesario { color: var(--danger); background: #FBE9E9; }
+.badge-cuotas, .badge-deben { color: #9A5B0B; background: #FCEFDA; }
+.badge-fijo{ color: #fcfcfc; background: #e8cd05; }
+.badge-cajero{color: #de7616; background: #fafafa; }
+.badge-necesario{ color: #1E5FA8; background: #E5EFFB; }
+.badge-devolver{ color: #e73b15; background: #edddfc; }
+.badge-inversion { color: #6B2FA8; background: #F0E9FA; }
+.badge-sin-valor { color: var(--text-muted); background: #F1F1EF; }
+
+/* Acciones */
+.actions-container { display: flex; justify-content: center; gap: 6px; }
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+.action-btn:hover { color: var(--text); }
+.delete-btn:hover { color: var(--danger); }
+
+.gastos-empty {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    background: #fff;
+}
+
+@media (max-width: 900px) {
+    .gastos-table th, .gastos-table td { padding: 10px 12px; }
+}
+
+@media (max-width:850px){
+    .table-container{
+        margin-left: 0;
+        padding: 16px;
+    }
+}
+
+@media (max-width:480px){
+    .table-container{
+        padding: 12px;
+    }
+}
+
+

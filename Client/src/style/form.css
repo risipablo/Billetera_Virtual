@@ -1,0 +1,286 @@
+
+:root {
+    --bg-page: #ffffff;
+    --bg-surface: #f7f7f7;
+    --border: #dedede;
+    --text-primary: #111111;
+    --text-secondary: #555555;
+
+    --accent: #111111;
+    --accent-hover: #333333;
+    --on-accent: #ffffff;
+
+    --input-bg: #ffffff;
+    --input-text: #080808;
+
+    --overlay-bg: rgba(0, 0, 0, 0.45);
+}
+
+
+.btn-add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 8px 18px;
+
+    background-color: #0C447C;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.btn-add:hover {
+    background-color: #165798;
+    transform: translateY(-3px);
+}
+
+
+/* ============================================
+   Overlay
+   ============================================ */
+.form-modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: var(--overlay-bg);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1000;
+    padding: 1rem;
+}
+
+
+/* ============================================
+   Modal
+   ============================================ */
+.form-modal-content {
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================
+   Header
+   ============================================ */
+.form-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 1;
+}
+
+.form-modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+
+/* ============================================
+   Botón cerrar
+   ============================================ */
+.form-modal-close {
+    background: none;
+    border: none;
+    color: #111111;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.15s ease;
+}
+
+.form-modal-close:hover {
+    background: #eeeeee;
+}
+
+
+
+.form-modal-body {
+    padding: 1.4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.78rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+
+
+.task-input {
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid #111111;
+    border-radius: 7px;
+    padding: 0.65rem 0.7rem;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease,
+                box-shadow 0.15s ease;
+}
+
+.task-input::placeholder {
+    color: #aaaaaa;
+}
+
+/* Focus */
+.task-input:focus {
+    outline: none;
+
+    border-color: #000000;
+
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ============================================
+   Acciones
+   ============================================ */
+.task-modal-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+    gap: 0.75rem;
+
+    margin-top: 0.5rem;
+}
+
+
+/* ============================================
+   Botones
+   ============================================ */
+.task-btn {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 0.65rem 1rem;
+
+    border-radius: 7px;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    border: 1px solid transparent;
+
+    transition: background-color 0.15s ease,
+                color 0.15s ease;
+}
+
+
+/* Botón principal */
+.task-btn-primary {
+    background: #111111;
+    color: #ffffff;
+}
+
+.task-btn-primary:hover {
+    background: #333333;
+}
+
+.task-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Botón secundario */
+.task-btn-secondary {
+    background: #ffffff;
+    color: #111111;
+    border-color: #111111;
+}
+
+.task-btn-secondary:hover {
+    background: #c7c4c4;
+}
+
+
+/* ============================================
+   Tablet / Mobile
+   ============================================ */
+@media (max-width: 768px) {
+    .form-modal-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ============================================
+   Mobile
+   ============================================ */
+@media (max-width: 680px) {
+
+    .btn-add-task {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .form-modal-content {
+        max-width: 100%;
+        max-height: 85vh;
+
+        border-radius: 16px 16px 0 0;
+        border-bottom: none;
+    }
+}
+
+
+
+@media (max-width: 400px) {
+
+    .task-modal-actions {
+        flex-direction: column;
+    }
+}

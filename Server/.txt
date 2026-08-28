@@ -94,3 +94,12 @@ service
     - authService
 
 style
+Token	Light	Dark
+Fondo navbar	
+#F5F7FA	#0B1220
+Borde navbar	
+#E2E6EB	#1E2836
+Ícono / acento primario	
+#0C447C	#5B9BD5
+Texto secundario (saludo)	
+#3A4453	#C7D0DC

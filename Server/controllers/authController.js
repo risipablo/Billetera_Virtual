@@ -76,7 +76,7 @@ exports.logoutUser = (req, res) => {
     // Eliminar la cookie de sesión
     res.clearCookie('token', {
         httpOnly: true,
-        secure: process.env.NODE_ENV,
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
     });
     res.json({ message: 'Cierre de sesión exitoso' });

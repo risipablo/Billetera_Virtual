@@ -2,18 +2,18 @@
 const express = require('express');
 const connectdb = require("./config/database")
 const fs = require('fs');
-console.log('🔍 Buscando archivos de base de datos...');
+console.log('Buscando archivos de base de datos...');
 try {
     const files1 = fs.readdirSync('./config');
-    console.log('📁 config/:', files1);
+    console.log('config/:', files1);
 } catch (e) {
-    console.log('❌ No existe ./config');
+    console.log('No existe ./config');
 }
 
 const cors = require('cors'); 
 const gastoRoutes = require('./routes/gastosRoutes');
-const notaRoutes = require('./routes/notaRoutes');
-const noteRoutes = require('./routes/noteRoutes')
+const fijoRoutes = require('./routes/fijoRoutes');
+const noteRoutes = require('./routes/cuotaRoutes')
 const authRoutes = require('./routes/authRoutes');
 const listRoutes = require('./routes/listRoutes');
 const tokenValidate = require('./routes/validateRoutes')
@@ -40,7 +40,7 @@ app.use(cors(corsOptions));
 connectdb();
 
 app.use('/api', gastoRoutes);
-app.use('/api', notaRoutes);
+app.use('/api', fijoRoutes);
 app.use('/api', noteRoutes);
 app.use('/api', listRoutes);
 app.use('/api/auth', tokenValidate)

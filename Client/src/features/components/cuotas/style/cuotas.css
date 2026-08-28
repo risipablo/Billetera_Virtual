@@ -1,0 +1,523 @@
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --active-bg: #E5EFFB;
+    --active-text: #1E5FA8;
+    --danger: #A22E2E;
+    --success: #2E7D32;
+    --overlay-bg: rgba(11, 18, 32, 0.55);
+}
+
+.notas-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.notas-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.notas-empty p {
+    font-size: 1.1rem;
+}
+
+/* Botón */
+.btn-add-nota {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: var(--header-bg);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn-add-nota:hover {
+    background: #0A3A6A;
+}
+
+/* Card */
+.nota-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nota-card.completed {
+    opacity: 0.7;
+}
+
+/* Header */
+.nota-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.nota-card-title h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.nota-card-title h3.completed {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.nota-card-cuotas {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.nota-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.nota-card-progreso {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--header-bg);
+}
+
+.nota-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.nota-card-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nota-card-actions button:hover {
+    background: #F7F9FC;
+}
+
+/* botón de completar: mismo tratamiento que el check del boceto */
+.nota-btn-toggle {
+    width: 28px;
+    height: 28px;
+    background: var(--active-bg);
+    color: var(--active-text);
+}
+
+.nota-btn-toggle:hover {
+    background: #D6E7F9;
+}
+
+.nota-btn-toggle.done {
+    background: #F1F1EF;
+    color: var(--text-muted);
+}
+
+.nota-btn-more:hover {
+    color: var(--text);
+}
+
+/* Barra de progreso */
+.nota-progress-track {
+    height: 6px;
+    background: #F1F1EF;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.nota-progress-fill {
+    height: 100%;
+    background: var(--header-bg);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+/* Stats: filas simples, sin caja gris */
+.nota-card-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nota-stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.nota-stat-label {
+    color: var(--text-muted);
+}
+
+.nota-stat-value {
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* filas destacadas: total pagado / restante por pagar */
+.nota-stat-row.success .nota-stat-label,
+.nota-stat-row.success .nota-stat-value {
+    color: var(--success);
+}
+
+.nota-stat-row.success .nota-stat-value {
+    font-weight: 600;
+}
+
+.nota-stat-row.danger .nota-stat-label,
+.nota-stat-row.danger .nota-stat-value {
+    color: var(--danger);
+}
+
+.nota-stat-row.danger .nota-stat-value {
+    font-weight: 600;
+}
+
+/* Pie de la card: vencimiento + expandir */
+.nota-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid #F1F1EF;
+}
+
+.nota-footer-vencimiento {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.nota-btn-expand {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border-radius: 6px;
+}
+
+.nota-btn-expand:hover {
+    color: var(--text);
+    background: #F7F9FC;
+}
+
+/* Body */
+.nota-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nota-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Item */
+.nota-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #F7F9FC;
+    transition: background-color 0.15s ease;
+}
+
+.nota-item:hover {
+    background: #F1F5FB;
+}
+
+.nota-item.completed {
+    background: #F1F8ED;
+    opacity: 0.85;
+}
+
+.nota-item-toggle {
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease;
+}
+
+.nota-item-toggle:hover {
+    border-color: var(--header-bg);
+}
+
+.nota-item-toggle.checked {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+}
+
+.nota-item-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.nota-item-text {
+    font-size: 0.88rem;
+    color: var(--text);
+    flex: 1;
+}
+
+.nota-item-text.text-completed {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.nota-item-precio {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--header-bg);
+    min-width: 70px;
+    text-align: right;
+}
+
+.nota-item-fecha {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    min-width: 80px;
+    text-align: right;
+}
+
+.nota-item-actions {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.nota-item-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nota-item-actions button:hover {
+    background: #E9EBEF;
+    color: var(--text);
+}
+
+/* Edit mode */
+.nota-item-editing {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background: #F7F9FC;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.nota-btn-save {
+    background: var(--success);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.nota-btn-save:hover {
+    background: #256826;
+}
+
+.nota-btn-cancel {
+    background: var(--danger);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.nota-btn-cancel:hover {
+    background: #8A2727;
+}
+
+/* Add item */
+.nota-add-item {
+    margin-top: 4px;
+    border-top: 1px solid #F1F1EF;
+    padding-top: 8px;
+}
+
+.nota-btn-add-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--header-bg);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+}
+
+.nota-btn-add-item:hover {
+    background: var(--active-bg);
+}
+
+.nota-add-item-form {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nota-add-item-form .nota-input-small {
+    width: 100%;
+}
+
+.nota-btn-save-item {
+    background: var(--header-bg);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease;
+}
+
+.nota-btn-save-item:hover:not(:disabled) {
+    background: #0A3A6A;
+}
+
+.nota-btn-save-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Inputs */
+.nota-input {
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s ease;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.nota-input:focus {
+    border-color: var(--header-bg);
+}
+
+.nota-input-small {
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s ease;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.nota-input-small:focus {
+    border-color: var(--header-bg);
+}
+
+/* Form group row */
+.form-group-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+}
+
+
+
+@media (max-width: 600px) {
+    .nota-stat-row {
+        font-size: 0.82rem;
+    }
+
+    .form-group-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nota-item-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .nota-item-precio,
+    .nota-item-fecha {
+        text-align: left;
+        min-width: auto;
+    }
+
+    .nota-item {
+        flex-wrap: wrap;
+    }
+
+    .btn-add-nota span {
+        display: none;
+    }
+
+    .btn-add-nota {
+        padding: 8px 14px;
+    }
+}

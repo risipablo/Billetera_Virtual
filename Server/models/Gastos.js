@@ -2,19 +2,8 @@
 const mongoose = require('mongoose')
 
 const gastosSchema = new mongoose.Schema({
-
-    dia:{
-        type: String,
-        required: true
-    },
-
-    mes:{
-        type: String,
-        required: true
-    },
-
-    año:{
-        type: String,
+    fecha:{
+           type: String,  
         required: true
     },
 
@@ -22,25 +11,35 @@ const gastosSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    metodo:{
-        type:String,
-        required:true
-    }, 
-
-    condicion:{
-        type:String,
-        required:true
-    }, 
-
-    necesario:{
-        type:String,
-        required:true
-    }, 
 
     monto:{
         type: Number,
         required: true
     },
+
+    categoria:{
+        type:String,
+        required: true
+    },
+
+    
+    metodo:{
+        type:String,
+        required:true
+    }, 
+
+    
+    condicion:{
+        type:String,
+        required:true
+    }, 
+    
+    
+    estado:{
+        type:String,
+        required:true
+    },
+
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

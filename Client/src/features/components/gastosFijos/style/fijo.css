@@ -1,0 +1,430 @@
+
+
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #A22E2E;
+    --success: #2E7D32;
+    --overlay-bg: rgba(11, 18, 32, 0.55);
+}
+
+/* ============================================================
+   Contenedor
+   ============================================================ */
+.gastos-fijos-container {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 1rem 0;
+    padding: .6rem 0;
+    overflow: hidden;
+    max-width: 300px;
+}
+
+.gastos-fijos-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.gastos-fijos-toggle:hover {
+    background: #F7F9FC;
+}
+
+.gastos-fijos-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.82rem;
+}
+
+.gastos-fijos-header svg {
+    width: 15px;
+    height: 15px;
+}
+
+.gastos-fijos-total {
+    background: var(--header-bg);
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.gastos-fijos-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-add-fijo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: none;
+    background: var(--header-bg);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn-add-fijo svg {
+    width: 13px;
+    height: 13px;
+}
+
+.btn-add-fijo:hover {
+    background: #0A3A6A;
+}
+
+.gastos-fijos-list {
+    overflow: hidden;
+    padding: 0 12px;
+}
+
+.gastos-fijos-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.gastos-fijos-empty button {
+    margin-top: 8px;
+    padding: 7px 16px;
+    background: var(--header-bg);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.gastos-fijos-empty button:hover {
+    background: #0A3A6A;
+}
+
+/* ============================================================
+   Item
+   ============================================================ */
+.gasto-fijo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    margin: 0;
+}
+
+.gasto-fijo-item:last-child {
+    border-bottom: none;
+}
+
+.gasto-fijo-item.estado-activo {
+    border-left: 3px solid var(--success);
+}
+
+.gasto-fijo-item.estado-pagado {
+    border-left: 3px solid var(--header-bg);
+    opacity: 0.7;
+}
+
+.gasto-fijo-item.estado-vencido {
+    border-left: 3px solid var(--danger);
+}
+
+.gasto-fijo-info {
+    flex: 1;
+}
+
+.gasto-fijo-nombre {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.estado-icon.activo { color: var(--success); }
+.estado-icon.pagado { color: var(--header-bg); }
+.estado-icon.vencido { color: var(--danger); }
+
+.gasto-fijo-detalles {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+
+.gasto-fijo-detalles span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.gasto-fijo-categoria {
+    background: #F1F1EF;
+    color: #55554F;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+}
+
+.gasto-fijo-estado {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 999px;
+    text-transform: uppercase;
+}
+
+.gasto-fijo-estado.activo  { background: #E8F3E4; color: var(--success); }
+.gasto-fijo-estado.pagado  { background: #E5EFFB; color: var(--header-bg); }
+.gasto-fijo-estado.vencido { background: #FBE9E9; color: var(--danger); }
+
+/* Acciones */
+.gasto-fijo-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gasto-fijo-actions button {
+    border: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.btn-toggle {
+    background: #F1F1EF;
+    color: var(--text-muted);
+}
+
+.btn-toggle:hover {
+    background: #E9EBEF;
+}
+
+.btn-edit {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 8px;
+}
+
+.btn-edit:hover {
+    color: var(--text);
+    background: #F7F9FC;
+}
+
+.btn-delete {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 8px;
+}
+
+.btn-delete:hover {
+    color: var(--danger);
+    background: #FBE9E9;
+}
+
+.gastos-fijos-skeleton {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ============================================================
+   Modal — mismo overlay que el resto de la app
+   ============================================================ */
+.gastos-fijos-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.gastos-fijos-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem;
+    max-width: 460px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.modal-close {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: var(--text);
+    background: #F7F9FC;
+}
+
+.gastos-fijos-modal .form-group {
+    margin-bottom: 14px;
+}
+
+.gastos-fijos-modal .form-group label,
+.form-group.half label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.gastos-fijos-modal .form-group input,
+.gastos-fijos-modal .form-group select,
+.form-group.half input,
+.form-group.half select {
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+}
+
+.gastos-fijos-modal .form-group input:focus,
+.gastos-fijos-modal .form-group select:focus,
+.form-group.half input:focus,
+.form-group.half select:focus {
+    outline: none;
+    border-color: var(--header-bg);
+}
+
+.form-group-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn-cancel {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+.btn-cancel:hover {
+    background: #F7F9FC;
+}
+
+.btn-save {
+    background: var(--header-bg);
+    color: #fff;
+}
+
+.btn-save:hover {
+    background: #0A3A6A;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 680px) {
+    .gastos-fijos-modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .gastos-fijos-modal {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 85vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .gasto-fijo-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .gasto-fijo-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .form-group-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
