@@ -11,13 +11,15 @@ const {
     editNote,
     toggleCompleteNote,
     getNotes,
-    addNotes
+    addNotes,
+    deleteAllCuotas
 } = require('../controllers/cuotaController');
 
 
 router.get('/note', protect, getNotes);
 router.post('/note', protect, addNotes);
 router.delete('/note/:id', protect, deleteNote);
+router.delete('/note', protect, deleteAllCuotas);
 router.patch('/note/:id', protect, editNote);
 router.patch('/note/:id/toggle', protect, toggleCompleteNote);
 

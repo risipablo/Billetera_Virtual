@@ -17,6 +17,7 @@ export const EstadisticasMaster = () => {
         datosPorMetodo,
         datosPorCondicion,
         datosPorAño,
+        datosPorInversion,
         aplicarFiltros,
         resetFiltros,
         mesActual,
@@ -31,9 +32,12 @@ export const EstadisticasMaster = () => {
     }
 
     return (
-        <div className="estadisticas-container">
-            <h1 className="estadisticas-title">Estadísticas</h1>
+        <div className="table-container">
 
+            <div className="table-header">
+                <h2 className="table-title">Estadisticas</h2>
+            </div>
+            
             <FiltrosEstadisticas
                 onFilterChange={aplicarFiltros}
                 onReset={resetFiltros}
@@ -43,13 +47,15 @@ export const EstadisticasMaster = () => {
 
             <ResumenFinanciero resumen={resumen} loading={loading} />
 
+            
             <div className="estadisticas-grid">
                 <GraficoBarras
                     data={datosPorMes}
                     title="Gastos por Mes"
                     loading={loading}
-                    height={350}
+                    height={280}
                 />
+
 
                 <GraficoDonut
                     data={{
@@ -59,37 +65,49 @@ export const EstadisticasMaster = () => {
                     }}
                     title="Distribución por Productos"
                     loading={loading}
-                    size={280}
+                    size={220}
+                    maxSlices={10}
                 />
 
+                
                 <GraficoDonut
                     data={{
-                        ...datosPorProducto,
-                        maxLabel: String(datosPorProducto.maxLabel),
-                        maxValue: Number(datosPorProducto.maxValue),
+                        ...datosPorMetodo,
+                        maxLabel: String(datosPorMetodo.maxLabel),
+                        maxValue: Number(datosPorMetodo.maxValue),
                     }}
                     title="Métodos de Pago"
                     loading={loading}
-                    size={280}
+                    size={220}
                 />
 
                 <GraficoDonut
                     data={{
-                        ...datosPorProducto,
-                        maxLabel: String(datosPorProducto.maxLabel),
-                        maxValue: Number(datosPorProducto.maxValue),
+                        ...datosPorCondicion,
+                        maxLabel: String(datosPorCondicion.maxLabel),
+                        maxValue: Number(datosPorCondicion.maxValue),
                     }}
                     title="Condición de Gastos"
                     loading={loading}
-                    size={280}
+                    size={220}
                 />
 
                 <GraficoBarras
                     data={datosPorAño}
                     title="Gastos Anuales"
                     loading={loading}
-                    height={300}
+                    height={280}
                 />
+
+                <GraficoBarras
+                    data={datosPorInversion}
+                    title="Inversiones"
+                    loading={loading}
+                    height={280}
+                />
+
+          
+
             </div>
 
             <ScrollTop />
@@ -97,4 +115,3 @@ export const EstadisticasMaster = () => {
         </div>
     );
 };
-

@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Spinner } from "../../../../components/ui/spinner/spinner";
 import type { ResumenFinancieroProps } from "../types/type.estadisticas";
@@ -20,44 +19,50 @@ export const ResumenFinanciero = ({ resumen, loading = false }: ResumenFinancier
             transition={{ duration: 0.8 }}
         >
             <h2 className="resumen-title">Resumen Financiero</h2>
-            <ul className="resumen-list">
-                <li>
+            <div className="resumen-divider" />
+
+            <div className="resumen-grid">
+                <div className="resumen-cell">
                     <span className="resumen-label">Total de gastos</span>
                     <span className="resumen-value">
-                        ${resumen.totalGastos.toLocaleString('es-AR')}
+                        $ {resumen.totalGastos.toLocaleString('es-AR')}
                     </span>
-                </li>
-                <li>
+                </div>
+
+                <div className="resumen-cell">
                     <span className="resumen-label">Dinero Invertido</span>
                     <span className="resumen-value">
-                        ${resumen.totalInversion.toLocaleString('es-AR')}
+                        $ {resumen.totalInversion.toLocaleString('es-AR')}
                     </span>
-                </li>
-                <li>
+                </div>
+
+                <div className="resumen-cell">
                     <span className="resumen-label">Promedio de gasto por mes</span>
                     <span className="resumen-value">
-                        ${(resumen.promedioMensual || 0).toLocaleString('es-AR')}
+                        $ {(resumen.promedioMensual || 0).toLocaleString('es-AR')}
                     </span>
-                </li>
+                </div>
+
                 {resumen.promedioDiario !== null && (
-                    <li>
+                    <div className="resumen-cell">
                         <span className="resumen-label">Promedio de gasto por día</span>
                         <span className="resumen-value">
-                            ${resumen.promedioDiario.toLocaleString('es-AR')}
+                            $ {resumen.promedioDiario.toLocaleString('es-AR')}
                         </span>
-                    </li>
+                    </div>
                 )}
-                <li className="resumen-top">
+
+                <div className="resumen-cell resumen-cell-productos">
                     <span className="resumen-label">Productos con más gastos</span>
-                    <div className="resumen-top-list">
+                    <div className="resumen-productos-grid">
                         {resumen.topProductos.map(([producto, monto]: [string, number]) => (
-                            <span key={producto} className="resumen-top-item">
-                                {producto}: ${monto.toLocaleString('es-AR')}
+                            <span key={producto} className="resumen-producto-item">
+                                <strong>{producto}</strong> : $ {monto.toLocaleString('es-AR')}
                             </span>
                         ))}
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </motion.div>
     );
 };

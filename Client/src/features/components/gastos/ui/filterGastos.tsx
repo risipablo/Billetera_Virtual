@@ -308,7 +308,7 @@ export const FilterGastos = ({
                                     onChange={(e) => setConditions(e.target.value)}
                                 >
                                     <option value="">Seleccionar Condición</option>
-                                    {["Fijo", "Necesario", "Innecesario", "Sin Valor"].map(item =>
+                                    {["Fijo", "Necesario", "Innecesario", "Sin Valor","Cuotas"].map(item =>
                                         <option key={item} value={item}>{item}</option>
                                     )}
                                 </select>

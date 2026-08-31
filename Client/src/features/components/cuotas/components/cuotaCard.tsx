@@ -195,7 +195,7 @@ export const CuotaCard = ({
                     <div className="nota-card-footer">
                         <span className="nota-footer-vencimiento">
                             {proximoVencimiento
-                                ? `Próximo vencimiento: ${formatDate(proximoVencimiento)}`
+                                ? `Comprado el ${formatDate(proximoVencimiento)}`
                                 : 'Sin cuotas pendientes'}
                         </span>
                         <button

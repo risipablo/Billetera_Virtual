@@ -9,10 +9,11 @@ export interface LoginData{
     password: string
 }
 
-export interface IChangeUserName{
-    email?:string
-    newName:string
+export interface ChangeUserName {
+    email: string;
+    newName: string;
 }
+
 
 export interface IChangeUserName{
     setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>
@@ -38,7 +39,7 @@ export interface AuthResponse {
     token?: string;
     user?: {
       id: string;
-      email?: string;
+      email: string;
       name: string;
     };
   }

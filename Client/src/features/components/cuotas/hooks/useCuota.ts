@@ -73,27 +73,11 @@ const addCuotas = useCallback(async (data: {
             fecha: data.fecha,
         });
 
-        console.log('✅ Respuesta exitosa:', response.data);
         setCuotas(prev => [...prev, response.data]);
         toast.success('Nota creada exitosamente', TOAST_CONFIG);
         return response.data;
 
     } catch (error: any) {
-        console.error('❌ ===== ERROR EN addCuotas =====');
-        console.error('❌ Mensaje:', error.message);
-        console.error('❌ Código:', error.code);
-        console.error('❌ Status:', error.response?.status);
-        
-        if (error.response) {
-            console.error('❌ Data del error:', error.response.data);
-            console.error('❌ Headers de respuesta:', error.response.headers);
-        }
-        
-        if (error.request) {
-            console.error('❌ Request:', error.request);
-        }
-        
-        console.error('❌ Config:', error.config);
         
         toast.error(error.response?.data?.error || 'Error al crear nota', TOAST_CONFIG);
         throw error;
@@ -175,6 +159,20 @@ const addCuotas = useCallback(async (data: {
         }
     }, []);
 
+    const allDeleteCuotas = useCallback(() => {
+        axiosInstance.delete('/api/note')
+        .then(response => {
+            setCuotas([])
+            toast.success('Todos las cuotas han sido eliminados', TOAST_CONFIG)
+            console.debug(response.data)   
+        }) 
+         .catch(err => {
+            console.error(err)
+            toast.error('Error al eliminar las cuotas', TOAST_CONFIG)
+        })
+    },[setCuotas])
+
+
     
     const editCuotaItem = useCallback(async (id: string, index: number, data: {
         descripcion: string;
@@ -213,6 +211,7 @@ const addCuotas = useCallback(async (data: {
         toggleCompleteCuota,
         addCuotaItem,
         deleteCuotaItem,
+        allDeleteCuotas,
         editCuotaItem,
         toggleCompleteItem,
     };

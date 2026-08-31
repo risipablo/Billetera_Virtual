@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-import "../../../style/userSettings.css"
-import { UseAuth } from "../../features/hooks/useAuth"
-import type { IChangeUserName } from "../../features/types/type.user"
 
-export const LogOutComponent = ({ setIsAuthenticated }: IChangeUserName) => {
+import { UseAuth } from "../../features/hooks/useAuth"
+import type { AuthenticatedProps } from "../../features/types/type.auth"
+
+export const LogOutComponent = ({ setIsAuthenticated }:AuthenticatedProps ) => {
   const navigate = useNavigate()
   const { logout } = UseAuth()
 

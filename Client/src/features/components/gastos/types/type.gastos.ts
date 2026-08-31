@@ -40,4 +40,6 @@ export interface GastosContainerProps{
         estado:string
     }) => void
     onSubmitGastos?:() => void
+    onOrderByDate?: () => void
+    ordenAsc?: boolean
 }

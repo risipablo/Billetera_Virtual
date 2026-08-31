@@ -150,7 +150,7 @@ export const GastosForm = ({
                                         onChange={(e) => handleChange('condicion', e.target.value)}
                                     >
                                         <option value="">Seleccionar Condición</option>
-                                            {["Fijo", "Necesario", "Innecesario", "Sin Valor"].map(necesario => 
+                                            {["Fijo", "Necesario", "Innecesario", "Sin Valor","Cuotas"].map(necesario => 
                                                 <option key={necesario} value={necesario}>{necesario}</option>
                                             )}
                                     </select>

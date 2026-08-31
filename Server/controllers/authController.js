@@ -87,7 +87,7 @@ exports.verifyEmail = async (req, res) => {
     const {email} = req.body
 
     try{
-         // Verificar que el correo coincida con el del usuario logueado
+         
 
         const user = await UserModel.findOne({email, _id: req.user.id})
         if (!user){
@@ -99,39 +99,52 @@ exports.verifyEmail = async (req, res) => {
     }
 }
 
-exports.changeUsername = async (req, res) => {
-    const { newName } = req.body;
+exports.changeUserName = async (req, res) => {
+    const { newName } = req.body;  
     const userId = req.user.id;
 
-    if (!newName) {
-        return res.status(400).json({ error: 'El nuevo nombre es requerido' });
+    if (!newName ) {
+        return res.status(400).json({ error: "El nuevo nombre es requerido." });
     }
 
     try {
+
         const user = await UserModel.findById(userId);
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        const nameExists = await UserModel.findOne({ name: newName });
-            if (nameExists) {
-                return res.status(400).json({ error: 'El nombre ya está registrado' });
-            }
 
+        const nameExists = await UserModel.findOne({ 
+            name: newName, 
+            _id: { $ne: userId }
+         });
 
-        const oldName = user.name    
+        if (nameExists) {
+            return res.status(400).json({ error: 'El nombre de usuario ya está registrado' });
+        }
+
         user.name = newName;
         await user.save();
-        
-        try{
-            sendUserChangeName(user.email, oldName, newName);    
-        } catch (emailError) {
-            console.error('❌ Error al enviar email de confirmación:', emailError);
-        }
-        
-        res.status(200).json({ message: 'Nombre de usuario actualizado exitosamente' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error interno del servidor: ' + error.message });
+
+        const token = jwt.sign(
+            { id: user._id, role: user.role, name: user.name },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ 
+            message: "Nombre de usuario actualizado exitosamente",
+            token: token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
+    
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 };
 

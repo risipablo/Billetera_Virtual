@@ -39,7 +39,7 @@ export const useGastosStats = (
         }
 
         data.forEach(producto => {
-            if ([ 'cajero', 'cuotas', 'deben', 'inversion'].includes(producto.estado.toLowerCase())) {
+            if ([ 'cajero', 'cuotas', 'deben', 'inversion'].includes(producto.estado.toLocaleLowerCase())) {
 
             } else {
                 total += producto.monto;

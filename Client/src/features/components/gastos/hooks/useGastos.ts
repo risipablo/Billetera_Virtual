@@ -82,15 +82,15 @@ export const UseGastos = () => {
             toast.error('Error al agregar el gasto', TOAST_CONFIG)    
             console.log(err)
         }
-    },[])
-
+    },[setFilterGastos,setGastos])
+    
     const deleteGastos = useCallback((id:string) => {
         axiosInstance.delete(`api/bills/${id}`)
         .then(() => {
             setGastos(prev => prev.filter(prod => prod._id !== id))
             toast.success('Producto eliminado', TOAST_CONFIG)
         })
-    },[])
+    },[setFilterGastos,setGastos])
 
     const editGastos = useCallback((id:string, editData:{
         fecha:string
@@ -104,7 +104,7 @@ export const UseGastos = () => {
         axiosInstance.patch(`/api/bills/${id}`, editData)
         .then(response => {
             setGastos(prev => prev.map(bills => bills._id === id ? response.data : bills))
-            setFilterGastos(prev => prev.map(tas => tas._id === id ? response.data : tas))
+            setFilterGastos(prev => prev.map(bills => bills._id === id ? response.data : bills))
             toast.success('Producto modificado', TOAST_CONFIG)
         })
         .catch(err => {

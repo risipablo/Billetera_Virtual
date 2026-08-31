@@ -7,6 +7,7 @@ import { formatDate } from "./utils/dateutils"
 import { ModalConfirm } from "../../../components/ui/modalConfirm"
 import Tooltip from "@mui/material/Tooltip"
 import { Spinner } from "../../../components/ui/spinner/spinner"
+import { IconButton } from "@mui/material"
 
 
 
@@ -15,7 +16,9 @@ const GastosContainer = ({
     setFilterGastos,
     loading,
     deleteGastos,
-    editGastos
+    editGastos,
+    ordenAsc = true,
+    onOrderByDate
 }: GastosContainerProps) => {
 
 
@@ -44,7 +47,7 @@ const GastosContainer = ({
     }
 
     const handleSaveGasto = async (id:string) => {
-        // Validar campos
+        
         if (!editData.fecha || !editData.producto || !editData.monto || 
             !editData.categoria || !editData.metodo || !editData.condicion || 
             !editData.estado) {
@@ -52,14 +55,14 @@ const GastosContainer = ({
             return
         }
 
-        await editGastos(id,{
-            fecha:editData.fecha,
-            producto:editData.producto,
-            monto:editData.monto,
-            categoria:editData.categoria,
-            metodo:editData.metodo,
-            condicion:editData.condicion,
-            estado:editData.estado,
+        editGastos(id, {
+            fecha: editData.fecha,
+            producto: editData.producto,
+            monto: editData.monto,
+            categoria: editData.categoria,
+            metodo: editData.metodo,
+            condicion: editData.condicion,
+            estado: editData.estado,
         })
         
         setEditData({
@@ -122,6 +125,7 @@ const GastosContainer = ({
         }
     };
 
+
     const slug = (value: string) =>
     value
         ?.toLowerCase()
@@ -131,21 +135,6 @@ const GastosContainer = ({
 
     const badgeClass = (value: string) => `badge badge-${slug(value) || "default"}`  
 
-
-
-    
-    const [ordenar,setOrdenar] = useState(true)
-    
-    const diaOrden = () => {
-            const productosFiltrados = [...filterGastos].sort((a,b) => {
-                const dia1 = parseInt(a.fecha)
-                const dia2 = parseInt(b.fecha)
-    
-                return ordenar ? dia1 - dia2 : dia2 - dia1
-            }) 
-            setFilterGastos(productosFiltrados)
-            setOrdenar(!ordenar)
-    }
     
     
         if (loading) {
@@ -173,9 +162,9 @@ const GastosContainer = ({
                     <thead>
                         <tr>
                             <th>Fecha
-                            <button onClick={diaOrden}>
-                                {ordenar ? <ArrowUp size={15}/> : <ArrowDown size={15}/>}
-                            </button>
+                                   <IconButton onClick={onOrderByDate} className="ordenar" size="small" sx={{ color: "rgb(245, 243, 239)" }} >
+                                    {ordenAsc ? <ArrowUp size={15} /> : <ArrowDown size={15} />}
+                                    </IconButton>
                             </th>
                             <th>Producto</th>
                             <th className="align-right">Monto</th>
@@ -329,7 +318,7 @@ const GastosContainer = ({
                                     onChange={(e) => handleChange('condicion', e.target.value)}
                                 >
                                     <option value="">Seleccionar Condición</option>
-                                    {["Fijo", "Necesario", "Innecesario", "Sin Valor"].map(condicion => 
+                                    {["Fijo", "Necesario", "Innecesario", "Sin Valor","Cuotas"].map(condicion => 
                                         <option key={condicion} value={condicion}>{condicion}</option>
                                     )}
                                 </select>

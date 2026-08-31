@@ -1,13 +1,16 @@
-// SubMenu.tsx
+
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { config } from "../../config";
 
 import { 
     User, 
-    Settings, 
+
     LogOut, 
-    ChevronRight,
+
+    UserCog,
+    KeyRound,
+    MessageSquare,
+
 } from "lucide-react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -15,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
 import { useUser } from "../../features/hooks/useUser";
+import { useNavigate } from "react-router-dom";
 
 const serverFront = config.Api;
 
@@ -44,24 +48,38 @@ export const SubMenu = () => {
         setError(null);
         
         try {
-            await axios.post(`${serverFront}/api/auth/logout`, {}, { 
-                withCredentials: true 
-            });
+            const token = localStorage.getItem('token');
+            
+            if (token) {
+                try {
+                    await axios.post(`${serverFront}/api/auth/logout`, {}, { 
+                        withCredentials: true,
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                } catch (logoutError) {
+                    console.log('Error en logout backend:', logoutError);
+                }
+            }
             
             localStorage.removeItem('token');
-            navigate('/login');
+            handleUserMenuClose();
+            window.location.href = '/login';
             
         } catch (err) {
             console.error('Error al cerrar sesión:', err);
             setError('Error al cerrar sesión');
+            localStorage.removeItem('token');
+            window.location.href = '/login';
         } finally {
             setLoading(false);
         }
     };
 
-    const handleNavigateToConfig = () => {
+    const handleNavigate = (path: string) => {
         handleUserMenuClose();
-        navigate('/configuracion');
+        navigate(path);
     };
 
     return (
@@ -84,18 +102,19 @@ export const SubMenu = () => {
                 slotProps={{
                     paper: {
                         sx: {
-                            width: 220,
+                            width: 240,
                             borderRadius: 2,
                             boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
                             mt: 1,
+                            py: 1,
                         }
                     }
                 }}
             >
                 <MenuItem 
-                    onClick={handleNavigateToConfig}
+                    onClick={() => handleNavigate('/perfil')}
                     sx={{ 
-                        margin: '4px 8px',
+                        mx: 1,
                         borderRadius: 1,
                         '&:hover': {
                             backgroundColor: '#f1f5f9',
@@ -103,17 +122,53 @@ export const SubMenu = () => {
                     }}
                 >
                     <ListItemIcon>
-                        <Settings size={20} />
+                        <UserCog size={20} />
                     </ListItemIcon>
-                    Configuraciones
-                    <ChevronRight size={18} style={{ marginLeft: 'auto' }} />
+                    Perfil
                 </MenuItem>
+
+                <MenuItem 
+                    onClick={() => handleNavigate('/configuracion/password')}
+                    sx={{ 
+                        mx: 1,
+                        borderRadius: 1,
+                        '&:hover': {
+                            backgroundColor: '#f1f5f9',
+                        }
+                    }}
+                >
+                    <ListItemIcon>
+                        <KeyRound size={20} />
+                    </ListItemIcon>
+                    Contraseña
+                </MenuItem>
+
+                <MenuItem 
+                    onClick={() => handleNavigate('/configuracion/sugerencias')}
+                    sx={{ 
+                        mx: 1,
+                        borderRadius: 1,
+                        '&:hover': {
+                            backgroundColor: '#f1f5f9',
+                        }
+                    }}
+                >
+                    <ListItemIcon>
+                        <MessageSquare size={20} />
+                    </ListItemIcon>
+                    Sugerencias
+                </MenuItem>
+
+                <div style={{ 
+                    borderTop: '1px solid #e2e8f0', 
+                    margin: '6px 12px',
+                }} />
 
                 <MenuItem 
                     onClick={handleLogout} 
                     disabled={loading}
                     sx={{ 
-                        margin: '4px 8px',
+                        mx: 1,
                         borderRadius: 1,
                         '&:hover': {
                             backgroundColor: '#fef2f2',

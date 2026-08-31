@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Tooltip } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 import { Spinner } from "../../../components/ui/spinner/spinner";
 import { useConfirmModal } from "../../hooks/useModalConfirm";
@@ -10,6 +10,7 @@ import { CuotaCard } from "./components/cuotaCard";
 
 import "./style/cuotas.css";
 import { useCuotas } from "./hooks/useCuota";
+import { Trash2 } from "lucide-react";
 
 export const CuotasMaster = () => {
     const {
@@ -19,13 +20,14 @@ export const CuotasMaster = () => {
         addCuotaItem,
         deleteCuota,
         deleteCuotaItem,
+        allDeleteCuotas,
         editCuota,
         editCuotaItem,
         toggleCompleteCuota,
         toggleCompleteItem
     } = useCuotas();
 
-    const { ModalComponent } = useConfirmModal();
+    const { openModal,ModalComponent } = useConfirmModal();
     const [formData, setFormData] = useState({
         titulo: '',
         cuotas: '',
@@ -85,6 +87,21 @@ export const CuotasMaster = () => {
                         onSubmit={handleAddNota}
                         isLoading={loading}
                     />
+
+                    <Tooltip title="Eliminar todas las tareas" arrow>
+                        <button
+                            className="delete-all-btn"
+                            onClick={() => openModal(
+                                allDeleteCuotas,
+                                "Confirmar borrado",
+                                `¿Estás seguro que deseas eliminar todos los gastos (${cuotas.length})?`,
+                                "Eliminar Todas"
+                            )}
+                        >
+                            <Trash2 size={18} />
+                            Eliminar Todas ({cuotas.length})
+                        </button>
+                    </Tooltip>
                 </div>
             </div>
 
@@ -124,6 +141,8 @@ export const CuotasMaster = () => {
                     itemsPerPage={itemsPerPage}
                 />
             )}
+
+            
 
             <ModalComponent />
             <Toaster />

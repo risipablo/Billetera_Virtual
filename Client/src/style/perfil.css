@@ -1,0 +1,172 @@
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #A22E2E;
+}
+
+.perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+}
+
+.perfil-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--header-bg);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.perfil-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.perfil-subtitle {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Lista de opciones */
+.perfil-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.perfil-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background: #fff;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease;
+}
+
+.perfil-item:last-child {
+    border-bottom: none;
+}
+
+.perfil-item:hover {
+    background: #F7F9FC;
+}
+
+.perfil-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #E5EFFB;
+    color: var(--header-bg);
+    flex-shrink: 0;
+}
+
+.perfil-item-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.perfil-item-title {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.perfil-item-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.perfil-item-chevron {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+/* Zona de riesgo */
+.perfil-danger-zone {
+    border: 1px solid #F3D8D8;
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+}
+
+.perfil-danger-label {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--danger);
+}
+
+.perfil-danger-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.perfil-logout-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.delete-account-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #F3D8D8;
+    background: #FBE9E9;
+    color: var(--danger);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.delete-account-btn:hover {
+    background: #F6D5D5;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .perfil-danger-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .delete-account-btn {
+        justify-content: center;
+    }
+}

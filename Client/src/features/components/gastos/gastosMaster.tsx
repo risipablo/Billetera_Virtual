@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, FilterX, Trash2 } from "lucide-react";
 import { TransitionGroup } from "react-transition-group";
@@ -39,8 +38,7 @@ const GastosMaster = () => {
 
     const isMobile = useMediaQuery('(max-width:500px)');
     const [showInputs, setShowInputs] = useState(true);
-    
-    // Seccion de filtros
+
     const [activeFilter, setFilterActive] = useState<string>('');
     const [showModalFilter, setShowModalFilter] = useState(false);
     const [monthFilter, setMonthFilter] = useState<string>('');
@@ -49,7 +47,8 @@ const GastosMaster = () => {
     const [metodoFilter, setMetodoFilter] = useState<string>('');
     const [estadoFilter, setEstadoFilter] = useState<string>('');
 
-    // Pagination
+    const [ordenAsc, setOrdenAsc] = useState<boolean>(true);
+
     const itemsToDisplay = filterGastos && filterGastos.length >= 0 ? filterGastos : gastos;
     const [currentPage, setCurrentPage] = useState<number>(0);
     const itemsPerPage = 12;
@@ -61,7 +60,7 @@ const GastosMaster = () => {
         if (filterGastos !== gastos) {
             setCurrentPage(0);
         }
-    }, [filterGastos.length]);
+    }, [filterGastos, gastos]);
 
     useEffect(() => {
         const limiteGuardado = localStorage.getItem('limiteGasto');
@@ -74,6 +73,18 @@ const GastosMaster = () => {
         localStorage.setItem('limiteGasto', String(limite));
         setShowInputs(isMobile);
     }, [limite, isMobile]);
+
+    const searchGastos = (palabraClave: string) => {
+        if (!palabraClave.trim()) {
+            setFilterGastos(filterGastos || gastos);
+            setFilterActive('');
+            return;
+        }
+
+        const resultados = filterGastosBySearch(filterGastos || gastos, palabraClave);
+        setFilterGastos(resultados);
+        setFilterActive(palabraClave);
+    };
 
     const handleSubmit = async () => {
         if (!formData.fecha || !formData.producto || !formData.monto ||
@@ -105,11 +116,65 @@ const GastosMaster = () => {
         });
     };
 
+    const handleOrderByDate = () => {
+        if (!filterGastos || filterGastos.length === 0) return;
+
+        const getFechaParaOrdenar = (fecha: any): string => {
+            if (!fecha) return '';
+
+            if (fecha instanceof Date) {
+                if (isNaN(fecha.getTime())) return '';
+                const year = fecha.getFullYear();
+                const month = String(fecha.getMonth() + 1).padStart(2, '0');
+                const day = String(fecha.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            if (typeof fecha === 'string') {
+                if (fecha.includes('T')) {
+                    const parts = fecha.split('T')[0];
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(parts)) {
+                        return parts;
+                    }
+                }
+                if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+                    return fecha;
+                }
+                if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+                    const [day, month, year] = fecha.split('/');
+                    return `${year}-${month}-${day}`;
+                }
+                const date = new Date(fecha);
+                if (!isNaN(date.getTime())) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+            return '';
+        };
+
+        const ordenados = [...filterGastos].sort((a, b) => {
+            const fechaA = getFechaParaOrdenar(a.fecha);
+            const fechaB = getFechaParaOrdenar(b.fecha);
+
+            if (!fechaA) return 1;
+            if (!fechaB) return -1;
+
+            return ordenAsc ? fechaA.localeCompare(fechaB) : fechaB.localeCompare(fechaA);
+        });
+
+        setFilterGastos(ordenados);
+        setOrdenAsc(!ordenAsc);
+        setCurrentPage(0);
+    };
+
     type ExpenseFilterType = 'date' | 'month' | 'today' | 'year';
 
     const getFilterDescription = () => {
         const parts: string[] = [];
-        
+
         if (activeFilter === 'fechas' || monthFilter || yearFilter) {
             const monthNames: Record<string, string> = {
                 '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
@@ -119,11 +184,11 @@ const GastosMaster = () => {
             if (monthFilter) parts.push(monthNames[monthFilter]);
             if (yearFilter) parts.push(yearFilter);
         }
-        
+
         if (conditionsFilter) parts.push(`Condición: ${conditionsFilter}`);
         if (metodoFilter) parts.push(`Método: ${metodoFilter}`);
         if (estadoFilter) parts.push(`Estado: ${estadoFilter}`);
-        
+
         return parts.length > 0 ? parts.join(' - ') : activeFilter;
     };
 
@@ -143,27 +208,14 @@ const GastosMaster = () => {
         setGastos(response.data);
     };
 
-    const searchGastos = (palabraClave: string) => {
-        if (!palabraClave.trim()) {
-            setFilterGastos(gastos);
-            setFilterActive('');
-            return;
-        }
-
-        const resultados = filterGastosBySearch(gastos, palabraClave);
-        setFilterGastos(resultados);
-        setFilterActive(palabraClave);
-    };
-    
     const hasActiveFilters = Boolean(
-        monthFilter || yearFilter || conditionsFilter || metodoFilter || estadoFilter || activeFilter
+        monthFilter || yearFilter || conditionsFilter || metodoFilter || estadoFilter || activeFilter 
     );
 
     return (
         <div className="table-container">
             <div className="table-header">
                 <h2 className="table-title">Gastos Mensuales</h2>
-                
 
                 <div className="header-actions">
                     <GastosForm
@@ -173,7 +225,6 @@ const GastosMaster = () => {
                         isLoading={loading}
                     />
 
-    
                     <Tooltip title="Eliminar todas las tareas" arrow>
                         <button
                             className="delete-all-btn"
@@ -189,11 +240,8 @@ const GastosMaster = () => {
                         </button>
                     </Tooltip>
 
-                    
-
-    
                     {hasActiveFilters && filterGastos.length > 0 && (
-                        <Tooltip title={`Eliminar solo los gstos de: ${getFilterDescription()}`} arrow>
+                        <Tooltip title={`Eliminar solo los gastos de: ${getFilterDescription()}`} arrow>
                             <button
                                 className="delete-all-btn"
                                 onClick={() => openModal(
@@ -212,24 +260,23 @@ const GastosMaster = () => {
                 </div>
             </div>
 
-            <GastosFijosMaster/>
+            <GastosFijosMaster />
             <FilterGastos
                 gastos={gastos}
                 setFilterGastos={setFilterGastos}
-                onFilterChange={({ 
-                    monthFilter, 
-                    yearFilter, 
-                    conditions, 
-                    metodoFilter, 
-                    estadoFilter 
+                onFilterChange={({
+                    monthFilter,
+                    yearFilter,
+                    conditions,
+                    metodoFilter,
+                    estadoFilter
                 }) => {
                     setMonthFilter(monthFilter);
                     setYearFilter(yearFilter);
                     setConditionsFilter(conditions);
                     setMetodoFilter(metodoFilter);
                     setEstadoFilter(estadoFilter);
-                    
-                    
+
                     const hasFilters = monthFilter || yearFilter || conditions || metodoFilter || estadoFilter;
                     setFilterActive(hasFilters ? 'fechas' : '');
                 }}
@@ -237,7 +284,6 @@ const GastosMaster = () => {
 
             <Buscador filtrarDatos={searchGastos} />
 
-            
             <Button
                 onClick={() => setShowInputs(prev => !prev)}
                 startIcon={showInputs ? <ChevronDown /> : <ChevronUp />}
@@ -273,6 +319,8 @@ const GastosMaster = () => {
                 editGastos={editGastos}
                 onSubmitGastos={handleSubmit}
                 loading={loading}
+                onOrderByDate={handleOrderByDate}
+                ordenAsc={ordenAsc}
             />
 
             {pageCount > 1 && (

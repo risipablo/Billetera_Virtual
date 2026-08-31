@@ -10,7 +10,7 @@ export const filterGastosBySearch = (
     
 
     if (!palabraClave.trim()) {
-        console.log('📊 Búsqueda vacía - devolviendo todos');
+        
         return gastos;
     }
 

@@ -20,9 +20,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({children, isAuthentic
             return
         }
 
-
         try{
             const response = await axiosInstance.get('/api/auth/name')
+             console.log('Datos del usuario:', response.data.user)
             setUser(response.data.user)
         } catch(err){
             console.error(err)
@@ -34,9 +34,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({children, isAuthentic
 
     useEffect(() => {
         if(isAuthenticated){
+
             fetchUserData()
+        } else {
+            
+            setUser(null)
         }
-    },[isAuthenticated, fetchUserData])
+    },[isAuthenticated])
 
     const value = useMemo<UserContextType>(() => ({
         fetchUserData,

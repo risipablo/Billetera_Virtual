@@ -8,6 +8,8 @@ import { ConsejosPage } from './components/consejosPage';
 import { ListadoPage } from "./components/listado";
 import { CuotasPage } from "./components/cuotasPage";
 import EstadisticasPage from "./components/estadisticas";
+import PerfilPage from "./auth/perfilPage";
+import ChangeUserNamePage from "./auth/changeName";
 
 
 
@@ -26,6 +28,8 @@ export const Home = ({isAuthenticated, setIsAuthenticated}:AuthenticatedProps) =
                 <Route path="/cuotas" element={isAuthenticated ? <CuotasPage/> : <Navigate to="/" replace/>}/>
                 <Route path="/convertidor" element={isAuthenticated ? <ConvertidorPage/> : <Navigate to="/" replace/>}/>
                 <Route path="/consejos" element={isAuthenticated ? <ConsejosPage/> : <Navigate to="/" replace/>}/>
+                <Route path="/perfil" element={isAuthenticated ? <PerfilPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} /> : <Navigate to="/" replace/>}/>
+                 <Route path="/change-user" element={isAuthenticated ? <ChangeUserNamePage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
                 <Route path="*" element={<Navigate to={isAuthenticated ? "/gastos" : "/"} replace/>}/>
             </Routes>
         

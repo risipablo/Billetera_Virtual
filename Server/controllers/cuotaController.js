@@ -1,5 +1,4 @@
 
-// Logica para el componente notasPage
 
 const noteModel = require('../models/Cuotas');
 
@@ -12,38 +11,21 @@ exports.getNotes = async (req, res) => {
     }
 }
 
-// controllers/noteController.js - CON LOGS COMPLETOS
+
 
 exports.addNotes = async (req, res) => {
-    // ✅ LOG 1: Ver qué llega
-    console.log('📥 ===== INICIO addNotes =====');
-    console.log('📥 Headers:', req.headers);
-    console.log('📥 Body recibido:', req.body);
-    console.log('📥 Usuario ID:', req.user?.id);
-
     const { titulo, cuotas, monto, fecha } = req.body;
 
-    // ✅ LOG 2: Validar campos
-    console.log('📥 Validando campos:');
-    console.log('  - titulo:', titulo, '| tipo:', typeof titulo);
-    console.log('  - cuotas:', cuotas, '| tipo:', typeof cuotas);
-    console.log('  - monto:', monto, '| tipo:', typeof monto);
-    console.log('  - fecha:', fecha, '| tipo:', typeof fecha);
+
 
     if (!titulo || !cuotas || !monto || !fecha) {
-        console.log('❌ FALTAN CAMPOS:', {
-            titulo: !titulo,
-            cuotas: !cuotas,
-            monto: !monto,
-            fecha: !fecha,
-        });
         return res.status(400).json({ 
             error: 'Título, cuotas, monto y fecha son requeridos' 
         });
     }
 
     try {
-        // ✅ LOG 3: Datos a guardar
+        
         const noteData = {
             titulo: titulo.trim(),
             cuotas: Number(cuotas),
@@ -54,24 +36,16 @@ exports.addNotes = async (req, res) => {
             completedItems: [],
             userId: req.user.id,
         };
-        console.log('📥 Datos a guardar:', JSON.stringify(noteData, null, 2));
+        
 
         const newNote = new noteModel(noteData);
-        console.log('📥 Modelo creado, guardando...');
+        
 
         const result = await newNote.save();
-        console.log('✅ Nota creada exitosamente:', result);
+        
         res.status(201).json(result);
 
     } catch (err) {
-        // ✅ LOG 4: Error completo
-        console.error('❌ ===== ERROR EN addNotes =====');
-        console.error('❌ Mensaje:', err.message);
-        console.error('❌ Stack:', err.stack);
-        console.error('❌ Código:', err.code);
-        console.error('❌ Nombre:', err.name);
-        
-        // ✅ Si es error de MongoDB
         if (err.name === 'MongoError' || err.name === 'MongoServerError') {
             console.error('❌ MongoDB Error Details:', {
                 code: err.code,
@@ -80,10 +54,7 @@ exports.addNotes = async (req, res) => {
             });
         }
 
-        // ✅ Si es error de validación de Mongoose
-        if (err.name === 'ValidationError') {
-            console.error('❌ Validation Errors:', err.errors);
-        }
+    
 
         res.status(500).json({ 
             error: err.message,
@@ -135,7 +106,7 @@ exports.deleteNote = async (req, res) => {
     }
 };
 
-// Eliminar notas indivduales
+
 exports.deleteNoteItem = async (req, res) => {
     const { id, idx } = req.params;
     const index = parseInt(idx, 10);
@@ -163,6 +134,14 @@ exports.deleteNoteItem = async (req, res) => {
     }
 };
  
+exports.deleteAllCuotas = async(req,res) => {
+    try{
+        const result = await noteModel.deleteMany({userId:req.user.id})
+        res.json(result)
+    } catch(err){
+        res.status(500).json({error:err.message})
+    }
+}
  
 exports.editNote = async (req, res) => {
     const { id } = req.params;

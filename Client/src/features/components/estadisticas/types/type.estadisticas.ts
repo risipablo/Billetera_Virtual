@@ -52,6 +52,7 @@ export interface GraficoBarrasProps {
     title: string;
     loading?: boolean;
     height?: number;
+    legendLabel?: string;
 }
 
 export interface GraficoDonutProps {
@@ -64,4 +65,5 @@ export interface GraficoDonutProps {
     title: string;
     loading?: boolean;
     size?: number;
+    maxSlices?: number; 
 }
