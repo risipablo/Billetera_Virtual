@@ -70,7 +70,7 @@ exports.getGastos = async (req, res) => {
                     'variable': 'Variable',
                     'innecesario': 'Innecesario',
                     'necesario': 'Necesario'
-                    // Añade aquí los valores reales que maneje tu sistema para condicion
+                    
                 };
                 const condicionLower = String(g.condicion).toLowerCase();
                 g.condicion = condicionMap[condicionLower] || g.condicion;
@@ -92,6 +92,13 @@ exports.getGastos = async (req, res) => {
                 g.estado = estadoMap[estadoLower] || g.estado; 
             } else {
                 g.estado = 'Pagado'; 
+            }
+
+            if(g.metodo){
+                const metodoMap = {
+                    'Mercado Pago' : 'Transferencia'
+                }
+                g.metodo = metodoMap[g.metodo] || g.metodo;
             }
             
             if (g.fecha && typeof g.fecha === 'string' && g.fecha.includes('-')) {
