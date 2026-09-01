@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
@@ -41,7 +41,7 @@
     "react-transition-group": "^4.4.5",
     "reapop": "^4.3.0",
     "use-sound": "^5.0.0",
-    "vercel": "^58.0.0"
+    "vercel": "^58.11.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",
