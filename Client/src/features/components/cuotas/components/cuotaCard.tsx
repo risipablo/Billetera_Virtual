@@ -24,6 +24,8 @@ export const CuotaCard = ({
     const [editData, setEditData] = useState({
         titulo: cuota.titulo,
         cuotas: cuota.cuotas,
+        montoTotal: cuota.montoTotal,
+        fecha: cuota.fechaCompra || '',
     });
     const [newItem, setNewItem] = useState({
         descripcion: '',
@@ -32,7 +34,7 @@ export const CuotaCard = ({
     });
     const [showEditModal, setShowEditModal] = useState(false);
 
-    // ✅ CÁLCULOS DE LA CARD
+    
     const totalCuotas = cuota.cuotas || 0;
     const montoTotal = cuota.montoTotal || 0;
 
@@ -61,7 +63,7 @@ export const CuotaCard = ({
     const restantePorPagar = montoTotal - totalPagado;
 
 
-    const proximoVencimiento = cuota.fecha?.find((_, idx) => !cuota.completedItems?.[idx]) || cuota.fecha?.[0] || '';
+    // const proximoVencimiento = cuota.fecha?.find((_, idx) => !cuota.completedItems?.[idx]) || cuota.fecha?.[0] || '';
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -73,6 +75,9 @@ export const CuotaCard = ({
 
     const handleAddItem = () => {
         if (newItem.descripcion.trim() && newItem.fecha && Number(newItem.precio) > 0) {
+            
+              console.log('Agregando item con fecha:', newItem.fecha);
+            
             onAddItem(cuota._id!, {
                 descripcion: newItem.descripcion.trim(),
                 fecha: newItem.fecha,
@@ -87,14 +92,20 @@ export const CuotaCard = ({
 
     const handleSaveEdit = () => {
         if (editData.titulo.trim() && editData.cuotas > 0) {
-            onEdit(cuota._id!, { titulo: editData.titulo, cuotas: editData.cuotas });
+            onEdit(cuota._id!,
+                 { 
+                    titulo: editData.titulo, 
+                    cuotas: editData.cuotas,
+                    montoTotal: editData.montoTotal,
+                    fecha: editData.fecha || cuota.fechaCompra || new Date().toISOString().split('T')[0]
+                 });
             setIsEditing(false);
             setShowEditModal(false);
         }
     };
 
     const handleEditClick = () => {
-        setEditData({ titulo: cuota.titulo, cuotas: cuota.cuotas });
+        setEditData({ titulo: cuota.titulo, cuotas: cuota.cuotas, montoTotal: cuota.montoTotal, fecha: cuota.fecha?.[0] || '' });
         setIsEditing(true);
         setShowEditModal(true);
         handleMenuClose();
@@ -194,8 +205,8 @@ export const CuotaCard = ({
 
                     <div className="nota-card-footer">
                         <span className="nota-footer-vencimiento">
-                            {proximoVencimiento
-                                ? `Comprado el ${formatDate(proximoVencimiento)}`
+                            {cuota.fechaCompra
+                                ? `Comprado el ${formatDate(cuota.fechaCompra)}`
                                 : 'Sin cuotas pendientes'}
                         </span>
                         <button
@@ -244,7 +255,7 @@ export const CuotaCard = ({
                                     </button>
 
                                     {isExpanded && (
-                                        <div className="nota-add-item-form">
+                                        <div className="nota-add-item-form" >
                                             <input
                                                 type="text"
                                                 className="nota-input-small"
@@ -256,7 +267,9 @@ export const CuotaCard = ({
                                                 type="date"
                                                 className="nota-input-small"
                                                 value={newItem.fecha}
-                                                onChange={(e) => setNewItem({ ...newItem, fecha: e.target.value })}
+                                                onChange={(e) => {
+                                                        console.log('Fecha seleccionada:', e.target.value)
+                                                    setNewItem({ ...newItem, fecha: e.target.value })}}
                                             />
                                             <input
                                                 type="number"
@@ -315,6 +328,27 @@ export const CuotaCard = ({
                                     ))}
                                 </select>
                             </div>
+
+                            <div className="form-group">
+                                <label>Monto Total</label>
+                                <input
+                                    type="number"
+                                    className="nota-input"
+                                    value={editData.montoTotal || 0}
+                                    onChange={(e) => setEditData({ ...editData, montoTotal: Number(e.target.value) })}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Fecha de compra </label>
+                                <input
+                                    type="date"
+                                    className="nota-input"
+                                    value={editData.fecha}
+                                    onChange={(e) => setEditData({ ...editData, fecha: e.target.value })}
+                                />
+                            </div>
+
                         </div>
 
                         <div className="task-modal-actions">

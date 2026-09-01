@@ -107,6 +107,10 @@ exports.changeUserName = async (req, res) => {
         return res.status(400).json({ error: "El nuevo nombre es requerido." });
     }
 
+      if (newName.length < 3) {
+        return res.status(400).json({ error: "El nombre debe tener al menos 3 caracteres." });
+    }
+
     try {
 
         const user = await UserModel.findById(userId);

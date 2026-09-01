@@ -286,7 +286,7 @@ const GastosContainer = ({
                                     <option value="">Seleccionar Categoria</option>
                                     {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
                                       "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
-                                      'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro", "Salidas", "Otro"  
+                                      'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas", "Otro"  
                                     ].map(categoria => 
                                         <option key={categoria} value={categoria}>{categoria}</option>
                                     )}

@@ -10,7 +10,6 @@ export interface LoginData{
 }
 
 export interface ChangeUserName {
-    email: string;
     newName: string;
 }
 

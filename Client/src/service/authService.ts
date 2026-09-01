@@ -29,13 +29,14 @@ class AuthService {
 
     async changeName(credentials: ChangeUserName): Promise<AuthResponse> {
         try {
+            
             const token = this.getToken();
-
+            console.log('Token:', token);
     
-            const response = await axios.patch<AuthResponse>(
+            const response = await axios.post<AuthResponse>(
                 `${serverFront}/api/auth/change-user`,
                 { 
-                    newName: credentials.newName 
+                    newName: credentials.newName.trim() 
                 },
                 {
                     headers: {

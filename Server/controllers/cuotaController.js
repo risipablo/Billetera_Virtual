@@ -30,9 +30,10 @@ exports.addNotes = async (req, res) => {
             titulo: titulo.trim(),
             cuotas: Number(cuotas),
             montoTotal: Number(monto),
+            fechaCompra: new Date(fecha),
             descripcion: [],
             precio: [],
-            fecha: [new Date(fecha)],
+            fecha: [],
             completedItems: [],
             userId: req.user.id,
         };
@@ -47,7 +48,7 @@ exports.addNotes = async (req, res) => {
 
     } catch (err) {
         if (err.name === 'MongoError' || err.name === 'MongoServerError') {
-            console.error('❌ MongoDB Error Details:', {
+            console.error('MongoDB Error Details:', {
                 code: err.code,
                 keyPattern: err.keyPattern,
                 keyValue: err.keyValue,
@@ -66,6 +67,7 @@ exports.addNotes = async (req, res) => {
 exports.addNoteItem = async (req,res) => {
     const {id} = req.params
     const {descripcion, fecha, precio} = req.body
+
     
     if (!descripcion || !fecha || !precio) {
         return res.status(400).json({ 
@@ -80,8 +82,15 @@ exports.addNoteItem = async (req,res) => {
             return res.status(404).json({ error: 'Cuota no encontrada '})
         }
 
+        const nuevaFecha = new Date(fecha);
+        if (isNaN(nuevaFecha.getTime())) {
+            return res.status(400).json({ error: 'Fecha inválida' });
+        }
+
+        console.log('Fecha guardada:', nuevaFecha);
+
         note.descripcion.push(descripcion.trim())
-        note.fecha.push(new Date(fecha))
+        note.fecha.push(nuevaFecha)
         note.precio.push(Number(precio))
         note.completedItems.push(false)
 
@@ -145,7 +154,7 @@ exports.deleteAllCuotas = async(req,res) => {
  
 exports.editNote = async (req, res) => {
     const { id } = req.params;
-    const { titulo, cuotas } = req.body;
+    const { titulo, cuotas, montoTotal, fecha } = req.body;
 
     try {
         const note = await noteModel.findOne({ _id: id, userId: req.user.id });
@@ -155,6 +164,8 @@ exports.editNote = async (req, res) => {
 
         if (titulo) note.titulo = titulo;
         if (cuotas) note.cuotas = Number(cuotas);
+        if (montoTotal) note.montoTotal = Number(montoTotal);
+        if (fecha) note.fechaCompra = new Date(fecha);   
 
         await note.save();
         res.json(note);
@@ -206,14 +217,6 @@ exports.toggleCompleteItem = async (req, res) => {
 
 
         note.completedItems[index] = !note.completedItems[index];
-
-
-        const todasPagadas = note.completedItems.every(item => item === true);
-        if (todasPagadas && note.completedItems.length > 0) {
-            note.completed = true;
-        } else {
-            note.completed = false;
-        }
 
         await note.save();
         res.json(note);

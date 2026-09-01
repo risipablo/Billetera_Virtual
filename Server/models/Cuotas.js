@@ -15,6 +15,8 @@ const noteSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
+    fechaCompra: 
+    { type: Date },
    descripcion: {
         type: [String],
         default: []

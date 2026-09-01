@@ -15,12 +15,14 @@ const TOAST_CONFIG = {
 
 export const useCuotas = () => {
     const [cuotas, setCuotas] = useState<ICuota[]>([]);
+    const [filteredCuotas, setFilteredCuotas] = useState<ICuota[]>([])
     const [loading, setLoading] = useState(true);
 
     const loadCuotas = useCallback(async () => {
         try {
             const response = await axiosInstance.get('/api/note');
             setCuotas(Array.isArray(response.data) ? response.data : []);
+            setFilteredCuotas(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error al cargar cuotas:', error);
             toast.error('Error al cargar cuotas', TOAST_CONFIG);
@@ -34,58 +36,51 @@ export const useCuotas = () => {
     }, [loadCuotas]);
 
     
-// hooks/useCuotas.ts - CON LOGS COMPLETOS
 
-const addCuotas = useCallback(async (data: {
-    titulo: string;
-    cuotas: number;
-    monto: number;
-    fecha: string;
-}) => {
-    console.log('📤 ===== INICIO addCuotas =====');
-    console.log('📤 Datos a enviar:', data);
-    console.log('📤 Token:', localStorage.getItem('token') ? '✅ Presente' : '❌ Ausente');
 
-    if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha) {
-        console.log('❌ Faltan campos en frontend:', {
-            titulo: !data.titulo.trim(),
-            cuotas: !data.cuotas,
-            monto: !data.monto,
-            fecha: !data.fecha,
-        });
-        toast.error('Todos los campos son requeridos', TOAST_CONFIG);
-        return;
-    }
-
-    try {
-        console.log('📤 Enviando a:', '/api/note');
-        console.log('📤 Payload:', {
-            titulo: data.titulo.trim(),
-            cuotas: data.cuotas,
-            monto: data.monto,
-            fecha: data.fecha,
-        });
-
-        const response = await axiosInstance.post('/api/note', {
-            titulo: data.titulo.trim(),
-            cuotas: data.cuotas,
-            monto: data.monto,
-            fecha: data.fecha,
-        });
-
-        setCuotas(prev => [...prev, response.data]);
-        toast.success('Nota creada exitosamente', TOAST_CONFIG);
-        return response.data;
-
-    } catch (error: any) {
+    const addCuotas = useCallback(async (data: {
+        titulo: string;
+        cuotas: number;
+        monto: number;
+        fecha: string;
+    }) => {
         
-        toast.error(error.response?.data?.error || 'Error al crear nota', TOAST_CONFIG);
-        throw error;
-    }
-}, []);
 
-    
-    const editCuota = useCallback(async (id: string, data: { titulo: string; cuotas: number }) => {
+        if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha) {
+            console.log( {
+                titulo: !data.titulo.trim(),
+                cuotas: !data.cuotas,
+                monto: !data.monto,
+                fecha: !data.fecha,
+            });
+            toast.error('Todos los campos son requeridos', TOAST_CONFIG);
+            return;
+        }
+
+        try {
+        
+
+            const response = await axiosInstance.post('/api/note', {
+                titulo: data.titulo.trim(),
+                cuotas: data.cuotas,
+                monto: data.monto,
+                fecha: data.fecha,
+            });
+
+            setCuotas(prev => [...prev, response.data]);
+            setFilteredCuotas(prev => [...prev, response.data]);
+            toast.success('Producto creado exitosamente', TOAST_CONFIG);
+            return response.data;
+
+        } catch (error: any) {
+            
+            toast.error(error.response?.data?.error || 'Error al crear nota', TOAST_CONFIG);
+            throw error;
+        }
+    }, []);
+
+        
+    const editCuota = useCallback(async (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string }) => {
         try {
             const response = await axiosInstance.patch(`/api/note/${id}`, data);
             setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
@@ -127,6 +122,7 @@ const addCuotas = useCallback(async (data: {
         fecha: string;
         precio: number;
     }) => {
+        console.log('Enviando item con fecha:', data.fecha);
         if (!data.descripcion.trim() || !data.fecha || !data.precio) {
             toast.error('Todos los campos son requeridos', TOAST_CONFIG);
             return;
@@ -204,6 +200,8 @@ const addCuotas = useCallback(async (data: {
 
     return {
         cuotas,
+        filteredCuotas,
+        setFilteredCuotas,
         loading,
         addCuotas,
         editCuota,

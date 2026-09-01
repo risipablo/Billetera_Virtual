@@ -54,9 +54,16 @@ export const UseAuth = (): UseAuthReturn => {
         setSuccess('');
 
         try {
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+            throw new Error('No estás autenticado. Inicia sesión primero.');
+            }
+
             const data = await authService.changeName(credentials);
             setSuccess(data.message || 'Cambio de nombre del usuario exitoso');
             
+            await fetchUserData();
 
             setTimeout(() => {
                 navigate('/perfil');

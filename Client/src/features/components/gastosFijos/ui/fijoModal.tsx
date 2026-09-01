@@ -49,10 +49,14 @@ export const GastosFijosModal = ({
             return;
         }
 
+        const montoNum = Number(formData.monto);
         const diaNum = Number(formData.dia);
-        
 
-        
+        if (montoNum <= 0) {
+            alert('El monto debe ser mayor a 0');
+            return;
+        }
+
         if (diaNum < 1 || diaNum > 31) {
             alert('El día debe estar entre 1 y 31');
             return;
@@ -60,7 +64,7 @@ export const GastosFijosModal = ({
 
         onSave({
             nombre: formData.nombre,
-            monto: Number(formData.monto),
+            monto: montoNum,
             dia: diaNum,
             categoria: formData.categoria,
             estado: formData.estado
@@ -78,7 +82,7 @@ export const GastosFijosModal = ({
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    {/* Nombre */}
+                    
                     <div className="form-group">
                         <label>Nombre del gasto</label>
                         <input
@@ -90,21 +94,26 @@ export const GastosFijosModal = ({
                         />
                     </div>
 
-                    {/* Monto */}
+                    
                     <div className="form-group">
                         <label>Monto</label>
                         <input
                             type="number"
-                            placeholder="Ej: 10000"
+                            
                             value={formData.monto}
-                            onChange={(e) => setFormData({ ...formData, monto: e.target.value })}
-                            required
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    monto: e.target.value
+                                })
+                            }
                             min="0"
-                            step="100"
+                            step="0.01"
+                            required
                         />
                     </div>
 
-                    {/* ✅ Día y Mes - SIN AÑO */}
+                    
                     <div className="form-group-row">
                         <div className="form-group half">
                             <label>Día del mes</label>
@@ -132,7 +141,7 @@ export const GastosFijosModal = ({
                             <option value="">Seleccionar Categoria</option>
                                 {["Comida", "Automovil", "Transporte", "Vivienda",'Servicios',
                                     "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
-                                    'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro", "Salidas","Otro"  
+                                    'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro", 'Supermercado',"Salidas","Otro"  
                                 ].map(categoria => 
                                     <option key={categoria} value={categoria}>{categoria}</option>
                                 )}

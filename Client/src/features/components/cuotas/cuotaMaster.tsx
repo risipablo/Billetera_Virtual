@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Container, Grid, Tooltip } from "@mui/material";
 import { Toaster } from "react-hot-toast";
@@ -7,14 +6,16 @@ import { useConfirmModal } from "../../hooks/useModalConfirm";
 import { PaginationComponent } from "../../../components/ui/pagination/pagination";
 import { CuotaForm } from "./components/cuotaForm";
 import { CuotaCard } from "./components/cuotaCard";
-
 import "./style/cuotas.css";
 import { useCuotas } from "./hooks/useCuota";
 import { Trash2 } from "lucide-react";
+import { FilterCuotas } from "./ui/filterCuotas";
 
 export const CuotasMaster = () => {
     const {
         cuotas,
+        filteredCuotas,
+        setFilteredCuotas,
         loading,
         addCuotas,
         addCuotaItem,
@@ -27,7 +28,7 @@ export const CuotasMaster = () => {
         toggleCompleteItem
     } = useCuotas();
 
-    const { openModal,ModalComponent } = useConfirmModal();
+    const { openModal, ModalComponent } = useConfirmModal();
     const [formData, setFormData] = useState({
         titulo: '',
         cuotas: '',
@@ -37,15 +38,17 @@ export const CuotasMaster = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 3;
 
-    const pageCount = Math.ceil(cuotas.length / itemsPerPage);
+    
+    const pageCount = Math.ceil(filteredCuotas.length / itemsPerPage);
     const offset = currentPage * itemsPerPage;
-    const currentItems = cuotas.slice(offset, offset + itemsPerPage);
+    const currentItems = filteredCuotas.slice(offset, offset + itemsPerPage);
 
+    
     useEffect(() => {
-        if (cuotas.length > 0 && currentPage >= pageCount) {
+        if (filteredCuotas.length > 0 && currentPage >= pageCount) {
             setCurrentPage(Math.max(0, pageCount - 1));
         }
-    }, [cuotas.length, pageCount, currentPage]);
+    }, [filteredCuotas.length, pageCount, currentPage]);
 
     const handleAddNota = () => {
         if (!formData.titulo.trim() || !formData.cuotas || !formData.monto || !formData.fecha) {
@@ -105,9 +108,19 @@ export const CuotasMaster = () => {
                 </div>
             </div>
 
-            {cuotas.length === 0 ? (
+            
+            <FilterCuotas
+                cuotas={cuotas}
+                setFilterCuotas={setFilteredCuotas}
+            />
+
+            {filteredCuotas.length === 0 ? (
                 <div className="notas-empty">
-                    <p>No hay cuotas que pagar </p>
+                    <p>
+                        {cuotas.length === 0 
+                            ? 'No hay cuotas que pagar' 
+                            : 'No hay cuotas que coincidan con el filtro seleccionado'}
+                    </p>
                 </div>
             ) : (
                 <Container style={{ marginTop: 30, padding: 0 }}>
@@ -135,14 +148,12 @@ export const CuotasMaster = () => {
                 <PaginationComponent
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
-                    totalItems={cuotas.length}
+                    totalItems={filteredCuotas.length}
                     offset={offset}
                     pageCount={pageCount}
                     itemsPerPage={itemsPerPage}
                 />
             )}
-
-            
 
             <ModalComponent />
             <Toaster />
