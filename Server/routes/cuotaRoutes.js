@@ -12,17 +12,20 @@ const {
     toggleCompleteNote,
     getNotes,
     addNotes,
-    deleteAllCuotas
+    deleteAllCuotas,
+    deletecuotasFilter
 } = require('../controllers/cuotaController');
 
 
 router.get('/note', protect, getNotes);
 router.post('/note', protect, addNotes);
-router.delete('/note/:id', protect, deleteNote);
+
+
+router.delete('/note/filtered', protect, deletecuotasFilter);
 router.delete('/note', protect, deleteAllCuotas);
 router.patch('/note/:id', protect, editNote);
 router.patch('/note/:id/toggle', protect, toggleCompleteNote);
-
+router.delete('/note/:id', protect, deleteNote);
 
 router.post('/note/:id/item', protect, addNoteItem);
 router.patch('/note/:id/item/:idx', protect, editNoteItem);

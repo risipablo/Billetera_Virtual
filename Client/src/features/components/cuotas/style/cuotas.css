@@ -125,7 +125,17 @@
     background: #F7F9FC;
 }
 
-/* botón de completar: mismo tratamiento que el check del boceto */
+.categoria-cuota {
+    display: inline-block;
+    color: #0A3A6A;
+    background-color: #EAF2F9;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin: auto;
+    padding: .2rem ;
+    border-radius: 0.4rem;
+}
+
 .nota-btn-toggle {
     width: 28px;
     height: 28px;

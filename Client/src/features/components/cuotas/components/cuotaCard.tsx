@@ -26,11 +26,13 @@ export const CuotaCard = ({
         cuotas: cuota.cuotas,
         montoTotal: cuota.montoTotal,
         fecha: cuota.fechaCompra || '',
+        categoria:cuota.categoria
     });
     const [newItem, setNewItem] = useState({
         descripcion: '',
         fecha: '',
         precio: '',
+        categoria:''
     });
     const [showEditModal, setShowEditModal] = useState(false);
 
@@ -83,7 +85,7 @@ export const CuotaCard = ({
                 fecha: newItem.fecha,
                 precio: Number(newItem.precio),
             });
-            setNewItem({ descripcion: '', fecha: '', precio: '' });
+            setNewItem({ descripcion: '', fecha: '', precio: '' , categoria:''});
             setIsExpanded(false);
         } else {
             alert('Todos los campos son requeridos');
@@ -97,7 +99,8 @@ export const CuotaCard = ({
                     titulo: editData.titulo, 
                     cuotas: editData.cuotas,
                     montoTotal: editData.montoTotal,
-                    fecha: editData.fecha || cuota.fechaCompra || new Date().toISOString().split('T')[0]
+                    fecha: editData.fecha || cuota.fechaCompra || new Date().toISOString().split('T')[0],
+                    categoria:editData.categoria
                  });
             setIsEditing(false);
             setShowEditModal(false);
@@ -105,7 +108,7 @@ export const CuotaCard = ({
     };
 
     const handleEditClick = () => {
-        setEditData({ titulo: cuota.titulo, cuotas: cuota.cuotas, montoTotal: cuota.montoTotal, fecha: cuota.fecha?.[0] || '' });
+        setEditData({ titulo: cuota.titulo, cuotas: cuota.cuotas, montoTotal: cuota.montoTotal, fecha: cuota.fecha?.[0] || '', categoria:cuota.categoria });
         setIsEditing(true);
         setShowEditModal(true);
         handleMenuClose();
@@ -130,6 +133,7 @@ export const CuotaCard = ({
                             <h3 className={cuota.completed ? 'completed' : ''}>
                                 {cuota.titulo}
                             </h3>
+                            <p className="categoria-cuota"> {cuota.categoria} </p>
                             <div className="nota-card-meta">
                                 <span className="nota-card-cuotas">
                                     {cuotasPagadas} de {totalCuotas} cuotas pagadas
@@ -235,6 +239,7 @@ export const CuotaCard = ({
                                             descripcion={cuota.descripcion[index] || ''}
                                             fecha={cuota.fecha?.[index] || ''}
                                             precio={cuota.precio?.[index] || 0}
+                                            categoria={cuota.categoria[index] || ''}
                                             index={index}
                                             notaId={cuota._id!}
                                             isCompleted={cuota.completedItems?.[index] || false}
@@ -278,6 +283,7 @@ export const CuotaCard = ({
                                                 value={newItem.precio}
                                                 onChange={(e) => setNewItem({ ...newItem, precio: e.target.value })}
                                             />
+
                                             <button
                                                 className="nota-btn-save-item"
                                                 onClick={handleAddItem}
@@ -347,6 +353,24 @@ export const CuotaCard = ({
                                     value={editData.fecha}
                                     onChange={(e) => setEditData({ ...editData, fecha: e.target.value })}
                                 />
+                            </div>
+
+            
+                            <div className="form-group">
+                                <label>Categoría</label>
+                                <select 
+                                    className="task-input"
+                                    value={editData.categoria} 
+                                    onChange={(e) => setEditData({ ...editData, categoria: e.target.value })}
+                                >
+                                    <option value="">Seleccionar Categoria</option>
+                                    {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
+                                    "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                                    'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas", "Otro"  
+                                    ].map(categoria => 
+                                        <option key={categoria} value={categoria}>{categoria}</option>
+                                    )}
+                                </select>
                             </div>
 
                         </div>

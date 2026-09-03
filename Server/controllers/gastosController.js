@@ -211,7 +211,7 @@ exports.deleteGastoFilter = async(req,res) => {
                 today.setHours(0,0,0,0)
                 const tomorrow = new Date(today)
                 tomorrow.setDate(tomorrow.getDate() + 1)
-                filtered.date = { $gte: today, $lt: tomorrow }
+                filtered.fecha = { $gte: today, $lt: tomorrow }
                 break
 
             case 'date':
@@ -220,7 +220,7 @@ exports.deleteGastoFilter = async(req,res) => {
                     targetDate.setHours(0,0,0,0)
                     const nextDay = new Date(targetDate)
                     nextDay.setDate(nextDay.getDate() + 1)
-                    filtered.date = { $gte: targetDate, $lt: nextDay }
+                    filtered.fecha = { $gte: targetDate, $lt: nextDay }
                 }
                 break
 
@@ -228,7 +228,7 @@ exports.deleteGastoFilter = async(req,res) => {
                 if (month && year) {
                     const startDate = new Date(parseInt(year), parseInt(month) - 1, 1)
                     const endDate = new Date(parseInt(year), parseInt(month), 0)
-                    filtered.date = { $gte: startDate, $lt: endDate }
+                    filtered.fecha = { $gte: startDate, $lt: endDate }
                 }
                 break
                 
@@ -236,7 +236,7 @@ exports.deleteGastoFilter = async(req,res) => {
                 if (year) {
                     const startDate = new Date(parseInt(year), 0, 1)
                     const endDate = new Date(parseInt(year) + 1, 0, 1)
-                    filtered.date = { $gte: startDate, $lt: endDate }
+                    filtered.fecha = { $gte: startDate, $lt: endDate }
                 }
                 break
 
@@ -251,11 +251,11 @@ exports.deleteGastoFilter = async(req,res) => {
         }
 
         const result = await GastosModel.deleteMany(filtered)
-        res.json(
-             {message: `${result.deletedCount} gastos eliminadas`,
+        res.json({
+            message: `${result.deletedCount} gastos eliminados`,
             deletedCount: result.deletedCount,
-            filterApplied: { filterType, date, month, year }}
-        )
+            filterApplied: { filterType, date, month, year }
+        })
      
     } catch(err) {
         console.error(' Error:', err);
@@ -263,4 +263,24 @@ exports.deleteGastoFilter = async(req,res) => {
     }
 }
 
+exports.deleteGastosByIds = async (req, res) => {
+    const { ids } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ error: 'Se requiere un array de ids' });
+    }
+
+    try {
+        const result = await GastosModel.deleteMany({
+            _id: { $in: ids },
+            userId: req.user.id
+        });
+        res.json({
+            message: `${result.deletedCount} gastos eliminados`,
+            deletedCount: result.deletedCount
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 

@@ -14,7 +14,6 @@ import GastosContainer from "./gastosContainer";
 import { ScrollTop } from "../../../components/ui/scrollTop";
 import { PaginationComponent } from "../../../components/ui/pagination/pagination";
 import { Toaster } from "react-hot-toast";
-import axiosInstance from "../../../config/axiosConfig";
 import { ModalConfirm } from "../../../components/ui/modalConfirm";
 import { useConfirmModal } from "../../hooks/useModalConfirm";
 import { GastosFijosMaster } from "../gastosFijos/gastosFijoMaster";
@@ -46,8 +45,10 @@ const GastosMaster = () => {
     const [conditionsFilter, setConditionsFilter] = useState<string>('');
     const [metodoFilter, setMetodoFilter] = useState<string>('');
     const [estadoFilter, setEstadoFilter] = useState<string>('');
+    const [categoriaFilter, setCategoriaFilter] = useState<string>('');
 
     const [ordenAsc, setOrdenAsc] = useState<boolean>(true);
+    
 
     const itemsToDisplay = filterGastos && filterGastos.length >= 0 ? filterGastos : gastos;
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -60,13 +61,14 @@ const GastosMaster = () => {
         if (filterGastos !== gastos) {
             setCurrentPage(0);
         }
-    }, [filterGastos, gastos]);
+    }, [filterGastos.length]);
 
     useEffect(() => {
         const limiteGuardado = localStorage.getItem('limiteGasto');
         if (limiteGuardado) {
             setLimite(limiteGuardado);
         }
+
     }, []);
 
     useEffect(() => {
@@ -74,16 +76,19 @@ const GastosMaster = () => {
         setShowInputs(isMobile);
     }, [limite, isMobile]);
 
+
+
     const searchGastos = (palabraClave: string) => {
         if (!palabraClave.trim()) {
-            setFilterGastos(filterGastos || gastos);
+            setFilterGastos(gastos);
             setFilterActive('');
             return;
         }
 
-        const resultados = filterGastosBySearch(filterGastos || gastos, palabraClave);
+        const resultados = filterGastosBySearch(gastos, palabraClave);
         setFilterGastos(resultados);
         setFilterActive(palabraClave);
+        
     };
 
     const handleSubmit = async () => {
@@ -170,7 +175,6 @@ const GastosMaster = () => {
         setCurrentPage(0);
     };
 
-    type ExpenseFilterType = 'date' | 'month' | 'today' | 'year';
 
     const getFilterDescription = () => {
         const parts: string[] = [];
@@ -192,24 +196,19 @@ const GastosMaster = () => {
         return parts.length > 0 ? parts.join(' - ') : activeFilter;
     };
 
-    const handleDeleteFiltered = async () => {
-        const filterType = activeFilter as ExpenseFilterType;
-        if (!filterType) return;
+   const handleDeleteFiltered = async () => {
+    const idsToDelete = filterGastos
+        .map(g => g._id)
+        .filter((id): id is string => Boolean(id));
+    if (idsToDelete.length === 0) return;
 
-        await deleteFilteredGastos({
-            filterType,
-            ...(filterType === 'date' && { month: monthFilter, year: yearFilter })
-        });
-        setShowModalFilter(false);
-        setFilterActive('');
-
-        const response = await axiosInstance.get('/api/bills/filtered');
-        setFilterGastos(response.data);
-        setGastos(response.data);
+    await deleteFilteredGastos(idsToDelete);
+    setShowModalFilter(false);
+    setFilterActive('');
     };
 
     const hasActiveFilters = Boolean(
-        monthFilter || yearFilter || conditionsFilter || metodoFilter || estadoFilter || activeFilter 
+        monthFilter || yearFilter || conditionsFilter || metodoFilter || estadoFilter || categoriaFilter || activeFilter 
     );
 
     return (
@@ -225,7 +224,7 @@ const GastosMaster = () => {
                         isLoading={loading}
                     />
 
-                    <Tooltip title="Eliminar todas las tareas" arrow>
+                    <Tooltip title="Eliminar todos los productos " arrow>
                         <button
                             className="delete-all-btn"
                             onClick={() => openModal(
@@ -247,8 +246,8 @@ const GastosMaster = () => {
                                 onClick={() => openModal(
                                     handleDeleteFiltered,
                                     "Eliminar gastos filtrados",
-                                    `¿Estás seguro que deseas eliminar todas las metas de "${getFilterDescription()}" (${filterGastos.length} metas)?`,
-                                    `Eliminar ${filterGastos.length} metas`
+                                    `¿Estás seguro que deseas eliminar todos los gastos  de "${getFilterDescription()}" (${filterGastos.length} )?`,
+                                    `Eliminar ${filterGastos.length} gastos`
                                 )}
                             >
                                 <Trash2 size={18} />
@@ -269,20 +268,22 @@ const GastosMaster = () => {
                     yearFilter,
                     conditions,
                     metodoFilter,
-                    estadoFilter
+                    estadoFilter,
+                    categoriaFilter
                 }) => {
                     setMonthFilter(monthFilter);
                     setYearFilter(yearFilter);
                     setConditionsFilter(conditions);
                     setMetodoFilter(metodoFilter);
                     setEstadoFilter(estadoFilter);
+                    setCategoriaFilter(categoriaFilter)
 
-                    const hasFilters = monthFilter || yearFilter || conditions || metodoFilter || estadoFilter;
+                    const hasFilters = monthFilter || yearFilter || conditions || metodoFilter || estadoFilter || categoriaFilter;
                     setFilterActive(hasFilters ? 'fechas' : '');
                 }}
             />
 
-            <Buscador filtrarDatos={searchGastos} />
+            <Buscador filtrarDatos={searchGastos}  />
 
             <Button
                 onClick={() => setShowInputs(prev => !prev)}

@@ -1,14 +1,11 @@
 import type { IGastos } from "../types/type.gastos";
 import { buscarPorFecha, formatDate } from "./dateutils";
 
-
-
 export const filterGastosBySearch = (
     gastos: IGastos[], 
     palabraClave: string
 ): IGastos[] => {
     
-
     if (!palabraClave.trim()) {
         
         return gastos;
@@ -19,6 +16,7 @@ export const filterGastosBySearch = (
 
     const resultados = gastos.filter(gasto => {
         const fecha = formatDate(gasto.fecha);
+        
         const coincide = palabras.every(palabra => {
             const match = (
                 fecha.includes(palabra) ||

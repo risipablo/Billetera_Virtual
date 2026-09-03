@@ -43,15 +43,16 @@ export const useCuotas = () => {
         cuotas: number;
         monto: number;
         fecha: string;
+        categoria:string;
     }) => {
-        
 
-        if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha) {
+        if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha ||!data.categoria) {
             console.log( {
                 titulo: !data.titulo.trim(),
                 cuotas: !data.cuotas,
                 monto: !data.monto,
                 fecha: !data.fecha,
+                categoria:!data.categoria
             });
             toast.error('Todos los campos son requeridos', TOAST_CONFIG);
             return;
@@ -65,6 +66,7 @@ export const useCuotas = () => {
                 cuotas: data.cuotas,
                 monto: data.monto,
                 fecha: data.fecha,
+                categoria:data.categoria
             });
 
             setCuotas(prev => [...prev, response.data]);
@@ -80,7 +82,7 @@ export const useCuotas = () => {
     }, []);
 
         
-    const editCuota = useCallback(async (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string }) => {
+    const editCuota = useCallback(async (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string, categoria:string }) => {
         try {
             const response = await axiosInstance.patch(`/api/note/${id}`, data);
             setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
@@ -168,6 +170,20 @@ export const useCuotas = () => {
         })
     },[setCuotas])
 
+    
+    const deleteFilteredCuotas = useCallback(async (ids: string[]) => {
+     try {
+            const response = await axiosInstance.delete('/api/note/filtered', { data: { ids } })
+            setCuotas(prev => prev.filter(g => !g._id || !ids.includes(g._id)))
+            setFilteredCuotas(prev => prev.filter(g => !g._id || !ids.includes(g._id)))
+            toast.success(response.data.message, TOAST_CONFIG)
+            return response.data
+        } catch (err) {
+            console.error(err)
+            toast.error('Error al eliminar gastos filtrados', TOAST_CONFIG)
+            throw err
+        }
+    },[])
 
     
     const editCuotaItem = useCallback(async (id: string, index: number, data: {
@@ -201,6 +217,7 @@ export const useCuotas = () => {
     return {
         cuotas,
         filteredCuotas,
+        setCuotas,
         setFilteredCuotas,
         loading,
         addCuotas,
@@ -209,6 +226,7 @@ export const useCuotas = () => {
         toggleCompleteCuota,
         addCuotaItem,
         deleteCuotaItem,
+        deleteFilteredCuotas,
         allDeleteCuotas,
         editCuotaItem,
         toggleCompleteItem,

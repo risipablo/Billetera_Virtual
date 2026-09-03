@@ -8,8 +8,9 @@ import { CuotaForm } from "./components/cuotaForm";
 import { CuotaCard } from "./components/cuotaCard";
 import "./style/cuotas.css";
 import { useCuotas } from "./hooks/useCuota";
-import { Trash2 } from "lucide-react";
+import { FilterX, Trash2 } from "lucide-react";
 import { FilterCuotas } from "./ui/filterCuotas";
+import { ModalConfirm } from "../../../components/ui/modalConfirm";
 
 export const CuotasMaster = () => {
     const {
@@ -20,6 +21,7 @@ export const CuotasMaster = () => {
         addCuotas,
         addCuotaItem,
         deleteCuota,
+        deleteFilteredCuotas,
         deleteCuotaItem,
         allDeleteCuotas,
         editCuota,
@@ -34,7 +36,16 @@ export const CuotasMaster = () => {
         cuotas: '',
         monto: '',
         fecha: '',
+        categoria:''
     });
+
+    const [activeFilter, setFilterActive] = useState<string>('');
+    const [showModalFilter, setShowModalFilter] = useState(false);
+    const [selectedMonth, setSelectedMonth] = useState<string>('');
+    const [selectedYear, setSelecetYear] = useState<string>('');
+    const [completeFilter, setCompleteFilter] = useState<string>('')
+    const [selecetCategoria,setSelecetCategoria]= useState<string>('');
+    
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 3;
 
@@ -51,7 +62,7 @@ export const CuotasMaster = () => {
     }, [filteredCuotas.length, pageCount, currentPage]);
 
     const handleAddNota = () => {
-        if (!formData.titulo.trim() || !formData.cuotas || !formData.monto || !formData.fecha) {
+        if (!formData.titulo.trim() || !formData.cuotas || !formData.monto || !formData.fecha || !formData.categoria) {
             alert('Todos los campos son requeridos');
             return;
         }
@@ -61,6 +72,7 @@ export const CuotasMaster = () => {
             cuotas: Number(formData.cuotas),
             monto: Number(formData.monto),
             fecha: formData.fecha,
+            categoria:formData.categoria
         });
 
         setFormData({
@@ -68,8 +80,47 @@ export const CuotasMaster = () => {
             cuotas: '',
             monto: '',
             fecha: '',
+            categoria:''
         });
     };
+    
+
+
+    const getFilterDescription = () => {
+        const parts: string[] = [];
+
+        if (activeFilter === 'fechas' || selectedMonth || selectedYear) {
+            const monthNames: Record<string, string> = {
+                '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
+                '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
+                '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'
+            };
+            if (selectedMonth) parts.push(monthNames[selectedMonth]);
+            if (selectedYear) parts.push(selectedYear);
+        }
+
+        if (completeFilter) parts.push(`Condicion: ${completeFilter}`);
+        if (selecetCategoria) parts.push(`Condicion: ${selecetCategoria}`);
+        
+
+        return parts.length > 0 ? parts.join(' - ') : activeFilter;
+    };
+
+    const handleDeleteFiltered = async () => {
+        const idsToDelete = filteredCuotas
+            .map(g => g._id)
+            .filter((id): id is string => Boolean(id));
+        if (idsToDelete.length === 0) return;
+
+        await deleteFilteredCuotas(idsToDelete);
+        setShowModalFilter(false);
+        setFilterActive('');
+    };
+
+    const hasActiveFilters = Boolean(
+        selectedMonth || selectedYear || completeFilter|| selecetCategoria || activeFilter 
+    );
+
 
     if (loading) {
         return (
@@ -91,7 +142,7 @@ export const CuotasMaster = () => {
                         isLoading={loading}
                     />
 
-                    <Tooltip title="Eliminar todas las tareas" arrow>
+                    <Tooltip title="Eliminar todos los productos" arrow>
                         <button
                             className="delete-all-btn"
                             onClick={() => openModal(
@@ -105,6 +156,25 @@ export const CuotasMaster = () => {
                             Eliminar Todas ({cuotas.length})
                         </button>
                     </Tooltip>
+
+
+                    {hasActiveFilters && filteredCuotas.length > 0 && (
+                        <Tooltip title={`Eliminar solo los productos de: ${getFilterDescription()}`} arrow>
+                            <button
+                                className="delete-all-btn"
+                                onClick={() => openModal(
+                                    handleDeleteFiltered,
+                                    "Eliminar productos filtrados",
+                                    `¿Estás seguro que deseas eliminar todas las productos de "${getFilterDescription()}" (${filteredCuotas.length})?`,
+                                    `Eliminar ${filteredCuotas.length} metas`
+                                )}
+                            >
+                                <Trash2 size={18} />
+                                <FilterX size={14} />
+                                <span>Eliminar Filtradas ({filteredCuotas.length})</span>
+                            </button>
+                        </Tooltip>
+                    )}
                 </div>
             </div>
 
@@ -112,18 +182,36 @@ export const CuotasMaster = () => {
             <FilterCuotas
                 cuotas={cuotas}
                 setFilterCuotas={setFilteredCuotas}
+                onFilterChange={({
+                    selectedMonth,selectedYear,selecetCategoria,completeFilter
+                })=> {
+                    setCompleteFilter(completeFilter)
+                    setSelecetYear(selectedYear)
+                    setSelectedMonth(selectedMonth)
+                    setSelecetCategoria(selecetCategoria)
+
+                    const hasFilters = selectedMonth ||selectedYear || selecetCategoria || completeFilter;
+                    setFilterActive(hasFilters ? 'fechas' : '');
+                }}
             />
 
-            {filteredCuotas.length === 0 ? (
+
+            {currentItems.length === 0 ? (
                 <div className="notas-empty">
                     <p>
                         {cuotas.length === 0 
                             ? 'No hay cuotas que pagar' 
                             : 'No hay cuotas que coincidan con el filtro seleccionado'}
                     </p>
+                    
                 </div>
             ) : (
                 <Container style={{ marginTop: 30, padding: 0 }}>
+                    {filteredCuotas.length > 0 && (
+                        <span className="filter-results-count" style={{marginBottom: 10, display: 'block'}}>
+                            Mostrando {filteredCuotas.length} de {cuotas.length} productos
+                        </span>
+                    )}
                     <Grid container spacing={4}>
                         {currentItems.map((cuota) => (
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={cuota._id}>
@@ -152,6 +240,19 @@ export const CuotasMaster = () => {
                     offset={offset}
                     pageCount={pageCount}
                     itemsPerPage={itemsPerPage}
+                />
+            )}
+
+            
+            {showModalFilter && (
+                <ModalConfirm
+                    isOpen={showModalFilter}
+                    onClose={() => setShowModalFilter(false)}
+                    onConfirm={handleDeleteFiltered}
+                    title="Eliminar gastos filtrados"
+                    message={`¿Estás seguro que deseas eliminar todas las metas de "${getFilterDescription()}" (${filteredCuotas.length} metas)?`}
+                    confirmText={`Eliminar ${filteredCuotas.length} metas`}
+                    cancelText="Cancelar"
                 />
             )}
 

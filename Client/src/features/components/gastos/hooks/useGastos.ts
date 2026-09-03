@@ -111,34 +111,21 @@ export const UseGastos = () => {
             console.error(err)
             toast.error('Error al guardar el producto', TOAST_CONFIG)
         })
-    },[setGastos,setFilterGastos])
+    },[])
 
-    const deleteFilteredGastos = useCallback(async(filters:{
-        filterType:'today' | 'date' | 'month' | 'year'
-        date?: string
-        month?: string
-        year?: string
-    }) => {
-        try{
-            const response = await axiosInstance.delete('/api/bills',{
-                params:filters
-            })
-
-            setGastos(prev => {
-                return prev
-            })
-
-            const {data} = await axiosInstance.get('/api/bills')
-            setGastos(data)
-
-             toast.success(response.data.message, TOAST_CONFIG)
+    const deleteFilteredGastos = useCallback(async (ids: string[]) => {
+        try {
+            const response = await axiosInstance.delete('/api/bills/bulk', { data: { ids } })
+            setGastos(prev => prev.filter(g => !g._id || !ids.includes(g._id)))
+            setFilterGastos(prev => prev.filter(g => !g._id || !ids.includes(g._id)))
+            toast.success(response.data.message, TOAST_CONFIG)
             return response.data
         } catch (err) {
             console.error(err)
             toast.error('Error al eliminar gastos filtrados', TOAST_CONFIG)
             throw err
         }
-    },[setGastos,setFilterGastos])
+    }, [setGastos, setFilterGastos])
    
     const allDeleteGastos = useCallback(() => {
         axiosInstance.delete('/api/bills')

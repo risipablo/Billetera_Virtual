@@ -4,7 +4,8 @@ export interface ICuota {
     titulo: string;
     cuotas: number;
     montoTotal: number;
-    fechaCompra?: string; 
+    fechaCompra?: string;
+    categoria:string; 
     descripcion: string[];
     precio: number[];
     fecha: string[];
@@ -20,6 +21,7 @@ export interface CuotaFormData {
     cuotas: string;
     monto: string;
     fecha: string;
+    categoria:string
 }
 
 export interface CuotaFormProps {
@@ -33,7 +35,7 @@ export interface CuotaCardProps {
     cuota: ICuota;
     onToggleComplete: (id: string) => void;
     onDelete: (id: string) => void;
-    onEdit: (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string }) => void;
+    onEdit: (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string, categoria:string }) => void;
     onAddItem: (id: string, data: { descripcion: string; fecha: string; precio: number }) => void;
     onToggleItem: (id: string, index: number) => void;
     onDeleteItem: (id: string, index: number) => void;
@@ -44,6 +46,7 @@ export interface CuotaItemProps {
     descripcion: string;
     fecha: string;
     precio: number;
+    categoria:string;
     index: number;
     notaId: string;
     isCompleted?: boolean;

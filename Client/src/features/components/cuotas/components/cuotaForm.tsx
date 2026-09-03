@@ -22,6 +22,7 @@ export const CuotaForm = ({
             cuotas: '',
             monto: '',
             fecha: '',
+            categoria:''
         });
     };
 
@@ -31,17 +32,11 @@ export const CuotaForm = ({
     };
 
     const handleSubmit = () => {
-        if (!formData.titulo.trim() || !formData.cuotas || !formData.monto || !formData.fecha) {
+        if (!formData.titulo.trim() || !formData.cuotas || !formData.monto || !formData.fecha || !formData.categoria) {
             alert('Todos los campos son requeridos');
             return;
         }
 
-           console.log('Enviando formulario:', {
-        titulo: formData.titulo.trim(),
-        cuotas: Number(formData.cuotas),
-        monto: Number(formData.monto),
-        fecha: formData.fecha,
-    });
         onSubmit();
         setAddModal(false);
         handleClean();
@@ -119,13 +114,30 @@ export const CuotaForm = ({
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Fecha límite</label>
+                                    <label>Fecha de compra</label>
                                     <input
                                         type="date"
                                         className="nota-input"
                                         value={formData.fecha}
                                         onChange={(e) => handleChange('fecha', e.target.value)}
                                     />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Categoría</label>
+                                    <select 
+                                        className="nota-input"
+                                        value={formData.categoria} 
+                                        onChange={(e) => handleChange('categoria', e.target.value)}
+                                    >
+                                        <option value="">Seleccionar Categoria</option>
+                                            {["Comida", "Automovil", "Transporte", "Vivienda",'Servicios',
+                                              "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                                              'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas","Otro"  
+                                            ].map(categoria => 
+                                                <option key={categoria} value={categoria}>{categoria}</option>
+                                            )}
+                                    </select>
                                 </div>
                             </div>
 

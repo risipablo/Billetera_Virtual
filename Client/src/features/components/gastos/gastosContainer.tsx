@@ -13,7 +13,6 @@ import { IconButton } from "@mui/material"
 
 const GastosContainer = ({
     filterGastos,
-    setFilterGastos,
     loading,
     deleteGastos,
     editGastos,
@@ -137,7 +136,7 @@ const GastosContainer = ({
 
     
     
-        if (loading) {
+    if (loading) {
         return (
             <Spinner size="lg" label="Cargando datos..."/>
         )
@@ -285,7 +284,7 @@ const GastosContainer = ({
                                 >
                                     <option value="">Seleccionar Categoria</option>
                                     {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
-                                      "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                                      "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota","Indumentaria","Cosmetica",
                                       'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas", "Otro"  
                                     ].map(categoria => 
                                         <option key={categoria} value={categoria}>{categoria}</option>
@@ -318,7 +317,7 @@ const GastosContainer = ({
                                     onChange={(e) => handleChange('condicion', e.target.value)}
                                 >
                                     <option value="">Seleccionar Condición</option>
-                                    {["Fijo", "Necesario", "Innecesario", "Sin Valor","Cuotas"].map(condicion => 
+                                    {["Fijo", "Necesario", "Innecesario", "Inversion","Cuotas"].map(condicion => 
                                         <option key={condicion} value={condicion}>{condicion}</option>
                                     )}
                                 </select>

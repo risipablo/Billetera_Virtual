@@ -5,14 +5,21 @@ import { RotateCcw } from "lucide-react";
 type Props = {
     cuotas: ICuota[]
     setFilterCuotas: React.Dispatch<React.SetStateAction<ICuota[]>>
+    onFilterChange?:(filters:{completeFilter:string; selectedMonth:string; selectedYear:string, selecetCategoria:string}) => void
 }
 
-export const FilterCuotas = ({cuotas, setFilterCuotas}: Props) => {
+export const FilterCuotas = ({
+    cuotas, 
+    setFilterCuotas,
+    onFilterChange
+    }: Props) => {
     const [completeFilter, setCompleteFilter] = useState<string>('todos')
     const [selectedMonth, setSelectedMonth] = useState<string>('todos')
     const [selectedYear, setSelectedYear] = useState<string>('todos')
+    const [selecetCategoria,setSelecetCategoria] = useState<string>('todos')
 
-    // Obtener años únicos de las cuotas
+    
+    // Obtenemos todos los años disponibles que el usuario alla puesto en as cuotas card
     const availableYears = useMemo(() => {
         const years = new Set<string>()
         cuotas.forEach(cuota => {
@@ -104,26 +111,35 @@ export const FilterCuotas = ({cuotas, setFilterCuotas}: Props) => {
             })
         }
 
+        if(selecetCategoria !== 'todos'){
+             filtered = filtered.filter(g => g.categoria === selecetCategoria)
+        }
+
         return filtered
-    }, [cuotas, completeFilter, selectedMonth, selectedYear])
+    }, [cuotas, completeFilter, selectedMonth, selectedYear,selecetCategoria])
 
     useEffect(() => {
         setFilterCuotas(filteredCuotas)
+        if (onFilterChange) {
+            onFilterChange({completeFilter,selecetCategoria,selectedMonth,selectedYear});
+        }
     }, [filteredCuotas, setFilterCuotas])
 
     const handleReset = () => {
         setCompleteFilter("todos")
         setSelectedMonth("todos")
         setSelectedYear("todos")
+        setSelecetCategoria("todos")
     }
 
     const hasActiveFilters = completeFilter !== 'todos' || 
                             selectedMonth !== 'todos' || 
-                            selectedYear !== 'todos'
+                            selectedYear !== 'todos' ||
+                            selecetCategoria !== 'todos'
 
     return(
-        <div className="filter-container">
-            <div className="filter-group">
+        <div className="filter-buttons-group">
+            <div className="filter-row">
                 
                 <select 
                     className={`btn-toggle-view ${completeFilter !== 'todos' ? 'active' : ''}`}
@@ -159,6 +175,23 @@ export const FilterCuotas = ({cuotas, setFilterCuotas}: Props) => {
                     ))}
                 </select>
 
+                            
+                    {/* <label>Categoría</label> */}
+                    <select 
+                        className={`btn-toggle-view ${selecetCategoria !== 'todos' ? 'active' : ''}`}
+                        value={selecetCategoria} 
+                        onChange={(e) => setSelecetCategoria(e.target.value)}
+                    >
+                        <option value="">Seleccionar Categoria</option>
+                        {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
+                        "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                        'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas", "Otro"  
+                        ].map(categoria => 
+                            <option key={categoria} value={categoria}>{categoria}</option>
+                        )}
+                    </select>
+                            
+
                 
                 {hasActiveFilters && (
                     <button 
@@ -171,12 +204,6 @@ export const FilterCuotas = ({cuotas, setFilterCuotas}: Props) => {
                 )}
             </div>
 
-            
-            {filteredCuotas.length > 0 && (
-                <span className="filter-results-count">
-                    Mostrando {filteredCuotas.length} de {cuotas.length} cuotas
-                </span>
-            )}
         </div>
     )
 }

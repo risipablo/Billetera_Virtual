@@ -118,7 +118,7 @@ export const GastosForm = ({
                                     >
                                         <option value="">Seleccionar Categoria</option>
                                             {["Comida", "Automovil", "Transporte", "Vivienda",'Servicios',
-                                              "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                                              "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota","Indumentaria","Cosmetica",
                                               'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas","Otro"  
                                             ].map(categoria => 
                                                 <option key={categoria} value={categoria}>{categoria}</option>
@@ -150,7 +150,7 @@ export const GastosForm = ({
                                         onChange={(e) => handleChange('condicion', e.target.value)}
                                     >
                                         <option value="">Seleccionar Condición</option>
-                                            {["Fijo", "Necesario", "Innecesario", "Sin Valor","Cuotas"].map(necesario => 
+                                            {["Fijo", "Necesario", "Innecesario", "Inversion","Cuotas"].map(necesario => 
                                                 <option key={necesario} value={necesario}>{necesario}</option>
                                             )}
                                     </select>

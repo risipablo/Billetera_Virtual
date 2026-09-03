@@ -14,13 +14,13 @@ exports.getNotes = async (req, res) => {
 
 
 exports.addNotes = async (req, res) => {
-    const { titulo, cuotas, monto, fecha } = req.body;
+    const { titulo, cuotas, monto, fecha, categoria } = req.body;
 
 
 
-    if (!titulo || !cuotas || !monto || !fecha) {
+    if (!titulo || !cuotas || !monto || !fecha || !categoria) {
         return res.status(400).json({ 
-            error: 'Título, cuotas, monto y fecha son requeridos' 
+            error: 'Título, cuotas, monto, fecha y categoria son requeridos' 
         });
     }
 
@@ -30,6 +30,7 @@ exports.addNotes = async (req, res) => {
             titulo: titulo.trim(),
             cuotas: Number(cuotas),
             montoTotal: Number(monto),
+            categoria:categoria,
             fechaCompra: new Date(fecha),
             descripcion: [],
             precio: [],
@@ -142,6 +143,27 @@ exports.deleteNoteItem = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.deletecuotasFilter = async (req, res) => {
+const { ids } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ error: 'Se requiere un array de ids' });
+    }
+
+    try {
+        const result = await noteModel.deleteMany({
+            _id: { $in: ids },
+            userId: req.user.id
+        });
+        res.json({
+            message: `${result.deletedCount} productos eliminados`,
+            deletedCount: result.deletedCount
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
  
 exports.deleteAllCuotas = async(req,res) => {
     try{
@@ -154,7 +176,7 @@ exports.deleteAllCuotas = async(req,res) => {
  
 exports.editNote = async (req, res) => {
     const { id } = req.params;
-    const { titulo, cuotas, montoTotal, fecha } = req.body;
+    const { titulo, cuotas, montoTotal, fecha,categoria } = req.body;
 
     try {
         const note = await noteModel.findOne({ _id: id, userId: req.user.id });
@@ -165,7 +187,8 @@ exports.editNote = async (req, res) => {
         if (titulo) note.titulo = titulo;
         if (cuotas) note.cuotas = Number(cuotas);
         if (montoTotal) note.montoTotal = Number(montoTotal);
-        if (fecha) note.fechaCompra = new Date(fecha);   
+        if (fecha) note.fechaCompra = new Date(fecha);
+        if (categoria) note.categoria = categoria   
 
         await note.save();
         res.json(note);

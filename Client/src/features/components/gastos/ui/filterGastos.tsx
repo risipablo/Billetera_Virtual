@@ -9,7 +9,7 @@ import type { IGastos } from "../types/type.gastos";
 type Props = {
     gastos:IGastos[]
     setFilterGastos:React.Dispatch<React.SetStateAction<IGastos[]>>
-    onFilterChange?:(filters:{dateFilter:string; monthFilter:string; yearFilter:string, conditions:string, metodoFilter:string, estadoFilter:string}) => void
+    onFilterChange?:(filters:{dateFilter:string; monthFilter:string; yearFilter:string, conditions:string, metodoFilter:string, estadoFilter:string, categoriaFilter:string}) => void
 }
 
 
@@ -31,6 +31,7 @@ export const FilterGastos = ({
     const [conditions, setConditions] = useState<string>('')
     const [metodoFilter, setMetodoFilter] = useState<string>('')
     const [estadoFilter, setEstadoFilter] = useState<string>('')
+    const [categoriaFilter, setCategoriaFilter] = useState<string>('')
 
     
     const [dateOpen, setDateOpen] = useState(false)
@@ -77,6 +78,10 @@ export const FilterGastos = ({
         if (estadoFilter){
             filtered = filtered.filter(g => g.estado === estadoFilter)
         }
+        if (categoriaFilter){
+            filtered = filtered.filter(g => g.categoria === categoriaFilter)
+        }
+
         if(showToday){
             const todayStr = normalDate(new Date())
             return filtered.filter(t => normalDate(t.fecha) === todayStr)
@@ -94,7 +99,7 @@ export const FilterGastos = ({
             })
         }
         return filtered
-    },[gastos, showToday, dateFilter, conditions, estadoFilter, metodoFilter, monthFilter, yearFilter, normalDate])
+    },[gastos, showToday, dateFilter, conditions, estadoFilter, metodoFilter,categoriaFilter ,monthFilter, yearFilter, normalDate])
 
     const mesActual = () => {
         const fecha = new Date();
@@ -113,7 +118,7 @@ export const FilterGastos = ({
     useEffect(() => {
         setFilterGastos(filteredBills)
         if (onFilterChange) {
-            onFilterChange({dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter});
+            onFilterChange({dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter,categoriaFilter});
         }
     },[filteredBills])
 
@@ -150,6 +155,7 @@ export const FilterGastos = ({
         setConditions('')
         setMetodoFilter('')
         setEstadoFilter('')
+        setCategoriaFilter('')
         setClassifyOpen(false)
     }
 
@@ -308,7 +314,7 @@ export const FilterGastos = ({
                                     onChange={(e) => setConditions(e.target.value)}
                                 >
                                     <option value="">Seleccionar Condición</option>
-                                    {["Fijo", "Necesario", "Innecesario", "Sin Valor","Cuotas"].map(item =>
+                                    {["Fijo", "Necesario", "Innecesario", "Inversion","Cuotas"].map(item =>
                                         <option key={item} value={item}>{item}</option>
                                     )}
                                 </select>
@@ -333,6 +339,20 @@ export const FilterGastos = ({
                                     <option value="">Seleccionar Estado</option>
                                     {["Pagado", "Impago", "Deben", "Cuotas", "Devolver", "Cajero", "Inversion"].map(estado =>
                                         <option key={estado} value={estado}>{estado}</option>
+                                    )}
+                                </select>
+
+                                <select 
+                                    className="filter-input popover-full-input"
+                                    value={categoriaFilter}
+                                    onChange={(e) => setCategoriaFilter(e.target.value)}
+                                >
+                                <option value="">Seleccionar Categoria</option>
+                                    {["Comida", "Automovil", "Transporte", "Vivienda",'Servicios',
+                                        "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota","Indumentaria","Cosmetica",
+                                        'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas","Otro"  
+                                    ].map(categoria => 
+                                        <option key={categoria} value={categoria}>{categoria}</option>
                                     )}
                                 </select>
 
