@@ -3,7 +3,7 @@ import type { UseAuthReturn } from "../types/type.auth";
 import { useUser } from "./useUser";
 import { useNavigate } from "react-router-dom";
 import authService from "../../service/authService";
-import type { ChangeUserName, LoginData, RegisterData } from "../types/type.user";
+import type { ChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../types/type.user";
 
 export const UseAuth = (): UseAuthReturn => {
     const { fetchUserData, setUser } = useUser();
@@ -78,6 +78,40 @@ export const UseAuth = (): UseAuthReturn => {
         }
     };
 
+    const changePassword = async(credentials:ResetPasswordData) :Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        try{
+            const data = await authService.changePassword(credentials)
+            setSuccess(data.message || 'Cambio de nombre de contraseña exitoso')
+
+            localStorage.removeItem('token')
+            navigate('/login')
+        } catch (err){
+            setError((err as Error).message)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const verifyEmail = async(credentials: VerifyEmailData): Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        try{
+            const data = await authService.VerifyEmail(credentials)
+            setSuccess(data.message || 'Cambio de nombre de contraseña exitoso')
+            
+        } catch (err){
+            setError((err as Error).message)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const logout = async (): Promise<void> => {
         setLoading(true);
 
@@ -102,6 +136,8 @@ export const UseAuth = (): UseAuthReturn => {
         setLoading,
         error,
         changeName,
+        changePassword,
+        verifyEmail,
         logout,
         setError,
         setSuccess,

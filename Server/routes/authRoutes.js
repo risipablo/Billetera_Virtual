@@ -8,8 +8,8 @@ router.post('/login', authController.loginUser);
 router.post('/logout',authController.logoutUser);
 router.post('/forgot-password', authController.forgotPassword)
 router.post('/reset-password', authController.resetPassword)
-router.post('/change-user', protect, authController.changeUserName);
 router.post('/verify-email', protect, authController.verifyEmail);
+router.post('/change-user', protect, authController.changeUserName);
 router.post('/change-password', protect, authController.changePassword); 
 router.get('/name', protect, authController.userName);
 

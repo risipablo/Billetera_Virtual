@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import type {  ChangeUserName, LoginData, RegisterData } from "./type.user"
+import type {  ChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "./type.user"
 
 export interface User{
     id:string
@@ -14,6 +14,8 @@ export interface UseAuthReturn{
     succes:string
     register:(useData: RegisterData) => Promise<void>
     changeName:(credentials: ChangeUserName) => Promise<void>
+    changePassword:(credentials:ResetPasswordData) => Promise<void>
+     verifyEmail: (credentials: VerifyEmailData) => Promise<void>
     login:(credentials: LoginData) => Promise<void>
     logout: () => Promise<void>
     setError: (error: string) => void;

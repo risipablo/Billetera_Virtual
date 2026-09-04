@@ -1,0 +1,202 @@
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #A22E2E;
+    --success: #2E7D32;
+}
+
+/* ============================================================
+   Card del formulario
+   ============================================================ */
+.form-wrapper {
+    max-width: 440px;
+    margin: 2rem auto;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem 1.75rem;
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--header-bg);
+    color: #fff;
+    margin-bottom: 0.9rem;
+}
+
+.form-header h2 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-header p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ============================================================
+   Formulario
+   ============================================================ */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.form-hint {
+    margin: 0;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+.auth-input {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+}
+
+.auth-input:focus {
+    border-color: var(--header-bg);
+}
+
+.auth-input:disabled {
+    background: #F7F9FC;
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+/* Campo de contraseña con botón de mostrar/ocultar */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field .auth-input {
+    padding-right: 2.5rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 0.15s ease;
+}
+
+.password-toggle:hover {
+    color: var(--text);
+}
+
+/* ============================================================
+   Botón de envío
+   ============================================================ */
+.submit-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--header-bg);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+    background: #0A3A6A;
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   Mensajes (éxito / error)
+   ============================================================ */
+.message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    margin-top: 1.1rem;
+    font-size: 0.85rem;
+}
+
+.message-title {
+    margin: 0;
+    font-weight: 600;
+}
+
+.message-subtitle {
+    margin: 2px 0 0;
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+.success-message {
+    background: #E8F3E4;
+    color: var(--success);
+}
+
+.error-message {
+    background: #FBE9E9;
+    color: var(--danger);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 480px) {
+    .form-wrapper {
+        margin: 1rem;
+        padding: 1.5rem 1.25rem;
+    }
+}

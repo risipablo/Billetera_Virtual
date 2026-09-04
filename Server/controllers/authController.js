@@ -2,8 +2,6 @@
 const UserModel = require('../models/User');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const bcrypt = require('bcrypt');
-const { error } = require('console');
 const {sendUserChangeName} = require('../services/emailService')
 require('dotenv').config();
 
@@ -71,7 +69,6 @@ exports.loginUser = async (req, res) => {
 };
 
 
-
 exports.logoutUser = (req, res) => {
     // Eliminar la cookie de sesión
     res.clearCookie('token', {
@@ -83,19 +80,19 @@ exports.logoutUser = (req, res) => {
 };
 
 
-exports.verifyEmail = async (req, res) => {
+exports.verifyEmail = async (req,res) => {
     const {email} = req.body
 
     try{
-         
-
         const user = await UserModel.findOne({email, _id: req.user.id})
-        if (!user){
-            return res.status(404).json({message: 'Correo Incorrecto'})
+
+        if(!user){
+            return res.status(404).json({message: 'Incorrect Email'})
         }
-        res.status(200).json({message: 'Correo verificado', userId: user._id})
-    } catch (error) {
-        res.status(500).json({message: 'Error del servidor'})
+        res.status(200).json({message:'Verified Email', userId: user._id})
+    
+    } catch (error){
+        res.status(500).json({message: 'Error in the server'})
     }
 }
 
@@ -153,40 +150,37 @@ exports.changeUserName = async (req, res) => {
 };
 
 exports.changePassword = async (req, res) => {
-    const { currentPassword, newPassword } = req.body;
-    const userId = req.user.id; // Obtiene el ID del usuario autenticado
+    const {currentPassword, newPassword} = req.body
+    const userId = req.user.id
 
-    // Validaciones básicas
-    if (!currentPassword || !newPassword) {
-        return res.status(400).json({ error: 'Ambas contraseñas son requeridas' });
+    if(!currentPassword || !newPassword){
+        return res.status(400).json({error: "both password are required"})
     }
 
-    if (newPassword.length < 8) {
-        return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 8 caracteres' });
+    if(newPassword.length < 9){
+        return res.status(400).json({error: 'The new password must have equal o more 9 letters'})
     }
 
-    try {
-        const user = await UserModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
+    try{
+        const user = await UserModel.findById(userId)
+
+        if(!user){
+            return res.status(404).json({error: 'user not found'})
         }
 
-        // 2. Verificar la contraseña actual
-        const isMatch = await user.comparePassword(currentPassword);
-        if (!isMatch) {
-            return res.status(401).json({ error: 'Contraseña actual incorrecta' });
+        const isMatch = await user.comparePassword(currentPassword)
+        if(!isMatch){
+            return res.status(401).json({error: 'Password incorrect'})
         }
 
-        // 3. Hashear y guardar la nueva contraseña
-        user.password = newPassword; // El pre-hook 'save' en el modelo se encargará del hashing
-        await user.save();
+        user.password = newPassword
+        await user.save()
+        res.status(200).json({message: 'Password updated successfull'})
 
-        res.json({ message: 'Contraseña actualizada exitosamente' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    } catch(err){
+        res.status(500).json({error:err.message})
     }
 };
-
 
 
 exports.forgotPassword = async (req, res) => {

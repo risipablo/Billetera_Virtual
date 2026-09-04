@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { config } from "../config";
-import type { ApiError, AuthResponse, ChangeUserName, LoginData, RegisterData } from "../features/types/type.user";
+import type { ApiError, AuthResponse, ChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../features/types/type.user";
 
 const serverFront = config.Api;
 
@@ -52,6 +52,66 @@ class AuthService {
             }
             return response.data;
         } catch (error) {
+            throw this.handleError(error as AxiosError<ApiError>);
+        }
+    }
+
+    async changePassword(credentials: ResetPasswordData): Promise<AuthResponse>{
+            try{
+            const token = this.getToken()
+
+            if (!token) {
+                throw new Error('No hay token de autenticación');
+            }
+
+
+            const response = await axios.post<AuthResponse>(
+                `${serverFront}/api/auth/change-password`,
+                {
+                    currentPassword: credentials.currentPassword,
+                    newPassword: credentials.newPassword
+                }
+                ,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`, 
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            )
+
+            
+            if(response.data.token){
+                localStorage.setItem('token',response.data.token)
+            }
+
+            return response.data
+            
+        }  catch(error){
+            throw this.handleError(error as AxiosError<ApiError>);
+        }
+    }
+
+    async VerifyEmail(credentials: VerifyEmailData): Promise<AuthResponse>{
+        try{
+            const token = this.getToken()
+
+            const response = await axios.post<AuthResponse>(`${serverFront}/api/auth/verify-email`,
+                {email: credentials.email},
+                {  
+                    headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                    },
+                withCredentials: true}
+            )
+            if(response.data.token){
+                localStorage.setItem('token',response.data.token)
+            }
+            
+            return response.data
+            
+        } catch(error){
             throw this.handleError(error as AxiosError<ApiError>);
         }
     }

@@ -128,7 +128,7 @@ export const SubMenu = () => {
                 </MenuItem>
 
                 <MenuItem 
-                    onClick={() => handleNavigate('/configuracion/password')}
+                    onClick={() => handleNavigate('/change-password')}
                     sx={{ 
                         mx: 1,
                         borderRadius: 1,

@@ -4,6 +4,7 @@ import { UseAuth } from "../../features/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle, User } from "lucide-react";
+import "../../style/auth-forms.css";
 
 function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
     const [formData, setFormData] = useState<ChangeUserName>({
@@ -23,7 +24,7 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
     const handleSubmitChangeName = async (e: FormEvent<HTMLElement>): Promise<void> => {
         e.preventDefault();
         setShowError('');
-        
+
         // Validación básica
         if (!formData.newName || formData.newName.trim().length < 3) {
             setShowError('El nombre debe tener al menos 3 caracteres');
@@ -34,14 +35,14 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
             await changeName({
                 newName: formData.newName.trim()
             });
-            
+
             setShowSuccess(true);
             setIsAuthenticated(true);
-            
+
             setTimeout(() => {
                 navigate('/dashboard');
             }, 3000);
-            
+
         } catch (err) {
             const errorMsg = err instanceof Error ? err.message : 'Error cambiando nombre de usuario.';
             setShowError(errorMsg);
@@ -61,8 +62,8 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
                     <div className="form-icon user-icon-large">
                         <User size={32} />
                     </div>
-                    <h2>Cambiar Nombre de Usuario</h2>
-                    <p>Elige un nuevo nombre para tu perfil</p>
+                    <h2>Cambiar nombre de usuario</h2>
+                    <p>Elegí un nuevo nombre para tu perfil</p>
                 </motion.div>
 
                 <form onSubmit={handleSubmitChangeName} className="auth-form">
@@ -72,7 +73,7 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        <label htmlFor="newName">Nuevo Nombre de Usuario</label>
+                        <label htmlFor="newName">Nuevo nombre de usuario</label>
                         <input
                             id="newName"
                             type="text"
@@ -85,9 +86,7 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
                             className="auth-input"
                             minLength={3}
                         />
-                        <small style={{ color: '#6c757d', fontSize: '12px', marginTop: '4px' }}>
-                            Mínimo 3 caracteres
-                        </small>
+                        <p className="form-hint">Mínimo 3 caracteres</p>
                     </motion.div>
 
                     <motion.button
@@ -100,7 +99,7 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
                     >
-                        {loading ? "Procesando..." : showSuccess ? "¡Éxito!" : "Confirmar Cambio"}
+                        {loading ? "Procesando..." : showSuccess ? "¡Listo!" : "Confirmar cambio"}
                     </motion.button>
                 </form>
 
@@ -114,8 +113,8 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
                         >
                             <CheckCircle size={20} />
                             <div>
-                                <p className="message-title">¡Nombre actualizado exitosamente!</p>
-                                <p className="message-subtitle">Serás redirigido en 3 segundos...</p>
+                                <p className="message-title">Nombre actualizado</p>
+                                <p className="message-subtitle">Serás redirigido en unos segundos...</p>
                             </div>
                         </motion.div>
                     )}

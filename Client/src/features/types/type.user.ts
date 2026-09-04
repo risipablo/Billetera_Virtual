@@ -19,6 +19,7 @@ export interface IChangeUserName{
 }
 
 
+
 export interface ForgotPasswordData {
     email: string;
 }
