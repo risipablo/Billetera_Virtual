@@ -118,7 +118,7 @@ export const GastosForm = ({
                                     >
                                         <option value="">Seleccionar Categoria</option>
                                             {["Comida", "Automovil", "Transporte", "Vivienda",'Servicios',
-                                              "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota","Indumentaria","Cosmetica",
+                                              "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota","Indumentaria","Regalo","Cosmetica","Recital","Peluqueria",
                                               'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas","Otro"  
                                             ].map(categoria => 
                                                 <option key={categoria} value={categoria}>{categoria}</option>
