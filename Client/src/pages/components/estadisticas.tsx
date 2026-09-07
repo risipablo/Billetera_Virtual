@@ -4,6 +4,7 @@ import { EstadisticasMaster } from "../../features/components/estadisticas/estad
 const EstadisticasPage = () => {
   return (
     <div>
+      <title> Estadisticas </title>
       <EstadisticasMaster/>
     </div>
   )

@@ -22,7 +22,7 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         confirmPassword: ''
   })
 
-  const [show,setSHow] = useState<boolean>(true)
+  const [showRequirements, setShowRequirements] = useState<boolean>(true)
   const {register,loading,error,succes} = UseAuth()
   const navigate = useNavigate()
 
@@ -57,21 +57,21 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         }
     }
 
-  
+
     return (
     <AuthLayout title='Registrarse' >
-      <title>Tegister</title>
+      <title>Registro</title>
        <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
             >
-                
+
             <motion.input
             type="email"
             name="email"
-            placeholder="Ingrese Correo electrónico"
+            placeholder="Ingresá tu correo electrónico"
             value={formData.email}
             onChange={handleChange}
             required
@@ -81,7 +81,7 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
             <motion.input
             type="text"
             name="name"
-            placeholder="Ingrese Nombre de Usuario"
+            placeholder="Ingresá tu nombre de usuario"
             value={formData.name}
             onChange={handleChange}
             required
@@ -92,16 +92,15 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Crea una Contraseña"
-            delay={0.2}
+            placeholder="Creá una contraseña"
+            showStrength
             />
 
             <PasswordInput
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            placeholder="Confirme Contraseña"
-            delay={0.3}
+            placeholder="Confirmá tu contraseña"
             />
 
             <AuthButton loading={loading} text="Confirmar" />
@@ -130,8 +129,8 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         </motion.div>
 
         <PasswordRequirements 
-            show={show}
-            onToggle={() => setSHow(!show)}
+            show={showRequirements}
+            onToggle={() => setShowRequirements(!showRequirements)}
         />
     </AuthLayout>
   )

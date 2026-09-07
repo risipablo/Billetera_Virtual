@@ -88,9 +88,10 @@ export const UseGastos = () => {
         axiosInstance.delete(`api/bills/${id}`)
         .then(() => {
             setGastos(prev => prev.filter(prod => prod._id !== id))
+            setFilterGastos(prev => prev.filter(prod => prod._id !== id))
             toast.success('Producto eliminado', TOAST_CONFIG)
         })
-    },[setFilterGastos,setGastos])
+    },[])
 
     const editGastos = useCallback((id:string, editData:{
         fecha:string

@@ -58,6 +58,7 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
 
     return (
         <div className="table-container">
+            <title> Perfil de {user?.name?.charAt(0).toUpperCase() || '?'}</title>
             <div className="perfil-header">
                 <div className="perfil-avatar">
                     {user?.name?.charAt(0).toUpperCase() || '?'}

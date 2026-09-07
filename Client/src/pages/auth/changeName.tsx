@@ -52,6 +52,7 @@ function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
 
     return (
         <div className="table-container">
+            <title>Cambio de nombre de usuario</title>
             <div className="form-wrapper">
                 <motion.div
                     className="form-header"

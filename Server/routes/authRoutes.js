@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
+const { EmailComment } = require('../controllers/resendController');
 
 router.post('/register',authController.registerUser);
 router.post('/login', authController.loginUser);
@@ -12,7 +13,7 @@ router.post('/verify-email', protect, authController.verifyEmail);
 router.post('/change-user', protect, authController.changeUserName);
 router.post('/change-password', protect, authController.changePassword); 
 router.get('/name', protect, authController.userName);
-
+router.post('/send-email',EmailComment)
 
 
 module.exports = router

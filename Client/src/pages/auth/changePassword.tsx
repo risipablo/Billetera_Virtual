@@ -92,7 +92,8 @@ interface ShowState {
 
   return (
     <div className="table-container">
-            <div className="form-wrapper">
+      <title>Cambio de contraseña</title>
+      <div className="form-wrapper">
         <motion.div
           className="form-header"
           initial={{ opacity: 0, y: 20 }}

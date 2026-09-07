@@ -1,0 +1,240 @@
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #A22E2E;
+    --success: #2E7D32;
+}
+
+.roman-content {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   Título
+   ============================================================ */
+.roman-title-section {
+    margin-bottom: 1rem;
+}
+
+.roman-accent-line {
+    width: 40px;
+    height: 3px;
+    background: var(--header-bg);
+    border-radius: 999px;
+    margin-bottom: 10px;
+}
+
+.roman-title-section h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.roman-divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.divider-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--header-bg);
+    flex-shrink: 0;
+}
+
+.roman-description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0 0 1.75rem;
+    max-width: 520px;
+}
+
+/* ============================================================
+   Formulario
+   ============================================================ */
+.roman-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-left,
+.form-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group-full {
+    height: 100%;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.roman-input,
+.roman-select,
+.roman-textarea {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+    font-family: inherit;
+}
+
+.roman-textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.roman-input:focus,
+.roman-select:focus,
+.roman-textarea:focus {
+    border-color: var(--header-bg);
+}
+
+.roman-input:disabled,
+.roman-select:disabled,
+.roman-textarea:disabled {
+    background: #F7F9FC;
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.roman-input.error,
+.roman-select.error,
+.roman-textarea.error {
+    border-color: var(--danger);
+}
+
+.roman-error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.76rem;
+    color: var(--danger);
+}
+
+/* ============================================================
+   Botones
+   ============================================================ */
+.contact-btn-row {
+    display: flex;
+    gap: 10px;
+}
+
+.contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.7rem 1.3rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.contact-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.contact-btn--submit {
+    background: var(--header-bg);
+    color: #fff;
+}
+
+.contact-btn--submit:hover:not(:disabled) {
+    background: #0A3A6A;
+}
+
+.contact-btn--clear {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--border);
+}
+
+.contact-btn--clear:hover:not(:disabled) {
+    background: #F7F9FC;
+}
+
+.spinner-icon {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.roman-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.roman-footer p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+    }
+
+    .contact-btn-row {
+        flex-direction: column;
+    }
+
+    .roman-textarea {
+        min-height: 120px;
+    }
+}

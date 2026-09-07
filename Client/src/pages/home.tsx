@@ -11,6 +11,7 @@ import EstadisticasPage from "./components/estadisticas";
 import PerfilPage from "./auth/perfilPage";
 import ChangeUserNamePage from "./auth/changeName";
 import ResetPasswordPage from "./auth/changePassword";
+import { SuggestionsComponent } from "../features/components/email/suggestComponent";
 
 
 
@@ -32,6 +33,7 @@ export const Home = ({isAuthenticated, setIsAuthenticated}:AuthenticatedProps) =
                 <Route path="/perfil" element={isAuthenticated ? <PerfilPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} /> : <Navigate to="/" replace/>}/>
                 <Route path="/change-user" element={isAuthenticated ? <ChangeUserNamePage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
                 <Route path="/change-password" element={isAuthenticated ? <ResetPasswordPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
+                <Route path="/send-email" element={isAuthenticated ? <SuggestionsComponent /> : <Navigate to="/" replace/>}/>
                 <Route path="*" element={<Navigate to={isAuthenticated ? "/gastos" : "/"} replace/>}/>
             </Routes>
         

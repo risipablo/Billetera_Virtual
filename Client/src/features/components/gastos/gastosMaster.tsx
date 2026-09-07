@@ -58,7 +58,7 @@ const GastosMaster = () => {
     const currentItems = itemsToDisplay.slice(offSet, offSet + itemsPerPage);
 
     useEffect(() => {
-        if (filterGastos !== gastos) {
+        if (filterGastos) {
             setCurrentPage(0);
         }
     }, [filterGastos.length]);

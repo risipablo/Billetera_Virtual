@@ -42,7 +42,7 @@ export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
     return(
         <AuthLayout title='Iniciar Sesión'>
-            {/* <Helmet><title>Login</title></Helmet> */}
+            <title>Inicia Sesión</title>
             <motion.form
                 onSubmit={handleSubmit}
                 initial={{ opacity: 0, scale: 0.8 }}

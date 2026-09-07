@@ -70,6 +70,7 @@ export interface PasswordInputProps{
     required?: boolean
     delay?: number
     name?:string
+    showStrength?: boolean
 }
 
 export interface AuthButtonProps{

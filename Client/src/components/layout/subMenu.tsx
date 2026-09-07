@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { config } from "../../config";
 
 import { 
-    User, 
-
+    User,
     LogOut, 
-
     UserCog,
     KeyRound,
     MessageSquare,
@@ -144,7 +142,7 @@ export const SubMenu = () => {
                 </MenuItem>
 
                 <MenuItem 
-                    onClick={() => handleNavigate('/configuracion/sugerencias')}
+                    onClick={() => handleNavigate('/send-email')}
                     sx={{ 
                         mx: 1,
                         borderRadius: 1,
