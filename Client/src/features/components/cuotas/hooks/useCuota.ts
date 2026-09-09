@@ -21,6 +21,7 @@ export const useCuotas = () => {
     const loadCuotas = useCallback(async () => {
         try {
             const response = await axiosInstance.get('/api/note');
+            console.log(response.data)
             setCuotas(Array.isArray(response.data) ? response.data : []);
             setFilteredCuotas(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
@@ -45,15 +46,9 @@ export const useCuotas = () => {
         fecha: string;
         categoria:string;
     }) => {
-
+        console.log('Enviando categoría:', data.categoria);
         if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha ||!data.categoria) {
-            console.log( {
-                titulo: !data.titulo.trim(),
-                cuotas: !data.cuotas,
-                monto: !data.monto,
-                fecha: !data.fecha,
-                categoria:!data.categoria
-            });
+
             toast.error('Todos los campos son requeridos', TOAST_CONFIG);
             return;
         }
@@ -68,6 +63,8 @@ export const useCuotas = () => {
                 fecha: data.fecha,
                 categoria:data.categoria
             });
+
+            console.log(data.categoria)
 
             setCuotas(prev => [...prev, response.data]);
             setFilteredCuotas(prev => [...prev, response.data]);

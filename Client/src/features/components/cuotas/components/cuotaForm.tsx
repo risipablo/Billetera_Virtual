@@ -134,8 +134,8 @@ export const CuotaForm = ({
                                             {["Comida", "Automovil", "Transporte", "Vivienda",'Servicios',
                                               "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
                                               'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas","Otro"  
-                                            ].map(categoria => 
-                                                <option key={categoria} value={categoria}>{categoria}</option>
+                                            ].map(cat => 
+                                                <option key={cat} value={cat}>{cat}</option>
                                             )}
                                     </select>
                                 </div>

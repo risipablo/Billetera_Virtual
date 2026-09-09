@@ -13,14 +13,29 @@ exports.getNotes = async (req, res) => {
 
 
 
+
 exports.addNotes = async (req, res) => {
+    
     const { titulo, cuotas, monto, fecha, categoria } = req.body;
 
+    console.log('=== DATOS COMPLETOS RECIBIDOS ===');
+    console.log('titulo:', titulo);
+    console.log('cuotas:', cuotas);
+    console.log('monto:', monto);
+    console.log('fecha:', fecha);
+    console.log('categoria:', categoria);
 
-
+    
     if (!titulo || !cuotas || !monto || !fecha || !categoria) {
+        console.log('Faltan campos:', {
+            titulo: !titulo,
+            cuotas: !cuotas,
+            monto: !monto,
+            fecha: !fecha,
+            categoria: !categoria
+        });
         return res.status(400).json({ 
-            error: 'Título, cuotas, monto, fecha y categoria son requeridos' 
+            error: 'Todos los campos son requeridos: título, cuotas, monto, fecha y categoría' 
         });
     }
 
@@ -30,37 +45,42 @@ exports.addNotes = async (req, res) => {
             titulo: titulo.trim(),
             cuotas: Number(cuotas),
             montoTotal: Number(monto),
-            categoria:categoria,
             fechaCompra: new Date(fecha),
+            categoria: categoria.trim(), 
             descripcion: [],
             precio: [],
             fecha: [],
             completedItems: [],
             userId: req.user.id,
         };
-        
 
+        console.log('=== DATOS A GUARDAR EN MONGODB ===');
+        console.log('noteData completo:', noteData);
+        console.log('categoria a guardar:', noteData.categoria);
+
+        
         const newNote = new noteModel(noteData);
-        
-
         const result = await newNote.save();
+
+        console.log('=== DOCUMENTO GUARDADO ===');
+        console.log('result:', result);
+        console.log('result.categoria:', result.categoria);
+
         
-        res.status(201).json(result);
+        const responseData = {
+            ...result.toObject(),
+            categoria: result.categoria 
+        };
 
+        console.log('=== RESPUESTA A ENVIAR ===');
+        console.log('responseData:', responseData);
+
+        res.status(201).json(responseData);
     } catch (err) {
-        if (err.name === 'MongoError' || err.name === 'MongoServerError') {
-            console.error('MongoDB Error Details:', {
-                code: err.code,
-                keyPattern: err.keyPattern,
-                keyValue: err.keyValue,
-            });
-        }
-
-    
-
+        console.error('ERROR AL GUARDAR:', err);
         res.status(500).json({ 
             error: err.message,
-            details: err.errors || {},
+            details: err.errors || {}
         });
     }
 };

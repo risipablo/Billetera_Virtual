@@ -127,13 +127,14 @@ export const CuotaCard = ({
                 whileHover={{ scale: 1.01 }}
             >
                 <div className={`nota-card ${cuota.completed ? 'completed' : 'active'}`}>
-                    {/* Header */}
+                    
                     <div className="nota-card-header">
                         <div className="nota-card-title">
                             <h3 className={cuota.completed ? 'completed' : ''}>
                                 {cuota.titulo}
                             </h3>
-                            <p className="categoria-cuota"> {cuota.categoria} </p>
+                            <p className="categoria-cuota"> {cuota.categoria || 0} </p>
+                            
                             <div className="nota-card-meta">
                                 <span className="nota-card-cuotas">
                                     {cuotasPagadas} de {totalCuotas} cuotas pagadas
@@ -239,7 +240,7 @@ export const CuotaCard = ({
                                             descripcion={cuota.descripcion[index] || ''}
                                             fecha={cuota.fecha?.[index] || ''}
                                             precio={cuota.precio?.[index] || 0}
-                                            categoria={cuota.categoria[index] || ''}
+                                            categoria={cuota.categoria || ''}
                                             index={index}
                                             notaId={cuota._id!}
                                             isCompleted={cuota.completedItems?.[index] || false}

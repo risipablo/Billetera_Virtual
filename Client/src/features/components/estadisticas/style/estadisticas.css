@@ -14,13 +14,6 @@
     min-height: 400px;
 }
 
-.estadisticas-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1.5rem;
-}
-
 /* ============================================================
    Filtros
    ============================================================ */
@@ -35,7 +28,7 @@
 .filtros-actions {
     display: flex;
     gap: 8px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
     flex-wrap: wrap;
 }
 
@@ -76,10 +69,24 @@
     cursor: not-allowed;
 }
 
+.filtros-section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 8px;
+}
+
 .filtros-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
+    margin-bottom: 1.1rem;
+}
+
+.filtros-grid:last-of-type {
+    margin-bottom: 0;
 }
 
 .filtros-group {
@@ -204,121 +211,78 @@
 }
 
 /* ============================================================
-   Gráficos — COMPACTO CON HOVER
+   Gráficos — grilla fija de 2 por fila
    ============================================================ */
 .estadisticas-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-top: 0.25rem;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+/* el donut de productos (top 10) ocupa las 2 columnas para que la leyenda respire */
+.grafico-span-2 {
+    grid-column: 1 / -1;
 }
 
 .grafico-container {
     background: #fff;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.75rem 0.75rem 0.65rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Efecto hover interno con brillo */
-.grafico-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(12, 68, 124, 0.03) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    border-radius: 10px;
-}
-
-.grafico-container:hover::before {
-    opacity: 1;
-}
-
-.grafico-container:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    border-color: var(--header-bg);
-    transform: translateY(-2px);
-}
-
-/* Títulos más grandes */
 .grafico-title {
-    font-size: 1rem; /* ← Aumentado de 0.8rem a 1rem */
+    font-size: 0.92rem;
     font-weight: 700;
     color: var(--text);
     text-align: center;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2.5px solid var(--header-bg);
-    letter-spacing: 0.03em;
-    position: relative;
-    z-index: 1;
-}
-
-/* Título específico para donut */
-.donut-title {
-    font-size: 1.05rem; /* ← Aún más grande para donut */
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--header-bg);
 }
 
 .grafico-placeholder {
     display: flex;
     justify-content: center;
-    padding: 0.75rem 0;
+    padding: 2rem 0;
 }
 
 .grafico-vacio {
     text-align: center;
-    padding: 0.75rem 0;
+    padding: 2rem 0;
     color: var(--text-muted);
-    font-size: 0.78rem;
+    font-size: 0.85rem;
 }
 
-/* Leyenda compacta con hover mejorado */
+/* Barras (SVG) */
 .grafico-leyenda-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    font-size: 0.7rem;
-    font-weight: 500;
+    gap: 8px;
+    font-size: 0.85rem;
     color: var(--text);
-    margin-bottom: 0.3rem;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 0.75rem;
 }
 
 .grafico-leyenda-bar .grafico-leyenda-color {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-    flex-shrink: 0;
-    transition: transform 0.3s ease;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
 }
 
-.grafico-container:hover .grafico-leyenda-color {
-    transform: scale(1.1);
-}
-
-/* SVG Wrapper */
 .grafico-svg-wrapper {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--header-bg) #F1F1EF;
-    position: relative;
-    z-index: 1;
 }
 
 .grafico-svg-wrapper::-webkit-scrollbar {
-    height: 4px;
+    height: 6px;
 }
 
 .grafico-svg-wrapper::-webkit-scrollbar-thumb {
@@ -326,155 +290,95 @@
     border-radius: 999px;
 }
 
-/* Resumen máximo compacto */
 .grafico-resumen-maximo {
     text-align: center;
-    margin-top: 0.4rem;
-    padding-top: 0.4rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--border);
-    position: relative;
-    z-index: 1;
 }
 
 .grafico-resumen-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin: 0 0 1px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin: 0 0 6px;
 }
 
 .grafico-resumen-nombre {
-    font-size: 0.85rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #DC5C4B;
-    margin: 0 0 1px;
-    transition: color 0.3s ease;
-}
-
-.grafico-container:hover .grafico-resumen-nombre {
-    color: #c0392b;
+    margin: 0 0 4px;
 }
 
 .grafico-resumen-valor {
-    font-size: 0.8rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--success);
     margin: 0;
-    transition: color 0.3s ease;
 }
 
-.grafico-container:hover .grafico-resumen-valor {
-    color: #1e7e34;
-}
-
-/* Donut específico */
+/* Donut */
 .grafico-donut-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-    position: relative;
-    z-index: 1;
+    gap: 1.25rem;
 }
 
 .grafico-donut-wrapper {
-    position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
+    width: 100%;
 }
 
 .grafico-donut {
     max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-}
-
-.grafico-container:hover .grafico-donut {
-    transform: scale(1.02);
-}
-
-.grafico-donut-total {
-    font-size: 16px;
-    font-weight: 600;
-    fill: var(--text);
 }
 
 .grafico-leyenda {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 4px 10px;
+    gap: 6px 14px;
     width: 100%;
 }
 
 .grafico-leyenda-item {
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.7rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.grafico-leyenda-item:hover {
-    background: rgba(12, 68, 124, 0.06);
-    transform: translateX(2px);
+    gap: 6px;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
 }
 
 .grafico-leyenda-item.hovered {
-    background: rgba(12, 68, 124, 0.08);
-    transform: translateX(4px);
+    background: #F7F9FC;
 }
 
 .grafico-leyenda-color {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
-    transition: transform 0.3s ease;
 }
 
 .grafico-leyenda-label {
     color: var(--text);
-    font-weight: 500;
-    transition: color 0.3s ease;
 }
 
 .grafico-leyenda-label.max {
-    font-weight: 700;
-    color: var(--header-bg);
+    font-weight: 600;
 }
 
 .grafico-leyenda-valor {
     color: var(--text-muted);
-    font-weight: 500;
-}
-
-.grafico-leyenda-item:hover .grafico-leyenda-valor {
-    color: var(--text);
 }
 
 /* ============================================================
-   Responsive FULL
+   Responsive
    ============================================================ */
-@media (max-width: 1024px) {
-    .estadisticas-grid {
-        gap: 0.65rem;
-    }
-    
-    .grafico-title {
-        font-size: 0.9rem;
-    }
-    
-    .donut-title {
-        font-size: 0.95rem;
-    }
-}
-
 @media (max-width: 900px) {
     .resumen-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -496,34 +400,14 @@
 @media (max-width: 760px) {
     .estadisticas-grid {
         grid-template-columns: 1fr;
-        gap: 0.65rem;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
-    .grafico-title {
-        font-size: 0.95rem;
-    }
-
-    .donut-title {
-        font-size: 1rem;
-    }
-
-    .grafico-container {
-        padding: 0.85rem;
-    }
-
-    .grafico-container:hover {
-        transform: translateY(-1px);
+    .grafico-span-2 {
+        grid-column: 1;
     }
 }
 
 @media (max-width: 680px) {
-    .estadisticas-title {
-        font-size: 1.3rem;
-    }
-
     .resumen-card {
         padding: 1.25rem;
     }
@@ -554,19 +438,6 @@
     .filtros-grid {
         grid-template-columns: 1fr 1fr;
     }
-
-    .grafico-donut-container {
-        gap: 0.5rem;
-    }
-
-    .grafico-leyenda {
-        gap: 3px 8px;
-    }
-
-    .grafico-leyenda-item {
-        font-size: 0.65rem;
-        padding: 1px 4px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -580,65 +451,5 @@
 
     .grafico-donut-container {
         flex-direction: column;
-    }
-
-    .grafico-resumen-maximo {
-        display: none;
-    }
-
-    .grafico-title {
-        font-size: 0.85rem;
-        margin-bottom: 0.4rem;
-        padding-bottom: 0.4rem;
-    }
-
-    .donut-title {
-        font-size: 0.9rem;
-    }
-
-    .grafico-container {
-        padding: 0.65rem;
-        border-radius: 8px;
-    }
-
-    .grafico-leyenda-item {
-        font-size: 0.6rem;
-        padding: 1px 3px;
-    }
-
-    .grafico-leyenda-color {
-        width: 6px;
-        height: 6px;
-    }
-
-    .grafico-donut-total {
-        font-size: 14px !important;
-    }
-
-    .grafico-container:hover {
-        transform: none;
-    }
-
-    .grafico-container::before {
-        display: none;
-    }
-}
-
-@media (max-width: 360px) {
-    .grafico-title {
-        font-size: 0.75rem;
-    }
-
-    .donut-title {
-        font-size: 0.8rem;
-    }
-
-    .grafico-container {
-        padding: 0.5rem;
-    }
-
-    .grafico-leyenda-item {
-        font-size: 0.55rem;
-        gap: 2px;
     }
 }

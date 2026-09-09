@@ -8,9 +8,6 @@ const colores = [
     '#A22E2E', '#6B2FA8', '#147A69', '#414C82', '#A32360',
 ];
 
-// const COLOR_BARRA = '#A855F7';
-// const COLOR_MAX = '#DC5C4B';
-
 const colorOtros = '#B8B8B2';
 
 export const GraficoDonut = ({
@@ -19,6 +16,7 @@ export const GraficoDonut = ({
     loading = false,
     size = 200,
     maxSlices,
+    colorOverrides,
 }: GraficoDonutProps) => {
     const [hoveredSlice, setHoveredSlice] = useState<number | null>(null);
 
@@ -32,6 +30,15 @@ export const GraficoDonut = ({
             </div>
         );
     }
+
+    
+    const resolveColor = (label: string, fallback: string): string => {
+        if (!colorOverrides) return fallback;
+        const key = Object.keys(colorOverrides).find(
+            (k) => k.toLowerCase() === label.toLowerCase()
+        );
+        return key ? colorOverrides[key] : fallback;
+    };
 
     const pares = data.labels.map((label, i) => ({
         label,
@@ -49,11 +56,14 @@ export const GraficoDonut = ({
 
         labels = [...top.map(p => p.label), 'Otros'];
         values = [...top.map(p => p.value), sumaResto];
-        colorMap = [...top.map((_, i) => colores[i % colores.length]), colorOtros];
+        colorMap = [
+            ...top.map((p, i) => resolveColor(p.label, colores[i % colores.length])),
+            colorOtros,
+        ];
     } else {
         labels = pares.map(p => p.label);
         values = pares.map(p => p.value);
-        colorMap = pares.map((_, i) => colores[i % colores.length]);
+        colorMap = pares.map((p, i) => resolveColor(p.label, colores[i % colores.length]));
     }
 
     const total = values.reduce((sum, v) => sum + v, 0) || 1;
@@ -66,7 +76,7 @@ export const GraficoDonut = ({
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            whileHover={{ 
+            whileHover={{
                 boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                 borderColor: "var(--header-bg)",
                 transition: { duration: 0.2 }
@@ -92,7 +102,7 @@ export const GraficoDonut = ({
                             const isHovered = hoveredSlice === index;
 
                             return (
-                                <g 
+                                <g
                                     key={label}
                                     onMouseEnter={() => setHoveredSlice(index)}
                                     onMouseLeave={() => setHoveredSlice(null)}
@@ -109,7 +119,7 @@ export const GraficoDonut = ({
                                         strokeDashoffset={`-${(startAngle / 360) * 2 * Math.PI * radius}`}
                                         transform="rotate(-90 100 100)"
                                         opacity={isMax ? 1 : isHovered ? 1 : 0.7}
-                                        style={{ 
+                                        style={{
                                             transition: 'stroke-width 0.3s ease, opacity 0.3s ease',
                                             filter: isHovered ? 'drop-shadow(0 0 8px rgba(0,0,0,0.2))' : 'none'
                                         }}
@@ -125,7 +135,7 @@ export const GraficoDonut = ({
                                             strokeDasharray={`${(percentage / 100) * 2 * Math.PI * innerRadius} ${2 * Math.PI * innerRadius}`}
                                             strokeDashoffset={`-${(startAngle / 360) * 2 * Math.PI * innerRadius}`}
                                             transform="rotate(-90 100 100)"
-                                            style={{ 
+                                            style={{
                                                 transition: 'stroke-width 0.3s ease',
                                                 filter: isHovered ? 'drop-shadow(0 0 8px rgba(0,0,0,0.2))' : 'none'
                                             }}
@@ -177,8 +187,8 @@ export const GraficoDonut = ({
                         const isMax = label === maxLabelReal;
                         const isHovered = hoveredSlice === index;
                         return (
-                            <div 
-                                key={label} 
+                            <div
+                                key={label}
                                 className={`grafico-leyenda-item ${isHovered ? 'hovered' : ''}`}
                                 onMouseEnter={() => setHoveredSlice(index)}
                                 onMouseLeave={() => setHoveredSlice(null)}
@@ -186,7 +196,7 @@ export const GraficoDonut = ({
                             >
                                 <span
                                     className="grafico-leyenda-color"
-                                    style={{ 
+                                    style={{
                                         backgroundColor: colorMap[index],
                                         transform: isHovered ? 'scale(1.3)' : 'scale(1)',
                                         transition: 'transform 0.3s ease'

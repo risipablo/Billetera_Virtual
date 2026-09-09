@@ -20,6 +20,7 @@ import { GastosFijosMaster } from "../gastosFijos/gastosFijoMaster";
 
 const GastosMaster = () => {
     const { gastos, setGastos, addGastos, deleteGastos, editGastos, loading, filterGastos, setFilterGastos, deleteFilteredGastos, allDeleteGastos } = UseGastos();
+    const [activeFilter, setActiveFilter] = useState('');
 
     const [limite, setLimite] = useState<string>("");
     const { lastSpend, totalMonto, limiteSpend } = useGastosStats(gastos, filterGastos, limite);
@@ -38,7 +39,6 @@ const GastosMaster = () => {
     const isMobile = useMediaQuery('(max-width:500px)');
     const [showInputs, setShowInputs] = useState(true);
 
-    const [activeFilter, setFilterActive] = useState<string>('');
     const [showModalFilter, setShowModalFilter] = useState(false);
     const [monthFilter, setMonthFilter] = useState<string>('');
     const [yearFilter, setYearFilter] = useState<string>('');
@@ -58,8 +58,8 @@ const GastosMaster = () => {
     const currentItems = itemsToDisplay.slice(offSet, offSet + itemsPerPage);
 
     useEffect(() => {
-        if (filterGastos) {
-            setCurrentPage(0);
+        if (filterGastos.length === 0 && gastos.length > 0 && activeFilter) {
+            setFilterGastos(gastos)
         }
     }, [filterGastos.length]);
 
@@ -81,14 +81,13 @@ const GastosMaster = () => {
     const searchGastos = (palabraClave: string) => {
         if (!palabraClave.trim()) {
             setFilterGastos(gastos);
-            setFilterActive('');
+            setActiveFilter('');
             return;
         }
 
         const resultados = filterGastosBySearch(gastos, palabraClave);
         setFilterGastos(resultados);
-        setFilterActive(palabraClave);
-        
+        setActiveFilter(palabraClave);
     };
 
     const handleSubmit = async () => {
@@ -197,14 +196,14 @@ const GastosMaster = () => {
     };
 
    const handleDeleteFiltered = async () => {
-    const idsToDelete = filterGastos
-        .map(g => g._id)
-        .filter((id): id is string => Boolean(id));
-    if (idsToDelete.length === 0) return;
+        const idsToDelete = filterGastos
+            .map(g => g._id)
+            .filter((id): id is string => Boolean(id));
+        if (idsToDelete.length === 0) return;
 
-    await deleteFilteredGastos(idsToDelete);
-    setShowModalFilter(false);
-    setFilterActive('');
+        await deleteFilteredGastos(idsToDelete);
+        setShowModalFilter(false);
+        setActiveFilter('');
     };
 
     const hasActiveFilters = Boolean(
@@ -279,7 +278,8 @@ const GastosMaster = () => {
                     setCategoriaFilter(categoriaFilter)
 
                     const hasFilters = monthFilter || yearFilter || conditions || metodoFilter || estadoFilter || categoriaFilter;
-                    setFilterActive(hasFilters ? 'fechas' : '');
+                    setActiveFilter(hasFilters ? 'fechas' : '');
+                    
                 }}
             />
 
@@ -356,3 +356,4 @@ const GastosMaster = () => {
 };
 
 export default GastosMaster;
+

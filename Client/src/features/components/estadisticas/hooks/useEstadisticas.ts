@@ -14,6 +14,7 @@ export const useEstadisticas = () => {
         producto: '',
         metodo: '',
         condicion: '',
+        categoria:''
     });
 
     const loadGastos = useCallback(async () => {
@@ -43,6 +44,7 @@ export const useEstadisticas = () => {
     const resumen = useMemo((): ResumenFinanciero => {
         const data = gastosFiltrados.length > 0 ? gastosFiltrados : gastos;
         const condicionesExcluidas = ['cajero', 'inversion', 'deben', 'cuotas'];
+        const condicionesExcluida = ['cajero', 'deben', 'cuotas'];
 
         const totalGastos = data.reduce((acc, gasto) => {
             if (!gasto || !gasto.condicion) return acc;
@@ -88,9 +90,24 @@ export const useEstadisticas = () => {
             return acc;
         }, {} as Record<string, number>);
 
+        const categoriaProductos = data.reduce((acc, gasto) => {
+            if (!gasto || !gasto.categoria || !gasto.condicion) return acc;
+            if (condicionesExcluida.includes(gasto.condicion.toLowerCase())) {
+                return acc;
+            }
+
+            if(!acc[gasto.categoria])  acc[gasto.categoria] = 0
+            acc[gasto.categoria] += gasto.monto || 0
+            return acc
+        }, {} as Record<string, number>);
+
         const topProductos = Object.entries(productos)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 5);
+
+        const topCategoria = Object.entries(categoriaProductos)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
 
         return {
             totalGastos,
@@ -98,6 +115,7 @@ export const useEstadisticas = () => {
             promedioMensual,
             promedioDiario,
             topProductos: topProductos as [string, number][],
+            topCategorias: topCategoria as [string, number][],
             mesSeleccionado,
         };
     }, [gastos, gastosFiltrados, mesSeleccionado]);
@@ -207,6 +225,39 @@ export const useEstadisticas = () => {
         };
     }, [gastos, gastosFiltrados]);
 
+     const datosPorCategoria = useMemo(() => {
+       const data = gastosFiltrados.length > 0 ? gastosFiltrados : gastos;
+        const condicionesExcluidas = ['cajero', 'deben', 'cuotas'];
+
+        const porCategorias = data.reduce((acc,g) => {
+            if (!g || !g.categoria || !g.condicion) return acc;
+            if (condicionesExcluidas.includes(g.condicion.toLowerCase())) {
+                return acc;
+            }
+
+            if(!acc[g.categoria])  acc[g.categoria] = 0
+            acc[g.categoria] += g.monto || 0
+            return acc
+
+        }, {} as Record<string, number>)
+
+        const entries = Object.entries(porCategorias).sort((a, b) => {
+            const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
+                           'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+            return meses.indexOf(a[0]) - meses.indexOf(b[0]);
+        });
+
+        const max = entries.length > 0 ? entries.reduce((a, b) => a[1] > b[1] ? a : b) : ['', 0];
+       
+        return {
+            labels: entries.map(item => item[0]),
+            values: entries.map(item => item[1]),
+            maxLabel: max[0] ? String(max[0]) : '',
+            maxValue: max[1] ? Number(max[1]) : 0,
+        };
+
+    },[gastos,gastosFiltrados])
+
     const datosPorAño = useMemo(() => {
         const data = gastosFiltrados.length > 0 ? gastosFiltrados : gastos;
         const condicionesExcluidas = ['cajero', 'inversion', 'deben', 'cuotas'];
@@ -260,6 +311,8 @@ export const useEstadisticas = () => {
         };
     }, [gastos, gastosFiltrados]);
 
+   
+
     const aplicarFiltros = useCallback((nuevosFiltros: typeof filtros) => {
         setFiltros(nuevosFiltros);
         
@@ -280,13 +333,17 @@ export const useEstadisticas = () => {
         if (nuevosFiltros.condicion) {
             filtrados = filtrados.filter(g => g && g.necesario && g.necesario === nuevosFiltros.condicion);
         }
+
+        if (nuevosFiltros.categoria) {
+            filtrados = filtrados.filter(g => g && g.categoria && g.categoria === nuevosFiltros.categoria);
+        }        
         
         setGastosFiltrados(filtrados);
         setMesSeleccionado(nuevosFiltros.mes);
     }, [gastos]);
 
     const resetFiltros = useCallback(() => {
-        setFiltros({ mes: '', año: '', producto: '', metodo: '', condicion: '' });
+        setFiltros({ mes: '', año: '', producto: '', metodo: '', condicion: '', categoria:'' });
         setGastosFiltrados(gastos);
         setMesSeleccionado('');
     }, [gastos]);
@@ -312,6 +369,7 @@ export const useEstadisticas = () => {
         datosPorCondicion,
         datosPorAño,
         datosPorInversion,
+        datosPorCategoria,
         filtros,
         aplicarFiltros,
         resetFiltros,

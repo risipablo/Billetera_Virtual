@@ -25,6 +25,7 @@ export interface ResumenFinanciero {
     promedioMensual: number;
     promedioDiario: number | null;
     topProductos: [string, number][];
+    topCategorias: [string, number][];
     mesSeleccionado?: string;
 }
 
@@ -35,6 +36,7 @@ export interface FiltrosEstadisticasProps {
         producto: string;
         metodo: string;
         condicion: string;
+        categoria:string
     }) => void;
     onReset: () => void;
     onMesActual: () => void;
@@ -66,4 +68,5 @@ export interface GraficoDonutProps {
     loading?: boolean;
     size?: number;
     maxSlices?: number; 
+    colorOverrides?: Record<string, string>;
 }

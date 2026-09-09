@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Calendar, RotateCcw } from "lucide-react";
 import { motion } from "framer-motion";
@@ -19,6 +18,7 @@ export const FiltrosEstadisticas = ({
         producto: '',
         metodo: '',
         condicion: '',
+        categoria: ''
     });
 
     const handleChange = (field: keyof typeof filtros, value: string) => {
@@ -28,7 +28,7 @@ export const FiltrosEstadisticas = ({
     };
 
     const handleReset = () => {
-        setFiltros({ mes: '', año: '', producto: '', metodo: '', condicion: '' });
+        setFiltros({ mes: '', año: '', producto: '', metodo: '', condicion: '', categoria: '' });
         onReset();
     };
 
@@ -37,7 +37,7 @@ export const FiltrosEstadisticas = ({
         visible: (i: number) => ({
             opacity: 1,
             y: 0,
-            transition: { delay: i * 0.15, duration: 0.4 },
+            transition: { delay: i * 0.1, duration: 0.4 },
         }),
     };
 
@@ -63,6 +63,8 @@ export const FiltrosEstadisticas = ({
                 </button>
             </div>
 
+            {/* Sección 1: período de tiempo */}
+            <p className="filtros-section-label">Período</p>
             <div className="filtros-grid">
                 <motion.div
                     custom={0}
@@ -106,7 +108,11 @@ export const FiltrosEstadisticas = ({
                         <option value="2027">2027</option>
                     </select>
                 </motion.div>
+            </div>
 
+            {/* Sección 2: clasificación */}
+            <p className="filtros-section-label">Clasificación</p>
+            <div className="filtros-grid">
                 <motion.div
                     custom={2}
                     variants={containerVariants}
@@ -132,6 +138,30 @@ export const FiltrosEstadisticas = ({
                     animate="visible"
                     className="filtros-group"
                 >
+                    <label className="filtros-label">Categoría</label>
+                    <select
+                        className="filtros-select"
+                        value={filtros.categoria}
+                        onChange={(e) => handleChange('categoria', e.target.value)}
+                        disabled={loading}
+                    >
+                        <option value="">Todas</option>
+                        {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
+                          "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                          'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro", "Supermercado", "Salidas", "Otro"
+                        ].map(cat =>
+                            <option key={cat} value={cat}>{cat}</option>
+                        )}
+                    </select>
+                </motion.div>
+
+                <motion.div
+                    custom={4}
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="filtros-group"
+                >
                     <label className="filtros-label">Método</label>
                     <select
                         className="filtros-select"
@@ -148,7 +178,7 @@ export const FiltrosEstadisticas = ({
                 </motion.div>
 
                 <motion.div
-                    custom={4}
+                    custom={5}
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"

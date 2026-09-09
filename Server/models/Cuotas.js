@@ -18,10 +18,7 @@ const noteSchema = new mongoose.Schema({
     fechaCompra: {
          type: Date
     },
-    categoria:{
-        type: String,
-        required:true
-    },
+    categoria: { type: String, required: true },
     descripcion: {
         type: [String],
         default: []
