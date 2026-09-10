@@ -27,6 +27,21 @@
     flex-shrink: 0;
 }
 
+.perfil-avatar-2{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: var(--header-bg);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 .3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
 .perfil-title {
     margin: 0;
     font-size: 1.1rem;

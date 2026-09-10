@@ -161,9 +161,9 @@ const GastosContainer = ({
                     <thead>
                         <tr>
                             <th>Fecha
-                                   <IconButton onClick={onOrderByDate} className="ordenar" size="small" sx={{ color: "rgb(245, 243, 239)" }} >
-                                    {ordenAsc ? <ArrowUp size={15} /> : <ArrowDown size={15} />}
-                                    </IconButton>
+                                <IconButton onClick={onOrderByDate} className="ordenar" size="small" sx={{ color: "rgb(245, 243, 239)" }} >
+                                {ordenAsc ? <ArrowUp size={15} /> : <ArrowDown size={15} />}
+                                </IconButton>
                             </th>
                             <th>Producto</th>
                             <th className="align-right">Monto</th>

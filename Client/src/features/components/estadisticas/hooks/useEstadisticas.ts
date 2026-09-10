@@ -205,12 +205,12 @@ export const useEstadisticas = () => {
         const condicionesExcluidas = ['cajero', 'inversion', 'deben', 'cuotas'];
         
         const porCondicion = data.reduce((acc, g) => {
-            if (!g || !g.condicion || !g.necesario) return acc;
+            if (!g || !g.condicion) return acc;
             if (condicionesExcluidas.includes(g.condicion.toLowerCase())) {
                 return acc;
             }
-            if (!acc[g.necesario]) acc[g.necesario] = 0;
-            acc[g.necesario] += g.monto || 0;
+            if (!acc[g.condicion]) acc[g.condicion] = 0;
+            acc[g.condicion] += g.monto || 0;
             return acc;
         }, {} as Record<string, number>);
 

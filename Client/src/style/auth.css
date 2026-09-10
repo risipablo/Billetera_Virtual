@@ -56,6 +56,7 @@
 
 /* ===== CONTAINER LOGIN ===== */
 .container-login {
+  margin: 1rem auto;
   width: 100%;
   max-width: 450px;
   background: white;
@@ -63,7 +64,7 @@
   padding: 2.5rem 1.8rem;
   position: relative;
   z-index: 1;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
 }
 
 .container-login h2 {

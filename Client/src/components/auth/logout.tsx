@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 
 import { UseAuth } from "../../features/hooks/useAuth"
 import type { AuthenticatedProps } from "../../features/types/type.auth"
+import { LogOut } from "lucide-react"
 
 export const LogOutComponent = ({ setIsAuthenticated }:AuthenticatedProps ) => {
   const navigate = useNavigate()
@@ -24,12 +25,13 @@ export const LogOutComponent = ({ setIsAuthenticated }:AuthenticatedProps ) => {
   return (
     <motion.button
       onClick={handleLogout}
-      className="logout-btn"
+      className="delete-account-btn"
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
+      
     >
-
-      <span>Cerrar Sesión</span>
+<LogOut size={16} />
+      <span> Cerrar Sesión</span>
     </motion.button>
   )
 }

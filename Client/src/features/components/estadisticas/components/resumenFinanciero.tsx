@@ -62,18 +62,18 @@ export const ResumenFinanciero = ({ resumen, loading = false }: ResumenFinancier
                                 <strong>{producto}</strong> : $ {monto.toLocaleString('es-AR')}
                             </span>
                         ))}
-                    </div>
-                    <div>
-                        <span className="resumen-label">Top Categorias</span>
-                    <div className="resumen-productos-grid">
+                    </div>                    
+                </div>
+
+                <div className="resumen-category">
+                    <span className="resumen-label">Top Categorias</span>
+                    <div className="resumen-category-grid">
                         {resumen.topCategorias.map(([producto, monto]: [string, number]) => (
                             <span key={producto} className="resumen-producto-item">
                                 <strong>{producto}</strong> : $ {monto.toLocaleString('es-AR')}
                             </span>
                         ))}
                     </div>
-                    </div>
-                    
                 </div>
 
             </div>

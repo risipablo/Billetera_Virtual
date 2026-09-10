@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { User, KeyRound, Target, MessageSquare, Info, ChevronRight, LogOut, Trash2 } from "lucide-react";
+import { User, KeyRound, Target, MessageSquare, Info, ChevronRight, Trash2 } from "lucide-react";
 import { LogOutComponent } from "../../components/auth/logout"
 import { useUser } from "../../features/hooks/useUser"
 import type { AuthenticatedProps } from "../../features/types/type.auth"
@@ -90,7 +90,7 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
 
                 <div className="perfil-danger-actions">
                     <div className="perfil-logout-wrapper">
-                        <LogOut size={16} />
+                        
                         <LogOutComponent setIsAuthenticated={setIsAuthenticated} />
                     </div>
 

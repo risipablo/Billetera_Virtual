@@ -115,12 +115,24 @@ export const FilterGastos = ({
     const classifyFiltersCount = [!!conditions, !!metodoFilter, !!estadoFilter].filter(Boolean).length
     const hasActiveFilters = dateFiltersCount > 0 || classifyFiltersCount > 0
 
-    useEffect(() => {
-        setFilterGastos(filteredBills)
+   useEffect(() => {
         if (onFilterChange) {
-            onFilterChange({dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter,categoriaFilter});
+            onFilterChange({
+                dateFilter,
+                monthFilter,
+                yearFilter,
+                conditions,
+                metodoFilter,
+                estadoFilter,
+                categoriaFilter
+            });
         }
-    },[filteredBills])
+    }, [dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter, categoriaFilter, showToday]);
+
+    useEffect(() => {
+        setFilterGastos(filteredBills);
+    
+    }, [dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter, categoriaFilter, showToday]);
 
     const openDatePopover = () => {
         setPendingDate(dateFilter)

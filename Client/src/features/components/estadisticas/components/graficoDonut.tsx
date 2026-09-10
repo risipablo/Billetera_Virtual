@@ -31,7 +31,6 @@ export const GraficoDonut = ({
         );
     }
 
-    
     const resolveColor = (label: string, fallback: string): string => {
         if (!colorOverrides) return fallback;
         const key = Object.keys(colorOverrides).find(
@@ -88,7 +87,6 @@ export const GraficoDonut = ({
                     <svg
                         viewBox="0 0 200 200"
                         className="grafico-donut"
-                        style={{ width: size, height: size }}
                     >
                         {labels.map((label, index) => {
                             const value = values[index] || 0;
@@ -144,9 +142,9 @@ export const GraficoDonut = ({
                                     {isHovered && (
                                         <text
                                             x="100"
-                                            y="85"
+                                            y="82"
                                             textAnchor="middle"
-                                            fontSize="11"
+                                            fontSize="13"
                                             fontWeight="700"
                                             fill={colorMap[index]}
                                         >
@@ -162,7 +160,7 @@ export const GraficoDonut = ({
                             y="95"
                             textAnchor="middle"
                             className="grafico-donut-total"
-                            fontSize="16"
+                            fontSize="18"
                             fontWeight="600"
                             fill="#26262A"
                         >
@@ -173,7 +171,7 @@ export const GraficoDonut = ({
                             y="115"
                             textAnchor="middle"
                             className="grafico-donut-total"
-                            fontSize="10"
+                            fontSize="11"
                             fill="#8A8A90"
                         >
                             Total

@@ -55,8 +55,9 @@ export const EstadisticasMaster = () => {
 
             <ResumenFinanciero resumen={resumen} loading={loading} />
 
-            {/* 1) Tendencia en el tiempo — barras */}
             <div className="estadisticas-grid">
+
+                
                 <GraficoBarras
                     data={datosPorMes}
                     title="Gastos por Mes"
@@ -70,8 +71,6 @@ export const EstadisticasMaster = () => {
                     loading={loading}
                     height={280}
                 />
-
-
 
                 
                 <GraficoDonut
@@ -96,6 +95,7 @@ export const EstadisticasMaster = () => {
                     size={220}
                 />
 
+                
                 <GraficoDonut
                     data={{
                         ...datosPorCondicion,
@@ -108,25 +108,25 @@ export const EstadisticasMaster = () => {
                     colorOverrides={COLORES_CONDICION}
                 />
 
-                <GraficoBarras
-                    data={datosPorInversion}
-                    title="Inversiones"
+                <GraficoDonut
+                    data={{
+                        ...datosPorProducto,
+                        maxLabel: String(datosPorProducto.maxLabel),
+                        maxValue: Number(datosPorProducto.maxValue),
+                    }}
+                    title="Top 10 Productos con Más Gastos"
                     loading={loading}
-                    height={280}
+                    size={220}
+                    maxSlices={10}
                 />
 
                 
                 <div className="grafico-span-2">
-                    <GraficoDonut
-                        data={{
-                            ...datosPorProducto,
-                            maxLabel: String(datosPorProducto.maxLabel),
-                            maxValue: Number(datosPorProducto.maxValue),
-                        }}
-                        title="Top 10 Productos con Más Gastos"
+                    <GraficoBarras
+                        data={datosPorInversion}
+                        title="Inversiones"
                         loading={loading}
-                        size={220}
-                        maxSlices={10}
+                        height={280}
                     />
                 </div>
             </div>

@@ -87,7 +87,10 @@ export const SubMenu = () => {
                 onClick={handleUserMenuClick} 
                 style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
             >
-                <User size={20} />
+                
+                <div className="perfil-avatar-2">
+                    {user?.name?.charAt(0).toUpperCase() || '?'}
+                </div>
                 <p>Hola, {user?.name || 'Cargando...'}</p>
             </div>
 

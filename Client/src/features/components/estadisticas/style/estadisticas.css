@@ -210,37 +210,51 @@
     color: var(--header-bg);
 }
 
+.resumen-category-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 4px 24px;
+    margin-top: 2px;
+}
+
 /* ============================================================
    Gráficos — grilla fija de 2 por fila
    ============================================================ */
 .estadisticas-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1.25rem;
     margin-top: 0.5rem;
+    width: 100%;
+    min-width: 0;
 }
 
-/* el donut de productos (top 10) ocupa las 2 columnas para que la leyenda respire */
 .grafico-span-2 {
     grid-column: 1 / -1;
 }
 
 .grafico-container {
-    background: #fff;
+      background: #fff;
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 1.25rem;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .grafico-title {
-    font-size: 0.92rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--text);
     text-align: center;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 2px solid var(--header-bg);
+    word-break: break-word;
 }
 
 .grafico-placeholder {
@@ -253,16 +267,16 @@
     text-align: center;
     padding: 2rem 0;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
-/* Barras (SVG) */
+
 .grafico-leyenda-bar {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text);
     margin-bottom: 0.75rem;
 }
@@ -275,10 +289,13 @@
 
 .grafico-svg-wrapper {
     width: 100%;
+    max-width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--header-bg) #F1F1EF;
+    min-width: 0;
 }
 
 .grafico-svg-wrapper::-webkit-scrollbar {
@@ -298,20 +315,20 @@
 }
 
 .grafico-resumen-label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--text);
     margin: 0 0 6px;
 }
 
 .grafico-resumen-nombre {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #DC5C4B;
     margin: 0 0 4px;
 }
 
 .grafico-resumen-valor {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--success);
     margin: 0;
@@ -329,17 +346,21 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    min-width: 0;
 }
 
 .grafico-donut {
-    max-width: 100%;
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    display: block;
 }
 
 .grafico-leyenda {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 6px 14px;
+    gap: 8px 16px;
     width: 100%;
 }
 
@@ -347,10 +368,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.75rem;
-    padding: 2px 4px;
+    font-size: 0.85rem;
+    padding: 3px 6px;
     border-radius: 6px;
     transition: background-color 0.15s ease;
+    min-width: 0;
 }
 
 .grafico-leyenda-item.hovered {
@@ -358,14 +380,18 @@
 }
 
 .grafico-leyenda-color {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
 .grafico-leyenda-label {
     color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 140px;
 }
 
 .grafico-leyenda-label.max {
@@ -374,6 +400,8 @@
 
 .grafico-leyenda-valor {
     color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* ============================================================
@@ -399,11 +427,15 @@
 
 @media (max-width: 760px) {
     .estadisticas-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .grafico-span-2 {
         grid-column: 1;
+    }
+
+    .grafico-donut {
+        max-width: 200px;
     }
 }
 
@@ -413,7 +445,7 @@
     }
 
     .resumen-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         row-gap: 1rem;
     }
 
@@ -438,18 +470,62 @@
     .filtros-grid {
         grid-template-columns: 1fr 1fr;
     }
+
+    .grafico-container {
+        padding: 1rem;
+    }
+
+    .grafico-title {
+        font-size: 0.95rem;
+    }
+
+    .grafico-leyenda {
+        gap: 6px 10px;
+    }
+
+    .grafico-leyenda-item {
+        font-size: 0.8rem;
+        padding: 2px 5px;
+    }
+
+    .grafico-leyenda-label {
+        max-width: 110px;
+    }
 }
 
 @media (max-width: 480px) {
+    .filtros-actions {
+        gap: 18px;
+        margin-bottom: 1.1rem;
+        
+    }
     .filtros-grid {
         grid-template-columns: 1fr;
     }
 
-    .filtros-actions {
-        flex-direction: column;
-    }
 
     .grafico-donut-container {
         flex-direction: column;
+    }
+
+    .grafico-donut {
+        max-width: 170px;
+    }
+
+    .grafico-title {
+        font-size: 1.1rem;
+    }
+
+    .grafico-leyenda-item {
+        font-size: 0.75rem;
+    }
+
+    .grafico-leyenda-label {
+        max-width: 90px;
+    }
+
+    .grafico-svg-wrapper {
+        margin: 0 -0.5rem;
+        padding: 0 0.5rem;
     }
 }

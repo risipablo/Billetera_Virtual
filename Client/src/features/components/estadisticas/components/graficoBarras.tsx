@@ -57,11 +57,11 @@ export const GraficoBarras = ({
     const maxIndex = data.values.indexOf(maxValue);
     const maxLabelReal = data.labels[maxIndex];
 
-    const marginLeft = 45;
+    const marginLeft = 50;
     const marginRight = 10;
-    const marginTop = 8;
-    const marginBottom = 40;
-    const barWidth = 26;
+    const marginTop = 10;
+    const marginBottom = 44;
+    const barWidth = 28;
     const barGap = 10;
     const chartHeight = height - marginTop - marginBottom;
     const chartWidth = data.labels.length * (barWidth + barGap);
@@ -103,9 +103,9 @@ export const GraficoBarras = ({
                                 />
                                 <text
                                     x={marginLeft - 8}
-                                    y={y + 3}
+                                    y={y + 4}
                                     textAnchor="end"
-                                    fontSize="9"
+                                    fontSize="11"
                                     fill="#8A8A90"
                                 >
                                     {val.toLocaleString('es-AR')}
@@ -115,12 +115,12 @@ export const GraficoBarras = ({
                     })}
 
                     <text
-                        x={12}
+                        x={14}
                         y={marginTop + chartHeight / 2}
                         textAnchor="middle"
-                        fontSize="9"
+                        fontSize="11"
                         fill="#8A8A90"
-                        transform={`rotate(-90 12 ${marginTop + chartHeight / 2})`}
+                        transform={`rotate(-90 14 ${marginTop + chartHeight / 2})`}
                     >
                         $
                     </text>
@@ -157,13 +157,9 @@ export const GraficoBarras = ({
                                         x={x + barWidth / 2}
                                         y={y - 8}
                                         textAnchor="middle"
-                                        fontSize="9"
+                                        fontSize="11"
                                         fill={isMax ? COLOR_MAX : COLOR_BARRA}
                                         fontWeight="700"
-                                        style={{
-                                            transition: 'opacity 0.3s ease',
-                                            opacity: 1
-                                        }}
                                     >
                                         {value.toLocaleString('es-AR')}
                                     </text>
@@ -171,9 +167,9 @@ export const GraficoBarras = ({
                                 {isMax && !isHovered && (
                                     <text
                                         x={x + barWidth / 2}
-                                        y={y - 4}
+                                        y={y - 6}
                                         textAnchor="middle"
-                                        fontSize="8"
+                                        fontSize="10"
                                         fill={COLOR_MAX}
                                         fontWeight="700"
                                     >
@@ -182,16 +178,16 @@ export const GraficoBarras = ({
                                 )}
                                 <text
                                     x={x + barWidth / 2}
-                                    y={marginTop + chartHeight + 14}
+                                    y={marginTop + chartHeight + 16}
                                     textAnchor="end"
-                                    fontSize="8"
+                                    fontSize="10"
                                     fill={isHovered ? '#26262A' : '#6B6B6B'}
                                     fontWeight={isHovered ? '700' : '400'}
                                     style={{
                                         transition: 'fill 0.3s ease, font-weight 0.3s ease',
                                         cursor: 'pointer'
                                     }}
-                                    transform={`rotate(-30 ${x + barWidth / 2} ${marginTop + chartHeight + 14})`}
+                                    transform={`rotate(-30 ${x + barWidth / 2} ${marginTop + chartHeight + 16})`}
                                     onMouseEnter={() => setHoveredBar(index)}
                                     onMouseLeave={() => setHoveredBar(null)}
                                 >
@@ -215,7 +211,7 @@ export const GraficoBarras = ({
             {maxValue > 0 && (
                 <div className="grafico-resumen-maximo">
                     <p className="grafico-resumen-label">
-                        {title.toLowerCase().includes('año') ? 'Año con mayor gasto' : 'Año con mayor gasto'}
+                        {title.toLowerCase().includes('mes') ? 'Mes con mayor inversión' : 'Mes con mayor inversión'}
                     </p>
                     <p className="grafico-resumen-nombre">{maxLabelReal}</p>
                     <p className="grafico-resumen-valor">$ {maxValue.toLocaleString('es-AR')}</p>
