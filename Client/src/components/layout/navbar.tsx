@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Tooltip} from "@mui/material";
-import { ChartNoAxesColumn, CircleDollarSign, EllipsisVertical, Wallet } from 'lucide-react'
+import { ChartNoAxesColumn, CircleDollarSign, Wallet } from 'lucide-react'
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import "../../style/navbar.css"
 import { SubMenu } from "./subMenu";
 
-const Navbar = () => {
+interface NavbarProps {
+    setIsAuthenticated?: (value: boolean) => void;
+}
+
+const Navbar = ({setIsAuthenticated}:NavbarProps) => {
     const [active,setActive] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
     

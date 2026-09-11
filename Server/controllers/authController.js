@@ -47,7 +47,11 @@ exports.loginUser = async (req, res) => {
         }
 
         // Crear un token de acceso
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(
+            { id: user._id, role: user.role, tokenVersion: user.tokenVersion },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
 
         // Establecer la cookie con el token
         res.cookie('token', token, {
@@ -69,16 +73,26 @@ exports.loginUser = async (req, res) => {
 };
 
 
-exports.logoutUser = (req, res) => {
-    // Eliminar la cookie de sesión
+exports.logoutUser = async (req, res) => {
+    try {
+        const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+        if (token) {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            await UserModel.findByIdAndUpdate(decoded.id, { $inc: { tokenVersion: 1 } });
+        }
+    } catch (err) {
+        
+    }
+
     res.clearCookie('token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/',
     });
+
     res.json({ message: 'Cierre de sesión exitoso' });
 };
-
 
 exports.verifyEmail = async (req,res) => {
     const {email} = req.body

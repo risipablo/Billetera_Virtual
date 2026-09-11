@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { User, KeyRound, Target, MessageSquare, Info, ChevronRight, Trash2 } from "lucide-react";
-import { LogOutComponent } from "../../components/auth/logout"
-import { useUser } from "../../features/hooks/useUser"
-import type { AuthenticatedProps } from "../../features/types/type.auth"
-import "../../style/perfil.css"
+import { LogOutComponent } from "../../components/auth/logout";
+import { useUser } from "../../features/hooks/useUser";
+import type { AuthenticatedProps } from "../../features/types/type.auth";
+import "../../style/perfil.css";
 
 type SettingItem = {
     icon: React.ReactNode;
@@ -12,11 +12,14 @@ type SettingItem = {
     onClick: () => void;
 };
 
-const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
-    const { user } = useUser()
-    const navigate = useNavigate()
+interface PerfilPageProps extends AuthenticatedProps {
+    onLogoutStart?: () => void;
+}
 
-    
+const PerfilPage = ({ setIsAuthenticated, onLogoutStart }: PerfilPageProps) => {
+    const { user } = useUser();
+    const navigate = useNavigate();
+
     const items: SettingItem[] = [
         {
             icon: <User size={18} />,
@@ -52,13 +55,14 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
 
     const handleDeleteAccount = () => {
         if (confirm('¿Estás seguro que querés borrar tu cuenta? Esta acción no se puede deshacer.')) {
-        
+            // TODO: implementar
         }
     };
 
     return (
         <div className="table-container">
-            <title> Perfil de {user?.name?.charAt(0).toUpperCase() || '?'}</title>
+            <title>Perfil de {user?.name?.charAt(0).toUpperCase() || '?'}</title>
+
             <div className="perfil-header">
                 <div className="perfil-avatar">
                     {user?.name?.charAt(0).toUpperCase() || '?'}
@@ -87,11 +91,12 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
             </div>
 
             <div className="perfil-danger-zone">
-
                 <div className="perfil-danger-actions">
                     <div className="perfil-logout-wrapper">
-                        
-                        <LogOutComponent setIsAuthenticated={setIsAuthenticated} />
+                        <LogOutComponent
+                            setIsAuthenticated={setIsAuthenticated}
+                            onLogoutStart={onLogoutStart}
+                        />
                     </div>
 
                     <button className="delete-account-btn" onClick={handleDeleteAccount}>
@@ -101,7 +106,7 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PerfilPage
+export default PerfilPage;

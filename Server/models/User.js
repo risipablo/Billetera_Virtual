@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema({
             message: 'La contraseña debe contener al menos una letra mayúscula'
         }
     },
+    tokenVersion: { type: Number, default: 0 },
     role: { 
         type: String, 
         enum: ['admin', 'user'], 

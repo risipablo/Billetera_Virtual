@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-bottom: 1.5rem;
+    margin: 1rem auto 1.5rem;
 }
 
 .perfil-avatar {

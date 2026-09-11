@@ -117,20 +117,17 @@ class AuthService {
     }
 
     async logout(): Promise<void> {
+        const token = this.getToken();
         try {
-            const token = this.getToken();
-
             if (token) {
                 await axios.post(`${serverFront}/api/auth/logout`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                    withCredentials: true
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
                 });
             }
-            localStorage.removeItem('token');
         } catch (error) {
-            console.error('Error en cerrar la sesion', error);
+            console.error('Error en cerrar la sesión', error);
+        } finally {
             localStorage.removeItem('token');
         }
     }

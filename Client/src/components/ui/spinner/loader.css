@@ -1,0 +1,90 @@
+.splash-loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background: #ffffff;
+    z-index: 9999;
+    padding: 2rem;
+    transition: background-color 0.4s ease;
+}
+
+.splash-logo {
+    width: 180px;
+    max-width: 60vw;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(124, 58, 237, 0.18));
+    transition: filter 0.4s ease;
+}
+
+.splash-frase-container {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.splash-frase {
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #4B4B55;
+    letter-spacing: 0.02em;
+    margin: 0;
+    text-align: center;
+    transition: color 0.4s ease;
+}
+
+/* Puntitos animados */
+.splash-dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 0.5rem;
+}
+
+.splash-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #7C3AED;
+    animation: splash-bounce 1.2s infinite ease-in-out;
+    transition: background-color 0.4s ease;
+}
+
+.splash-dots .dot:nth-child(2) { animation-delay: 0.15s; }
+.splash-dots .dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes splash-bounce {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+    40%          { transform: scale(1);   opacity: 1; }
+}
+
+/* ── Modo LOGOUT: fondo más suave, tono "despedida" ── */
+.splash-loader.splash-logout {
+    background: #FAFAFB;
+}
+
+.splash-loader.splash-logout .splash-logo {
+    filter: drop-shadow(0 8px 24px rgba(124, 58, 237, 0.10));
+    opacity: 0.9;
+}
+
+.splash-loader.splash-logout .splash-frase {
+    color: #8A8A90;
+    font-style: italic;
+}
+
+.splash-loader.splash-logout .splash-dots .dot {
+    background: #B8B8C0;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .splash-logo { width: 140px; }
+    .splash-frase { font-size: 0.9rem; }
+}

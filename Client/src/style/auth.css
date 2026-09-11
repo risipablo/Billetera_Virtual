@@ -1,6 +1,8 @@
 :root {
   --header-bg: #0C447C;
   --header-bg-hover: #0A3A6A;
+  --button: #FCBF49 ;
+  --color: #75AADB;
   --border: #E9EBEF;
   --text: #26262A;
   --text-muted: #8A8A90;
@@ -20,8 +22,9 @@
   --spacing-xl: 4rem;
 }
 
+
+
 .login-background {
-  background-color: #F5F7FA;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -56,10 +59,10 @@
 
 /* ===== CONTAINER LOGIN ===== */
 .container-login {
-  margin: 1rem auto;
+  margin: 0 auto;
   width: 100%;
   max-width: 450px;
-  background: white;
+  background: #0A3A6A;
   border-radius: 14px;
   padding: 2.5rem 1.8rem;
   position: relative;
@@ -67,10 +70,30 @@
   border: 2px solid var(--border);
 }
 
+.login-logo {
+  display: block;
+  margin: 0 auto 1.5rem;
+  width: 170px;
+  max-width: 60%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25));
+  user-select: none;
+  pointer-events: none;
+}
+
 .container-login h2 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
-  color: var(--header-bg);
+  color: var(--border);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.container-login h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--border);
   margin-bottom: var(--spacing-lg);
   text-align: center;
 }
@@ -105,7 +128,7 @@ input[type="password"]:hover {
 input[type="email"]:focus,
 input[type="text"]:focus,
 input[type="password"]:focus {
-  border-color: var(--header-bg);
+  border-color: var(--border);
 }
 
 input::placeholder {
@@ -146,7 +169,7 @@ input::placeholder {
 }
 
 .password-container span:hover {
-  color: var(--header-bg);
+  color: var(--border);
 }
 
 .password-container svg {
@@ -212,15 +235,16 @@ button[type="submit"] {
   font-weight: 500;
   border: none;
   border-radius: 8px;
-  background: var(--header-bg);
-  color: white;
+  background: var(--button);
+  color: var(--border);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.3s ease;
   margin-top: var(--spacing-sm);
 }
 
 button[type="submit"]:hover:not(:disabled) {
-  background: var(--header-bg-hover);
+  background: var(--border);
+  color: #0A3A6A;
 }
 
 button[type="submit"]:disabled {
@@ -325,7 +349,7 @@ button[type="submit"]:focus:not(:disabled) {
 
 .count a p {
   margin: 0;
-  color: var(--header-bg);
+  color: var(--border);
   font-weight: 500;
   font-size: 0.9375rem;
   text-align: center;
@@ -337,7 +361,7 @@ button[type="submit"]:focus:not(:disabled) {
 }
 
 .count a:focus-visible {
-  outline: 2px solid var(--header-bg);
+  outline: 2px solid var(--border);
   outline-offset: 2px;
 }
 
@@ -346,7 +370,7 @@ button[type="submit"]:focus:not(:disabled) {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--gray-400);
+  color: var(--border);
 }
 
 .divider::before,
@@ -359,7 +383,7 @@ button[type="submit"]:focus:not(:disabled) {
 
 .divider span {
   font-size: 0.875rem;
-  color: var(--gray-400);
+  color: var(--border);
 }
 
 /* ===== PASSWORD REQUIREMENTS ===== */
@@ -367,7 +391,7 @@ button[type="submit"]:focus:not(:disabled) {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-muted);
+  color:var(--border);
   font-weight: 500;
   font-size: 0.875rem;
   margin-top: var(--spacing-lg);
@@ -425,11 +449,13 @@ button[type="submit"]:focus:not(:disabled) {
   }
 
   .login-background {
+    
     min-height: 100vh;
     padding: 1.5rem 1rem;
   }
 
   .container-login {
+    
     border-radius: 10px;
     padding: 3rem 1.25rem 3.5rem;
     max-width: 90%;
@@ -437,7 +463,7 @@ button[type="submit"]:focus:not(:disabled) {
   }
 
   .container-login h2 {
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     margin-bottom: 1.75rem;
   }
 
@@ -559,5 +585,18 @@ button[type="submit"]:focus:not(:disabled) {
 @media (prefers-reduced-motion: reduce) {
   .login-background {
     background-attachment: scroll;
+  }
+}
+
+@media (max-width: 490px) {
+  .login-logo {
+    width: 130px;
+    max-width: 55%;
+    margin-bottom: 1.25rem;
+  }
+
+  .container-login h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.75rem;
   }
 }

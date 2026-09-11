@@ -31,6 +31,7 @@ export const Spinner = ({
                     borderTopColor: 'transparent',
                 }}
             />
+            
             {label && <p className="spinner-label">{label}</p>}
         </div>
     );

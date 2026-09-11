@@ -12,7 +12,6 @@ import "../../style/auth.css"
 
 
 
-
 export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
     const [formData,setFormData] = useState<LoginData>({
@@ -37,7 +36,7 @@ export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         e.preventDefault()
         await login(formData)
         setIsAuthenticated(true)
-        navigate('/dashboard')
+        navigate('/gastos', { replace: true })
     }
 
     return(

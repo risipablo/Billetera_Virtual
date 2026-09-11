@@ -1,85 +1,126 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react";
 import axiosInstance from "./config/axiosConfig";
 import { config } from "./config";
-import { Spinner } from "./components/ui/spinner/spinner";
 import { UserProvider } from "./context/userProvider";
 import { Home } from "./pages/home";
 import Navbar from "./components/layout/navbar";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/auth/loginPage";
 import RegisterPage from "./pages/auth/registerPage";
+import { SplashLoader } from "./components/ui/spinner/loader";
 
+const serverFront = config.Api;
+const MIN_SPLASH = 1200; 
 
-const serverFront = config.Api
+type SplashMode = "welcome" | "loading" | "logout";
 
+function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [splashMode, setSplashMode] = useState<SplashMode>("loading");
 
-function App(){
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
-    const [loading, setLoading] = useState<boolean>(true)
+    const isCallbackPath = window.location.pathname === "/auth/callback";
 
-    const isCallbackPath = window.location.pathname === '/auth/callback';
+    const checkAuth = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        
+        if (!token) {
+            setSplashMode("welcome");
+        } else {
+            setSplashMode("loading");
+        }
+
+        const validationPromise = (async () => {
+            if (!token) {
+                setIsAuthenticated(false);
+                return;
+            }
+
+            try {
+                await axiosInstance.get(`${serverFront}/api/auth/validate-token`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
+                });
+                setIsAuthenticated(true);
+            } catch {
+                localStorage.removeItem("token");
+                setIsAuthenticated(false);
+            }
+        })();
+
+        const minDelayPromise = new Promise<void>((resolve) =>
+            setTimeout(resolve, MIN_SPLASH)
+        );
+
+        await Promise.all([validationPromise, minDelayPromise]);
+        setLoading(false);
+    }, []);
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
+        checkAuth();
 
-        if (window.location.pathname === '/auth/callback') {
-            setLoading(false)
-            return;
-        }
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible") checkAuth();
+        };
 
-        if(!token){
-            setIsAuthenticated(false)
-            setLoading(false)
-            return
-        }
+        const handleLogoutStart = () => {
+            setSplashMode("logout");
+            setLoading(true);
+        };
 
-        const validateToken = async() => {
-            try{
-                await axiosInstance.get(`${serverFront}/api/auth/validate-token`,{
-                    headers:{
-                        Authorization:`Bearer ${token}`
-                    },
-                    withCredentials: true
-                })
-                setIsAuthenticated(true)
-            } catch (error){
-                localStorage.removeItem('token')
-                setIsAuthenticated(false)
-            } finally{
-                setLoading(false)
-            }
-        }
-        validateToken()
-    },[isCallbackPath])
+        window.addEventListener("popstate", checkAuth);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("app:logout-start", handleLogoutStart);
+
+        return () => {
+            window.removeEventListener("popstate", checkAuth);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            window.removeEventListener("app:logout-start", handleLogoutStart);
+        };
+    }, [checkAuth]);
 
     if ((isAuthenticated === null || loading) && !isCallbackPath) {
-        return <Spinner />
+        return <SplashLoader mode={splashMode} />;
     }
 
-    return(
+    return (
         <BrowserRouter>
             <UserProvider isAuthenticated={isAuthenticated}>
-                {
-                    isAuthenticated ? (
-                        <>
-                        <Navbar/>
-                        <Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
-                        </>
-                        
-                    ) : (
-                            <Routes>
-                            <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />} />
-                            <Route path="/register" element={<RegisterPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />            
-                            {/* <Route path="/auth/callback" element={<CallbackPage setIsAuthenticated={setIsAuthenticated} />}/> */}
-                            <Route path="*" element={<Navigate to="/login" replace />} />
-                            </Routes>
-                    )
-                }
-
+                {isAuthenticated ? (
+                    <>
+                        <Navbar setIsAuthenticated={setIsAuthenticated}/>
+                        <Home
+                            isAuthenticated={isAuthenticated}
+                            setIsAuthenticated={setIsAuthenticated}
+                        />
+                    </>
+                ) : (
+                    <Routes>
+                        <Route
+                            path="/login"
+                            element={
+                                <LoginPage
+                                    setIsAuthenticated={setIsAuthenticated}
+                                    isAuthenticated={null}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/register"
+                            element={
+                                <RegisterPage
+                                    setIsAuthenticated={setIsAuthenticated}
+                                    isAuthenticated={null}
+                                />
+                            }
+                        />
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </Routes>
+                )}
             </UserProvider>
         </BrowserRouter>
-    )
-
+    );
 }
 
-export default App
+export default App;
