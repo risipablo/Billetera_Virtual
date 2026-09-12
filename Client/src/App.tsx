@@ -8,6 +8,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/auth/loginPage";
 import RegisterPage from "./pages/auth/registerPage";
 import { SplashLoader } from "./components/ui/spinner/loader";
+import CallbackPage from "./pages/auth/callbackPage";
 
 const serverFront = config.Api;
 const MIN_SPLASH = 1200; 
@@ -60,6 +61,11 @@ function App() {
     useEffect(() => {
         checkAuth();
 
+        if (window.location.pathname === '/auth/callback') {
+            console.log('En callback, esperando...');
+            setLoading(false)
+            return;
+        }
         const handleVisibilityChange = () => {
             if (document.visibilityState === "visible") checkAuth();
         };
@@ -115,6 +121,7 @@ function App() {
                                 />
                             }
                         />
+                        <Route path="/auth/callback" element={<CallbackPage setIsAuthenticated={setIsAuthenticated} />}/>
                         <Route path="*" element={<Navigate to="/login" replace />} />
                     </Routes>
                 )}

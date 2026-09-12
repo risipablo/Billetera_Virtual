@@ -2,8 +2,11 @@
 const UserModel = require('../models/User');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const {sendUserChangeName} = require('../services/emailService')
+const rateLimit = require('express-rate-limit')
+const {passport} = require('../config/passport')
 require('dotenv').config();
+
+
 
 exports.registerUser = async (req, res) => {
     const { email, password, name} = req.body;
@@ -252,7 +255,6 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
-
 exports.userName = async (req, res) => {
     try {
         const user = await UserModel.findById(req.user.id).select('name');
@@ -264,3 +266,47 @@ exports.userName = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }
+
+
+// Passport para google
+exports.googleLogin = (req,res,next) => {
+    console.log(' GOOGLE CALLBACK URL CONFIGURADA:', process.env.GOOGLE_CALLBACK_URL);
+    console.log('Iniciando autenticación con Google...');
+    console.log('Scope:', ['profile', 'email']);
+
+    passport.authenticate('google',{
+        scope: ['profile','email'],
+        session:false,
+        accessType: 'offline',
+        prompt: 'consent'
+    })(req,res,next)
+}
+
+exports.googleCallback = (req, res, next) => {
+    console.log('📥 Query params:', req.query); 
+    console.log('📥 Code:', req.query.code);
+    
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+    });
+    
+    passport.authenticate('google', { session: false }, (err, user, info) => {
+        console.log('🔍 Resultado:', { err: err?.message, user: user?.email });
+        
+        if (err || !user) {
+            console.log(' Error:', err?.message || info?.message);
+            return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+        }
+
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        console.log(' Login exitoso, redirigiendo');
+        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
+    })(req, res, next);
+};

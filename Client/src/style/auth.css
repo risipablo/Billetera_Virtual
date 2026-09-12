@@ -31,7 +31,8 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 2rem 1rem;
+  padding: 1rem;
+  
 }
 
 .login-background::before,
@@ -61,21 +62,22 @@
 .container-login {
   margin: 0 auto;
   width: 100%;
-  max-width: 450px;
+  max-width: 650px;
   background: #0A3A6A;
   border-radius: 14px;
   padding: 2.5rem 1.8rem;
   position: relative;
   z-index: 1;
   border: 2px solid var(--border);
+  
 }
 
 .login-logo {
   display: block;
-  margin: 0 auto 1.5rem;
-  width: 170px;
+  margin: 0 auto ;
+  width: 250px;
   max-width: 60%;
-  height: auto;
+  height: 200px;
   object-fit: contain;
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25));
   user-select: none;
@@ -540,7 +542,7 @@ button[type="submit"]:focus:not(:disabled) {
   }
 }
 
-/* Landscape móvil */
+
 @media (max-height: 600px) and (max-width: 768px) {
   .login-background {
     min-height: auto;
@@ -567,7 +569,7 @@ button[type="submit"]:focus:not(:disabled) {
   }
 }
 
-/* Tablet horizontal */
+
 @media (min-width: 769px) and (max-width: 1024px) {
   .container-login {
     max-width: 450px;
@@ -575,7 +577,7 @@ button[type="submit"]:focus:not(:disabled) {
   }
 }
 
-/* Desktop large */
+
 @media (min-width: 1025px) {
   .container-login {
     max-width: 450px;
@@ -589,14 +591,17 @@ button[type="submit"]:focus:not(:disabled) {
 }
 
 @media (max-width: 490px) {
-  .login-logo {
-    width: 130px;
-    max-width: 55%;
-    margin-bottom: 1.25rem;
+  .container-login{
+    max-width: 650px;
   }
+
+  .login-logo {
+    max-width: 60%;
+    height: auto;
+  }
+  
 
   .container-login h2 {
     font-size: 1.5rem;
-    margin-bottom: 1.75rem;
   }
 }

@@ -31,14 +31,31 @@ const UserSchema = new mongoose.Schema({
         default: 'user' 
     },
 
+     isGoogleUser: {
+        type: Boolean,
+         default: false 
+    },
+
     resetPasswordToken: String,        
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+
+    lastLoginAt: Date,
+        sessionVersion: {
+        type: Number,
+        default: 0
+    }
 });
 
 
 // Genera contraseña
 UserSchema.pre('save', async function(next) {
+    
+    if (this.isGoogleUser) {
+        return next();
+    }
+    
     if (!this.isModified('password')) return next();
+    
 
     try {
         const salt = await bcrypt.genSalt(12);

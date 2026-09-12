@@ -2,6 +2,8 @@
 const express = require('express');
 const connectdb = require("./config/database")
 const fs = require('fs');
+
+
 console.log('Buscando archivos de base de datos...');
 try {
     const files1 = fs.readdirSync('./config');
@@ -19,6 +21,7 @@ const listRoutes = require('./routes/listRoutes');
 const tokenValidate = require('./routes/validateRoutes')
 const errorHandler = require('./middleware/gastosMiddleware');
 const cookieParser = require('cookie-parser')
+require('./config/passport')
 require('dotenv').config();
 
 const app = express();
@@ -31,7 +34,10 @@ const corsOptions = {
     origin: ['http://localhost:5173', 'http://localhost:5176', 'http://localhost:5175', 'https://billetera-virtual-nine.vercel.app', 'https://billetera-virtual-1.onrender.com','https://billetera-virtual-teal.vercel.app'],
     optionsSuccessStatus: 200,
     methods: 'GET,POST,DELETE,PUT,PATCH',
+    exposedHeaders: ['Set-Cookie'],
+    maxAge: 86400,
     credentials: true,
+    
     // allowedHeaders: 'Content-Type,Authorization'
 };
 
@@ -49,5 +55,6 @@ app.use(errorHandler);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
-  console.log(`Server corriendo en el puerto ${port}`);
+    console.log(`Servidor corriendo en el puerto ${port}`)
+    console.log(`📧 Emails se enviarán a: ${process.env.EMAIL_USER}`);
 });
