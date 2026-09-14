@@ -1,5 +1,5 @@
 :root {
-    --border: #E9EBEF;
+    --border: #535353;
     --text: #26262A;
     --text-muted: #8A8A90;
     --header-bg: #0C447C;
@@ -51,11 +51,12 @@
 .nota-card {
     background: #fff;
     border-radius: 12px;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     padding: 1.1rem;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    
 }
 
 .nota-card.completed {
@@ -85,6 +86,7 @@
 .nota-card-cuotas {
     font-size: 0.8rem;
     color: var(--text-muted);
+    
 }
 
 .nota-card-meta {

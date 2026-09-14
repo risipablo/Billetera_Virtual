@@ -74,7 +74,14 @@ export const UseGastos = () => {
                 estado
             })    
 
-            setGastos(prev => [...prev,response.data])
+            setGastos(prev => {
+                console.log('gastos después de add:', prev.length + 1);
+                return [...prev, response.data];
+            });
+            setFilterGastos(prev => {
+               console.log('FilterGasto después de add:', prev.length + 1); 
+               return [...prev,response.data]
+            })
             toast.success('Gasto agregado exitosamente', TOAST_CONFIG)
             return response.data
         
@@ -82,7 +89,7 @@ export const UseGastos = () => {
             toast.error('Error al agregar el gasto', TOAST_CONFIG)    
             console.log(err)
         }
-    },[setFilterGastos,setGastos])
+    },[])
     
     const deleteGastos = useCallback((id:string) => {
         axiosInstance.delete(`api/bills/${id}`)

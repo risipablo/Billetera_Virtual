@@ -1,8 +1,8 @@
+require('dotenv').config();
 
 const express = require('express');
-const connectdb = require("./config/database")
+const connectdb = require("./config/database");
 const fs = require('fs');
-
 
 console.log('Buscando archivos de base de datos...');
 try {
@@ -12,33 +12,37 @@ try {
     console.log('No existe ./config');
 }
 
-const cors = require('cors'); 
+const cors = require('cors');
 const gastoRoutes = require('./routes/gastosRoutes');
 const fijoRoutes = require('./routes/fijoRoutes');
-const noteRoutes = require('./routes/cuotaRoutes')
+const noteRoutes = require('./routes/cuotaRoutes');
 const authRoutes = require('./routes/authRoutes');
 const listRoutes = require('./routes/listRoutes');
-const tokenValidate = require('./routes/validateRoutes')
+const tokenValidate = require('./routes/validateRoutes');
 const errorHandler = require('./middleware/gastosMiddleware');
-const cookieParser = require('cookie-parser')
-require('./config/passport')
-require('dotenv').config();
+const cookieParser = require('cookie-parser');
+
+require('./config/passport');
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 
-
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:5176', 'http://localhost:5175', 'https://billetera-virtual-nine.vercel.app', 'https://billetera-virtual-1.onrender.com','https://billetera-virtual-teal.vercel.app'],
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:5176',
+        'http://localhost:5175',
+        'https://billetera-virtual-nine.vercel.app',
+        'https://billetera-virtual-1.onrender.com',
+        'https://billetera-virtual-teal.vercel.app',
+    ],
     optionsSuccessStatus: 200,
     methods: 'GET,POST,DELETE,PUT,PATCH',
     exposedHeaders: ['Set-Cookie'],
     maxAge: 86400,
     credentials: true,
-    
-    // allowedHeaders: 'Content-Type,Authorization'
 };
 
 app.use(cors(corsOptions));
@@ -49,12 +53,14 @@ app.use('/api', gastoRoutes);
 app.use('/api', fijoRoutes);
 app.use('/api', noteRoutes);
 app.use('/api', listRoutes);
-app.use('/api/auth', tokenValidate)
+app.use('/api/auth', tokenValidate);
 app.use('/api/auth', authRoutes);
 app.use(errorHandler);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
-    console.log(`Servidor corriendo en el puerto ${port}`)
-    console.log(`📧 Emails se enviarán a: ${process.env.EMAIL_USER}`);
+    console.log(`Servidor corriendo en el puerto ${port}`);
+    console.log(`Emails se enviarán a: ${process.env.EMAIL_USER}`);
+    console.log(`GOOGLE_CALLBACK_URL: ${process.env.GOOGLE_CALLBACK_URL}`);
+    console.log(`FRONTEND_URL: ${process.env.FRONTEND_URL}`);
 });

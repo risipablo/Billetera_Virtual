@@ -44,7 +44,7 @@ export const CuotaForm = ({
 
     return (
         <>
-            <button className="btn-add-nota" onClick={() => setAddModal(true)}>
+            <button className="btn-add" onClick={() => setAddModal(true)}>
                 <Plus size={18} />
                 <span>Nueva nota</span>
             </button>

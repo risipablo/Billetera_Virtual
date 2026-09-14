@@ -130,6 +130,7 @@ export const FilterGastos = ({
     }, [dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter, categoriaFilter, showToday]);
 
     useEffect(() => {
+         console.log('FilterGastos reescribe filterGastos con', filteredBills.length, 'items');
         setFilterGastos(filteredBills);
     
     }, [dateFilter, monthFilter, yearFilter, conditions, metodoFilter, estadoFilter, categoriaFilter, showToday]);

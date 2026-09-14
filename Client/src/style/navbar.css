@@ -120,7 +120,7 @@ a.active .icon {
 /* ============================================================
    MOBILE (<= 680px) — menú deslizante
    ============================================================ */
-@media (max-width: 680px) {
+@media (max-width:  847px) {
 
     .icon-container {
         position: relative;
@@ -153,10 +153,8 @@ a.active .icon {
     }
 }
 
-/* ============================================================
-   DESKTOP (>= 681px) — sidebar fijo, colapsable, usuario al pie
-   ============================================================ */
-@media (min-width: 681px) {
+
+@media (min-width: 847px) {
 
     .icon-container {
         position: fixed;

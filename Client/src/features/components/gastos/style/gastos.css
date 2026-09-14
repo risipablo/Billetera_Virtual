@@ -204,6 +204,22 @@
     .table-container{
         padding: 12px;
     }
+
+    .table-title{
+        margin: 1rem 0;
+    } 
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .btn-add,
+    .delete-all-btn {
+        width: 80%;
+        justify-content: center;
+    }
+
 }
 
 
