@@ -32,7 +32,6 @@ const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
             setIsAuthenticated(true);
             console.log('setIsAuthenticated(true)');
             
-        
             navigate('/gastos');
         } else {
         

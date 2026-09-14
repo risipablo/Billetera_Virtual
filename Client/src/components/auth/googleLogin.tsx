@@ -1,5 +1,4 @@
 import { config } from "../../config";
-
 const serverFront = config.Api
 
 export const GoogleLoginButton = () => {

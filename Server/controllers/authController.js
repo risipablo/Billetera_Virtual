@@ -283,8 +283,7 @@ exports.googleLogin = (req,res,next) => {
 }
 
 exports.googleCallback = (req, res, next) => {
-    console.log('📥 Query params:', req.query); 
-    console.log('📥 Code:', req.query.code);
+    
     
     res.clearCookie('token', {
         httpOnly: true,
@@ -293,7 +292,7 @@ exports.googleCallback = (req, res, next) => {
     });
     
     passport.authenticate('google', { session: false }, (err, user, info) => {
-        console.log('🔍 Resultado:', { err: err?.message, user: user?.email });
+        console.log('Resultado:', { err: err?.message, user: user?.email });
         
         if (err || !user) {
             console.log(' Error:', err?.message || info?.message);
