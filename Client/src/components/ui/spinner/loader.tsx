@@ -31,7 +31,7 @@ const FRASES_LOGOUT = [
     "Volvé cuando quieras",
 ];
 
-const FRASE_INTERVAL = 1200;
+const FRASE_INTERVAL = 3000;
 
 export const SplashLoader = ({ mode = "loading" }: SplashLoaderProps) => {
     const frases =
