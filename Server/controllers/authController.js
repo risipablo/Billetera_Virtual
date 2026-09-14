@@ -309,3 +309,15 @@ exports.googleCallback = (req, res, next) => {
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
     })(req, res, next);
 };
+
+
+exports.validateToken = async (req, res) => {
+    res.status(200).json({
+        valid: true,
+        user: {
+            id: req.user._id,
+            name: req.user.name,
+            email: req.user.email
+        }
+    });
+};

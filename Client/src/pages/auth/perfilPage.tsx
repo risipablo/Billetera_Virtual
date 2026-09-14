@@ -43,7 +43,7 @@ const PerfilPage = ({ setIsAuthenticated, onLogoutStart }: PerfilPageProps) => {
             icon: <MessageSquare size={18} />,
             title: "Sugerencias",
             description: "Contanos qué te gustaría mejorar de la app",
-            onClick: () => navigate('/sugerencias'),
+            onClick: () => navigate('/send-email'),
         },
         {
             icon: <Info size={18} />,

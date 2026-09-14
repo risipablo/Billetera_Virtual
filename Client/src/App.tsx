@@ -59,13 +59,14 @@ function App() {
     }, []);
 
     useEffect(() => {
-        checkAuth();
 
         if (window.location.pathname === '/auth/callback') {
             console.log('En callback, esperando...');
             setLoading(false)
             return;
         }
+
+        checkAuth()
         const handleVisibilityChange = () => {
             if (document.visibilityState === "visible") checkAuth();
         };

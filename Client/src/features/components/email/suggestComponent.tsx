@@ -214,7 +214,6 @@ export const SuggestionsComponent = () => {
                   <option value="consulta">Consulta general</option>
                   <option value="sugerencia">Sugerencia</option>
                   <option value="queja">Queja / Reclamo</option>
-                  <option value="trabajo">Propuesta laboral</option>
                 </select>
                 {errors.reason && (
                   <span className="roman-error">
@@ -265,7 +264,7 @@ export const SuggestionsComponent = () => {
           >
             <motion.button
               type="submit"
-              className="contact-btn contact-btn--submit"
+              className="contact-btn-submit"
               whileHover={{ scale: isLoading ? 1 : 1.02 }}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
               disabled={isLoading}

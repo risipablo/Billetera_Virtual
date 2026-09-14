@@ -179,8 +179,8 @@
     cursor: not-allowed;
 }
 
-.contact-btn--submit {
-    background: var(--header-bg);
+.contact-btn-submit{
+    background: #0A3A6A;
     color: #fff;
 }
 

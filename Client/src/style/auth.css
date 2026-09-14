@@ -359,7 +359,7 @@ button[type="submit"]:focus:not(:disabled) {
 }
 
 .count a:hover p {
-  color: var(--header-bg-hover);
+  color: #FCBF49;
 }
 
 .count a:focus-visible {
