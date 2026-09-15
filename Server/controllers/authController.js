@@ -59,9 +59,8 @@ exports.loginUser = async (req, res) => {
         // Establecer la cookie con el token
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', 
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-            maxAge: 60 * 60 * 1000,
+            secure: process.env.NODE_ENV, // Solo en producción
+            sameSite: 'none',   // Previene ataques CSRF
         });
 
 
@@ -69,7 +68,7 @@ exports.loginUser = async (req, res) => {
             id: user._id,
             name: user.name,
             email: user.email,}
-         }); 
+         }); // Enviar el token en la respuesta
          
     } catch (err) {
         res.status(500).json({ error: 'Error en el servidor: ' + err.message });
@@ -284,11 +283,19 @@ exports.googleLogin = (req,res,next) => {
 }
 
 exports.googleCallback = (req, res, next) => {
+    
+    
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+    });
+    
     passport.authenticate('google', { session: false }, (err, user, info) => {
         console.log('Resultado:', { err: err?.message, user: user?.email });
         
         if (err || !user) {
-            console.log('Error:', err?.message || info?.message);
+            console.log(' Error:', err?.message || info?.message);
             return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
         }
 
@@ -298,7 +305,7 @@ exports.googleCallback = (req, res, next) => {
             { expiresIn: '7d' }
         );
 
-        console.log('Login exitoso, redirigiendo');
+        console.log(' Login exitoso, redirigiendo');
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
     })(req, res, next);
 };
