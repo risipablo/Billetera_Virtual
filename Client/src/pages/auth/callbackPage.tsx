@@ -29,7 +29,7 @@ const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
             localStorage.setItem('token', token);
             console.log('✅ Token guardado, autenticando...');
             setIsAuthenticated(true);
-            navigate('/', { replace: true });
+            navigate('/gastos', { replace: true });
         } else {
             console.log('⚠️ No hay token, redirigiendo a login');
             navigate('/login', { replace: true });
