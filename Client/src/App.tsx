@@ -11,7 +11,7 @@ import { SplashLoader } from "./components/ui/spinner/loader";
 import CallbackPage from "./pages/auth/callbackPage";
 
 const serverFront = config.Api;
-const MIN_SPLASH = 1200; 
+const MIN_SPLASH = 1200;
 
 type SplashMode = "welcome" | "loading" | "logout";
 
@@ -46,6 +46,7 @@ function App() {
     }, []);
 
     useEffect(() => {
+        
         if (window.location.pathname === '/auth/callback') {
             setLoading(false);
             return;
@@ -88,15 +89,28 @@ function App() {
                     </>
                 ) : (
                     <Routes>
-                        <Route path="/login" element={
-                            <LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />
-                        } />
-                        <Route path="/register" element={
-                            <RegisterPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />
-                        } />
-                        <Route path="/auth/callback" element={
-                            <CallbackPage setIsAuthenticated={setIsAuthenticated} />
-                        } />
+                        <Route
+                            path="/login"
+                            element={
+                                <LoginPage
+                                    setIsAuthenticated={setIsAuthenticated}
+                                    isAuthenticated={null}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/register"
+                            element={
+                                <RegisterPage
+                                    setIsAuthenticated={setIsAuthenticated}
+                                    isAuthenticated={null}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/auth/callback"
+                            element={<CallbackPage setIsAuthenticated={setIsAuthenticated} />}
+                        />
                         <Route path="*" element={<Navigate to="/login" replace />} />
                     </Routes>
                 )}
