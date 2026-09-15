@@ -146,7 +146,7 @@ exports.changeUserName = async (req, res) => {
         await user.save();
 
         const token = jwt.sign(
-            { id: user._id, role: user.role, name: user.name },
+            { id: user._id, role: user.role, name: user.name, tokenVersion:user.tokenVersion },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -283,33 +283,24 @@ exports.googleLogin = (req,res,next) => {
 }
 
 exports.googleCallback = (req, res, next) => {
-    
-    
-    res.clearCookie('token', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-    });
-    
     passport.authenticate('google', { session: false }, (err, user, info) => {
-        console.log('Resultado:', { err: err?.message, user: user?.email });
-        
         if (err || !user) {
-            console.log(' Error:', err?.message || info?.message);
             return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
         }
 
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { 
+                id: user._id, 
+                role: user.role, 
+                tokenVersion: user.tokenVersion  
+            },
             process.env.JWT_SECRET,
             { expiresIn: '7d' }
         );
 
-        console.log(' Login exitoso, redirigiendo');
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
     })(req, res, next);
 };
-
 
 exports.validateToken = async (req, res) => {
     res.status(200).json({
