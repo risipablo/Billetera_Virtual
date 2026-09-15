@@ -57,9 +57,10 @@ app.use('/api/auth', tokenValidate);
 app.use('/api/auth', authRoutes);
 app.use(errorHandler);
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-    console.log(`Servidor corriendo en el puerto ${port}`);
+const port = process.env.PORT || 10000;
+
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en 0.0.0.0:${port}`);
     console.log(`Emails se enviarán a: ${process.env.EMAIL_USER}`);
     console.log(`GOOGLE_CALLBACK_URL: ${process.env.GOOGLE_CALLBACK_URL}`);
     console.log(`FRONTEND_URL: ${process.env.FRONTEND_URL}`);
