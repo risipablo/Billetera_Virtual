@@ -20,29 +20,17 @@ function App() {
     const [loading, setLoading] = useState<boolean>(true);
     const [splashMode, setSplashMode] = useState<SplashMode>("loading");
 
-    const isCallbackPath = window.location.pathname === "/auth/callback";
-
     const checkAuth = useCallback(async () => {
         const token = localStorage.getItem("token");
-
-        
-        if (!token) {
-            setSplashMode("welcome");
-        } else {
-            setSplashMode("loading");
-        }
+        setSplashMode(token ? "loading" : "welcome");
 
         const validationPromise = (async () => {
             if (!token) {
                 setIsAuthenticated(false);
                 return;
             }
-
             try {
-                await axiosInstance.get(`${serverFront}/api/auth/validate-token`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                    withCredentials: true,
-                });
+                await axiosInstance.get(`${serverFront}/api/auth/validate-token`);
                 setIsAuthenticated(true);
             } catch {
                 localStorage.removeItem("token");
@@ -50,27 +38,24 @@ function App() {
             }
         })();
 
-        const minDelayPromise = new Promise<void>((resolve) =>
-            setTimeout(resolve, MIN_SPLASH)
-        );
-
-        await Promise.all([validationPromise, minDelayPromise]);
+        await Promise.all([
+            validationPromise,
+            new Promise<void>((r) => setTimeout(r, MIN_SPLASH)),
+        ]);
         setLoading(false);
     }, []);
 
     useEffect(() => {
-
         if (window.location.pathname === '/auth/callback') {
-            console.log('En callback, esperando...');
-            setLoading(false)
+            setLoading(false);
             return;
         }
 
-        checkAuth()
+        checkAuth();
+
         const handleVisibilityChange = () => {
             if (document.visibilityState === "visible") checkAuth();
         };
-
         const handleLogoutStart = () => {
             setSplashMode("logout");
             setLoading(true);
@@ -87,16 +72,15 @@ function App() {
         };
     }, [checkAuth]);
 
-    if ((isAuthenticated === null || loading) && !isCallbackPath) {
-        return <SplashLoader mode={splashMode} />;
-    }
-
+    
     return (
         <BrowserRouter>
             <UserProvider isAuthenticated={isAuthenticated}>
-                {isAuthenticated ? (
+                {isAuthenticated === null || loading ? (
+                    <SplashLoader mode={splashMode} />
+                ) : isAuthenticated ? (
                     <>
-                        <Navbar setIsAuthenticated={setIsAuthenticated}/>
+                        <Navbar setIsAuthenticated={setIsAuthenticated} />
                         <Home
                             isAuthenticated={isAuthenticated}
                             setIsAuthenticated={setIsAuthenticated}
@@ -104,25 +88,15 @@ function App() {
                     </>
                 ) : (
                     <Routes>
-                        <Route
-                            path="/login"
-                            element={
-                                <LoginPage
-                                    setIsAuthenticated={setIsAuthenticated}
-                                    isAuthenticated={null}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/register"
-                            element={
-                                <RegisterPage
-                                    setIsAuthenticated={setIsAuthenticated}
-                                    isAuthenticated={null}
-                                />
-                            }
-                        />
-                        <Route path="/auth/callback" element={<CallbackPage setIsAuthenticated={setIsAuthenticated} />}/>
+                        <Route path="/login" element={
+                            <LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />
+                        } />
+                        <Route path="/register" element={
+                            <RegisterPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />
+                        } />
+                        <Route path="/auth/callback" element={
+                            <CallbackPage setIsAuthenticated={setIsAuthenticated} />
+                        } />
                         <Route path="*" element={<Navigate to="/login" replace />} />
                     </Routes>
                 )}

@@ -32,10 +32,10 @@ const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
             setIsAuthenticated(true);
             console.log('setIsAuthenticated(true)');
             
-            navigate('/gastos');
+             navigate('/', { replace: true }); 
         } else {
         
-            navigate('/login');
+             navigate('/login', { replace: true });
         }
     }, [location.search, navigate, setIsAuthenticated]);
 

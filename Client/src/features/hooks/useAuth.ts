@@ -35,10 +35,13 @@ export const UseAuth = (): UseAuthReturn => {
 
         try {
             const data = await authService.login(credentials);
+
+            if(data.token) localStorage.setItem('token', data.token)
+
             setSuccess(data.message || 'Login exitoso');
             await fetchUserData();
             setTimeout(() => {
-                navigate('/dashboard');
+                navigate('/gastos');
             }, 1000);
         } catch (err) {
             setError((err as Error).message);

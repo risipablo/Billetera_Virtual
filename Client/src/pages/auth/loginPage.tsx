@@ -34,9 +34,14 @@ export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
     const handleSubmit = async (e:FormEvent<HTMLFormElement>):Promise<void> => {
         e.preventDefault()
-        await login(formData)
-        setIsAuthenticated(true)
-        navigate('/gastos', { replace: true })
+        try{
+            await login(formData)
+            setIsAuthenticated(true)
+            console.log(navigate + "=> navigate")
+            // navigate('/gastos', { replace: true })
+        } catch (err){
+            console.error('Error during login:', err)
+        }
     }
 
     return(
