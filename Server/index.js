@@ -18,6 +18,7 @@ const fijoRoutes = require('./routes/fijoRoutes');
 const noteRoutes = require('./routes/cuotaRoutes');
 const authRoutes = require('./routes/authRoutes');
 const listRoutes = require('./routes/listRoutes');
+const metaRoutes = require('./routes/metaRoutes')
 const tokenValidate = require('./routes/validateRoutes');
 const errorHandler = require('./middleware/gastosMiddleware');
 const cookieParser = require('cookie-parser');
@@ -53,11 +54,12 @@ app.use('/api', gastoRoutes);
 app.use('/api', fijoRoutes);
 app.use('/api', noteRoutes);
 app.use('/api', listRoutes);
+app.use('/api/metas', metaRoutes);
 app.use('/api/auth', tokenValidate);
 app.use('/api/auth', authRoutes);
 app.use(errorHandler);
 
-const port = process.env.PORT || 10000;
+const port = process.env.PORT || 3001;
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor corriendo en 0.0.0.0:${port}`);

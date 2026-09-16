@@ -63,15 +63,6 @@ const Navbar = ({setIsAuthenticated}:NavbarProps) => {
                         </Tooltip>
                     </NavLink>
 
-                    <NavLink to="/convertidor" onMouseEnter={() => open('convertidor')} onMouseLeave={close}>
-                        <Tooltip title={active === 'convertidor' ? 'Convertidor' : ""}>
-                            <div className="icon change-icon">
-                                <CurrencyExchangeOutlinedIcon/>
-                                <span className="text"> Convertidor </span>
-                            </div>
-                        </Tooltip>
-                    </NavLink>
-
                     <NavLink to="/cuotas" onMouseEnter={() => open('notas')} onMouseLeave={close}>
                         <Tooltip title={active === 'notas' ? 'Notas' : ""}>
                             <div className="icon notas-icon">
@@ -81,11 +72,23 @@ const Navbar = ({setIsAuthenticated}:NavbarProps) => {
                         </Tooltip>
                     </NavLink>
 
+
+     
                     <NavLink to="/listado" onMouseEnter={() => open('lista de compras')} onMouseLeave={close}>
                         <Tooltip title={active === 'lista de compras' ? 'Lista de compras' : ""}>
                             <div className="icon notas-icon">
                                 <AddShoppingCartIcon />
                                 <span className="text">Lista de compras </span> 
+                            </div>
+                        </Tooltip>
+                    </NavLink>
+
+
+                    <NavLink to="/convertidor" onMouseEnter={() => open('convertidor')} onMouseLeave={close}>
+                        <Tooltip title={active === 'convertidor' ? 'Convertidor' : ""}>
+                            <div className="icon change-icon">
+                                <CurrencyExchangeOutlinedIcon/>
+                                <span className="text"> Convertidor </span>
                             </div>
                         </Tooltip>
                     </NavLink>

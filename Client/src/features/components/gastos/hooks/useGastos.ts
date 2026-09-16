@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-
 import toast from "react-hot-toast"
-
 import axiosInstance from "../../../../config/axiosConfig"
 import type { IGastos } from "../types/type.gastos"
 
@@ -12,7 +10,6 @@ const TOAST_CONFIG = {
     background: "#0C447C",
     color: "#fff",
     }
-    
 }
 
 export const UseGastos = () => {

@@ -1,0 +1,531 @@
+
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #A22E2E;
+    --active-bg: #E5EFFB;
+    --active-text: #1E5FA8;
+    --overlay-bg: rgba(11, 18, 32, 0.5);
+
+    --success-bg: #E8F3E4;
+    --success-text: #2E7D32;
+    --warning-bg: #FCEFDA;
+    --warning-text: #9A5B0B;
+    --danger-bg: #FBE9E9;
+}
+
+
+.headers-actions {
+    display: flex;
+    margin: 0.8rem 0;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--header-bg);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+    background: #0A3A6A;
+}
+
+/* ============ Filtros ============ */
+.metas-page__toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.metas-page__filtros {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.metas-page__filtros button {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+    text-transform: capitalize;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.metas-page__filtros button:hover {
+    background: #F7F9FC;
+}
+
+.metas-page__filtros button.active {
+    background: var(--active-bg);
+    color: var(--active-text);
+    border-color: var(--active-text);
+}
+
+/* ============ Estados de la lista ============ */
+/* Fijo en 3 columnas para que cada página (ITEMS_PER_PAGE = 3) llene
+   una sola fila completa. En pantallas más chicas baja a 2 y luego a 1
+   columna para que las cards no queden apretadas. */
+.metas-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 900px) {
+    .metas-page__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .metas-page__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.metas-page__empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.metas-page__loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.metas-page__error {
+    color: var(--danger);
+    background: var(--danger-bg);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+}
+
+/* ============ MetaCard ============ */
+.meta-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(12, 68, 124, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.meta-card--completada {
+    background: var(--success-bg);
+    border-color: #c9e6c2;
+}
+
+.meta-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.meta-card__title h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.meta-card__desc {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.meta-card__estado {
+    flex-shrink: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #F1F1EF;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.meta-card__estado--activa     { background: var(--active-bg); color: var(--active-text); }
+.meta-card__estado--completada { background: var(--success-bg); color: var(--success-text); }
+.meta-card__estado--pausada    { background: var(--warning-bg); color: var(--warning-text); }
+.meta-card__estado--cancelada  { background: var(--danger-bg); color: var(--danger); }
+
+.meta-card__montos {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.meta-card__actual {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.meta-card__objetivo {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.meta-card__footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.meta-card__porcentaje {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.meta-card__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.meta-card__btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.meta-card__btn:hover {
+    background: #F7F9FC;
+}
+
+.meta-card__btn--primary {
+    background: var(--header-bg);
+    color: #fff;
+    border-color: var(--header-bg);
+}
+
+.meta-card__btn--primary:hover {
+    background: #0A3A6A;
+}
+
+.meta-card__btn--danger {
+    color: var(--danger);
+    border-color: var(--danger-bg);
+}
+
+.meta-card__btn--danger:hover {
+    background: var(--danger-bg);
+}
+
+/* ============ Modal genérico de formulario (usado por MetaForm) ============ */
+.form-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.form-modal-content {
+    background: #fff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+.form-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.form-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.form-modal-close:hover {
+    background: #F7F9FC;
+    color: var(--text);
+}
+
+.form-modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select,
+.task-input {
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.task-input:focus {
+    outline: none;
+    border-color: var(--header-bg);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-error {
+    margin: 0;
+    font-size: 13px;
+    color: var(--danger);
+    background: var(--danger-bg);
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+.task-modal-actions {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+}
+
+/* task-btn / task-btn-primary / task-btn-secondary ya existen en tu
+   filtros.css global; se repiten acá con los mismos valores para que
+   este archivo funcione igual aunque se cargue solo. */
+.task-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.task-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.task-btn-primary {
+    background: var(--header-bg);
+    color: #fff;
+}
+
+.task-btn-primary:hover:not(:disabled) {
+    background: #0A3A6A;
+}
+
+.task-btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--border);
+}
+
+.task-btn-secondary:hover:not(:disabled) {
+    background: #F7F9FC;
+}
+
+/* ============ Modal de aporte ============ */
+.aporte-modal__overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.aporte-modal {
+    background: #fff;
+    padding: 22px;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+.aporte-modal h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.aporte-modal label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.aporte-modal input {
+    font-size: 14px;
+    padding: 9px 11px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.aporte-modal input:focus {
+    outline: none;
+    border-color: var(--header-bg);
+}
+
+.aporte-modal__hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: -6px 0 0;
+}
+
+.aporte-modal__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.aporte-modal__actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.aporte-modal__actions button:hover:not(:disabled) {
+    background: #F7F9FC;
+}
+
+.aporte-modal__actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.aporte-modal__actions button[type="submit"] {
+    background: var(--header-bg);
+    color: #fff;
+    border-color: var(--header-bg);
+}
+
+.aporte-modal__actions button[type="submit"]:hover:not(:disabled) {
+    background: #0A3A6A;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 480px) {
+    .metas-page__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metas-page__filtros {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+    }
+
+    .headers-actions {
+        width: 100%;
+    }
+
+    .btn-add {
+        width: 100%;
+        justify-content: center;
+    }
+}
