@@ -66,11 +66,12 @@ export const MetaForm = ({
                                 </button>
                             </div>
 
-                            <form onSubmit={handleSubmit}>
+                            
                                 <div className="form-modal-body">
                                     <div className="form-group">
                                         <label>
                                             Nombre
+                                            </label>
                                             <input
                                                 type="text"
                                                 value={formData.nombre}
@@ -80,27 +81,31 @@ export const MetaForm = ({
                                                 maxLength={80}
                                                 autoFocus
                                             />
-                                        </label>
+                                        
                                     </div>
 
                                     <div className="form-group">
                                         <label>
                                             Descripción
+                                        </label>
                                             <textarea
+                                            className="task-input"
                                                 value={formData.descripcion ?? ''}
                                                 onChange={(e) => handleChange('descripcion', e.target.value)}
                                                 placeholder="Opcional: para qué es esta meta"
                                                 maxLength={300}
                                                 rows={2}
                                             />
-                                        </label>
+                                        
                                     </div>
 
                                     <div className="form-group">
                                         <label>
                                             Monto objetivo
+                                            </label>
                                             <input
                                                 type="number"
+                                                className="task-input"
                                                 value={formData.montoObjetivo || ''}
                                                 onChange={(e) => handleChange('montoObjetivo', Number(e.target.value))}
                                                 min={1}
@@ -108,19 +113,21 @@ export const MetaForm = ({
                                                 placeholder="0"
                                                 required
                                             />
-                                        </label>
+                                        
                                     </div>
 
                                     <div className="form-group">
                                         <label>
-                                            Fecha límite
+                                            Fecha  
+                                            </label>
                                             <input
                                                 type="date"
+                                                className="task-input"
                                                 value={formData.fecha}
                                                 onChange={(e) => handleChange('fecha', e.target.value)}
                                                 required
                                             />
-                                        </label>
+                                        
                                     </div>
 
                                     <div className="form-group">
@@ -155,29 +162,32 @@ export const MetaForm = ({
                                             </select>
                                         </div>
                                     )}
+
+                                    
+                                    <div className="task-modal-actions">
+                                        <button
+                                            
+                                            className="task-btn task-btn-primary"
+                                            onClick={onSubmit}
+                                            disabled={Isloading}
+                                        >
+                                            {Isloading ? 'Guardando...' : isEdit ? 'Guardar' : 'Agregar'}
+                                            {!Isloading && <Plus size={18} />}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            className="task-btn task-btn-secondary"
+                                            onClick={handleClose}
+                                            disabled={Isloading}
+                                        >
+                                            <X size={18} />
+                                            Cancelar
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <div className="task-modal-actions">
-                                    <button
-                                        type="submit"
-                                        className="task-btn task-btn-primary"
-                                        disabled={Isloading}
-                                    >
-                                        {Isloading ? 'Guardando...' : isEdit ? 'Guardar' : 'Agregar'}
-                                        {!Isloading && <Plus size={18} />}
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        className="task-btn task-btn-secondary"
-                                        onClick={handleClose}
-                                        disabled={Isloading}
-                                    >
-                                        <X size={18} />
-                                        Cancelar
-                                    </button>
-                                </div>
-                            </form>
+                            
                         </motion.div>
                     </motion.div>
                 )}

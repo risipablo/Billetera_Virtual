@@ -8,8 +8,17 @@ import type {
     UseMetasReturn,
     IMeta
 } from '../types/type.meta';
+import { toast } from 'react-hot-toast';
 
 const BASE = '/api/metas';
+const TOAST_CONFIG = {
+    position: 'top-center' as const,
+    duration: 1500,
+    style:{
+    background: "#0C447C",
+    color: "#fff",
+    }
+}
 
 export const useMetas = (): UseMetasReturn => {
     const [metas, setMetas] = useState<IMeta[]>([]);
@@ -95,6 +104,40 @@ export const useMetas = (): UseMetasReturn => {
         }
     };
 
+    const deleteFilteredMetas = useCallback(async (ids: string[]) => {
+        try {
+                const response = await axiosInstance.delete('/api/metas/filtered', { data: { ids } })
+                setMetas(prev => prev.filter(g => !g._id || !ids.includes(g._id)))
+        
+                toast.success(response.data.message, TOAST_CONFIG)
+                return response.data
+            } catch (err) {
+                console.error(err)
+                toast.error('Error al eliminar gastos filtrados', TOAST_CONFIG)
+                throw err
+            }
+    },[])
+
+    const allDeleteMetas = useCallback(() => {
+        setError('')
+
+        try{
+            axiosInstance.delete('/api/metas')
+            .then(response => {
+                setMetas([])
+                toast.success('Todos lo gastos han sido eliminados', TOAST_CONFIG)
+                console.debug(response.data)   
+            }) 
+        } catch(error){
+            console.error((error as Error).message)
+        }
+    },[setMetas])
+
+   
+    
+
+    
+
     useEffect(() => {
         fetchMetas();
     }, [fetchMetas]);
@@ -109,6 +152,8 @@ export const useMetas = (): UseMetasReturn => {
         eliminarMeta,
         agregarAporte,
         eliminarAporte,
+        deleteFilteredMetas,
+        allDeleteMetas,
         setError
     };
 };

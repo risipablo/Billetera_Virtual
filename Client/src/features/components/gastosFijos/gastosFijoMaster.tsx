@@ -1,15 +1,14 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, ChevronDown, ChevronUp, Wallet } from "lucide-react";
+import { Plus, Wallet, X } from "lucide-react";
 import "./style/fijo.css";
 import { UseFijo } from "./hooks/useFijo";
 import { GastoFijoItem } from "./ui/itemFijo";
 import { GastosFijosModal } from "./ui/fijoModal";
 
 export const GastosFijosMaster = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false); 
+    const [showModal, setShowModal] = useState(false); 
     const [editingGasto, setEditingGasto] = useState<any>(null);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -45,7 +44,6 @@ export const GastosFijosMaster = () => {
         const gasto = gastosFijos.find(g => g._id === id);
         if (gasto) {
             const nuevoEstado = gasto.estado === 'activo' ? 'pagado' : 'activo';
-            // ✅ CORREGIDO: Eliminar la línea de fecha
             editFijo(id, {
                 ...gasto,
                 estado: nuevoEstado,
@@ -59,79 +57,96 @@ export const GastosFijosMaster = () => {
         setShowModal(true);
     };
 
-    return (
-        <div className="gastos-fijos-container">
-            <div
-                className="gastos-fijos-toggle"
-                onClick={() => setIsOpen(!isOpen)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setIsOpen(!isOpen)}
-                aria-expanded={isOpen}
-            >
-                <div className="gastos-fijos-header">
-                    <Wallet size={20} />
-                    <span>Gastos Fijos</span>
-                    <span className="gastos-fijos-total">
-                        ${totalFijos.toLocaleString('es-AR')}
-                    </span>
-                </div>
-                <div className="gastos-fijos-actions">
-                    <button
-                        className="btn-add-fijo"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingGasto(null);
-                            setIsEditing(false);
-                            setShowModal(true);
-                        }}
-                        title="Agregar gasto fijo"
-                        type="button"
-                    >
-                        <Plus size={18} />
-                    </button>
-                    {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </div>
-            </div>
+    const handleAbrirAgregar = () => {
+        setEditingGasto(null);
+        setIsEditing(false);
+        setShowModal(true);
+    };
 
+    return (
+        <>
+            
+            <button
+                className="gastos-fijos-trigger"
+                onClick={() => setIsOpen(true)}
+                type="button"
+            >
+                <Wallet size={18} />
+                <span>Gastos Fijos</span>
+                <span className="gastos-fijos-total">
+                    ${totalFijos.toLocaleString('es-AR')}
+                </span>
+            </button>
+
+            
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="gastos-fijos-list"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        className="gastos-fijos-list-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={() => setIsOpen(false)}
                     >
-                        {gastosFijos.length === 0 ? (
-                            <div className="gastos-fijos-empty">
-                                <p>No tienes gastos fijos registrados</p>
+                        <motion.div
+                            className="gastos-fijos-list-modal"
+                            initial={{ scale: 0.9, opacity: 0, y: 16 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 16 }}
+                            transition={{ duration: 0.3, type: 'spring', bounce: 0.25 }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="modal-header">
+                                <h3>
+                                    <Wallet size={18} />
+                                    <span>Gastos Fijos</span>
+                                    <span className="gastos-fijos-total">
+                                        ${totalFijos.toLocaleString('es-AR')}
+                                    </span>
+                                </h3>
                                 <button
-                                    onClick={() => {
-                                        setEditingGasto(null);
-                                        setIsEditing(false);
-                                        setShowModal(true);
-                                    }}
+                                    className="modal-close"
+                                    onClick={() => setIsOpen(false)}
                                     type="button"
+                                    aria-label="Cerrar"
                                 >
-                                    + Agregar gasto fijo
+                                    <X size={22} />
                                 </button>
                             </div>
-                        ) : (
-                            gastosFijos.map((gasto) => (
-                                <GastoFijoItem
-                                    key={gasto._id || Math.random().toString()}
-                                    gasto={gasto}
-                                    onEdit={handleEditClick}
-                                    onDelete={handleDelete}
-                                    onToggle={handleToggle}
-                                />
-                            ))
-                        )}
+
+                            <button
+                                className="btn-add-fijo-full"
+                                onClick={handleAbrirAgregar}
+                                type="button"
+                            >
+                                <Plus size={16} />
+                                <span>Agregar gasto fijo</span>
+                            </button>
+
+                            <div className="gastos-fijos-list-body">
+                                {gastosFijos.length === 0 ? (
+                                    <div className="gastos-fijos-empty">
+                                        <p>No tenés gastos fijos registrados</p>
+                                    </div>
+                                ) : (
+                                    gastosFijos.map((gasto) => (
+                                        <GastoFijoItem
+                                            key={gasto._id || Math.random().toString()}
+                                            gasto={gasto}
+                                            onEdit={handleEditClick}
+                                            onDelete={handleDelete}
+                                            onToggle={handleToggle}
+                                        />
+                                    ))
+                                )}
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
+            
             <GastosFijosModal
                 isOpen={showModal}
                 onClose={() => {
@@ -143,7 +158,7 @@ export const GastosFijosMaster = () => {
                 initialData={editingGasto || undefined}
                 isEditing={isEditing}
             />
-        </div>
+        </>
     );
 };
 

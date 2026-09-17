@@ -4,6 +4,7 @@ import { LogOutComponent } from "../../components/auth/logout";
 import { useUser } from "../../features/hooks/useUser";
 import type { AuthenticatedProps } from "../../features/types/type.auth";
 import "../../style/perfil.css";
+import img1 from "../../../public/logo.png"
 
 type SettingItem = {
     icon: React.ReactNode;
@@ -49,7 +50,7 @@ const PerfilPage = ({ setIsAuthenticated, onLogoutStart }: PerfilPageProps) => {
             icon: <Info size={18} />,
             title: "Acerca de la app",
             description: "Conocé para qué sirve y cómo usarla",
-            onClick: () => navigate('/acerca'),
+            onClick: () => navigate('/about'),
         },
     ];
 

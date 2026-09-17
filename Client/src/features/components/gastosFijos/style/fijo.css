@@ -1,5 +1,3 @@
-
-
 :root {
     --border: #E9EBEF;
     --text: #26262A;
@@ -10,47 +8,31 @@
     --overlay-bg: rgba(11, 18, 32, 0.55);
 }
 
-/* ============================================================
-   Contenedor
-   ============================================================ */
-.gastos-fijos-container {
+
+.gastos-fijos-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 8px;
-    margin: 1rem 0;
-    padding: .6rem 0;
-    overflow: hidden;
-    max-width: 300px;
-}
-
-.gastos-fijos-toggle {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 14px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
-}
-
-.gastos-fijos-toggle:hover {
-    background: #F7F9FC;
-}
-
-.gastos-fijos-header {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 500;
     color: var(--text);
-    font-size: 0.82rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.gastos-fijos-header svg {
-    width: 15px;
-    height: 15px;
+.gastos-fijos-trigger:hover {
+    background: #F7F9FC;
+    border-color: #D5D8DE;
+}
+
+.gastos-fijos-trigger svg {
+    width: 16px;
+    height: 16px;
+    color: var(--header-bg);
 }
 
 .gastos-fijos-total {
@@ -62,61 +44,86 @@
     font-weight: 600;
 }
 
-.gastos-fijos-actions {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.btn-add-fijo {
+/* ============================================================
+   Modal con la lista de gastos fijos
+   ============================================================ */
+.gastos-fijos-list-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 6px;
-    border: none;
-    background: var(--header-bg);
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
+    z-index: 1000;
+    padding: 1rem;
 }
 
-.btn-add-fijo svg {
-    width: 13px;
-    height: 13px;
+.gastos-fijos-list-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.btn-add-fijo:hover {
-    background: #0A3A6A;
+.gastos-fijos-list-modal .modal-header {
+    margin-bottom: 14px;
 }
 
-.gastos-fijos-list {
-    overflow: hidden;
-    padding: 0 12px;
+.gastos-fijos-list-modal .modal-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
 }
 
-.gastos-fijos-empty {
-    padding: 20px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.88rem;
+.gastos-fijos-list-modal .modal-header h3 svg {
+    color: var(--header-bg);
 }
 
-.gastos-fijos-empty button {
-    margin-top: 8px;
-    padding: 7px 16px;
+.btn-add-fijo-full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 50%;
+    padding: 9px;
+    margin-bottom: 12px;
     background: var(--header-bg);
     color: #fff;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     font-size: 0.85rem;
     font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    flex-shrink: 0;
 }
 
-.gastos-fijos-empty button:hover {
+.btn-add-fijo-full:hover {
     background: #0A3A6A;
+}
+
+.gastos-fijos-list-body {
+    overflow-y: auto;
+    border-top: 1px solid var(--border);
+    margin: 0 -1.4rem;
+    padding: 0 1.4rem;
+}
+
+.gastos-fijos-empty {
+    padding: 32px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
 }
 
 /* ============================================================
@@ -126,9 +133,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--border);
     margin: 0;
+    gap: 10px;
 }
 
 .gasto-fijo-item:last-child {
@@ -137,19 +145,23 @@
 
 .gasto-fijo-item.estado-activo {
     border-left: 3px solid var(--success);
+    padding-left: 9px;
 }
 
 .gasto-fijo-item.estado-pagado {
     border-left: 3px solid var(--header-bg);
+    padding-left: 9px;
     opacity: 0.7;
 }
 
 .gasto-fijo-item.estado-vencido {
     border-left: 3px solid var(--danger);
+    padding-left: 9px;
 }
 
 .gasto-fijo-info {
     flex: 1;
+    min-width: 0;
 }
 
 .gasto-fijo-nombre {
@@ -168,9 +180,9 @@
 .gasto-fijo-detalles {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-top: 4px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     flex-wrap: wrap;
 }
@@ -190,7 +202,7 @@
 }
 
 .gasto-fijo-estado {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 600;
     padding: 2px 9px;
     border-radius: 999px;
@@ -206,42 +218,24 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0;
 }
 
 .gasto-fijo-actions button {
     border: none;
     cursor: pointer;
-    padding: 6px 10px;
+    padding: 6px 8px;
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 500;
-    transition: background-color 0.15s ease;
-}
-
-.btn-toggle {
-    background: #F1F1EF;
-    color: var(--text-muted);
-}
-
-.btn-toggle:hover {
-    background: #E9EBEF;
-}
-
-.btn-edit {
     background: transparent;
     color: var(--text-muted);
-    padding: 6px 8px;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .btn-edit:hover {
     color: var(--text);
     background: #F7F9FC;
-}
-
-.btn-delete {
-    background: transparent;
-    color: var(--text-muted);
-    padding: 6px 8px;
 }
 
 .btn-delete:hover {
@@ -256,7 +250,8 @@
 }
 
 /* ============================================================
-   Modal — mismo overlay que el resto de la app
+   Modal de agregar/editar un gasto fijo — se abre por encima
+   del modal de la lista (z-index más alto)
    ============================================================ */
 .gastos-fijos-modal-overlay {
     position: fixed;
@@ -265,7 +260,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1001;
     padding: 1rem;
 }
 
@@ -399,11 +394,13 @@
    Responsive
    ============================================================ */
 @media (max-width: 680px) {
+    .gastos-fijos-list-overlay,
     .gastos-fijos-modal-overlay {
         align-items: flex-end;
         padding: 0;
     }
 
+    .gastos-fijos-list-modal,
     .gastos-fijos-modal {
         max-width: 100%;
         border-radius: 16px 16px 0 0;

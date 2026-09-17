@@ -86,8 +86,8 @@ export const CuotaForm = ({
                                     />
                                 </div>
 
-                                <div className="form-group-row">
-                                    <div className="form-group half">
+                                <div className="form-group">
+                                    
                                         <label>Cuotas</label>
                                         <select
                                             className="nota-input"
@@ -101,7 +101,7 @@ export const CuotaForm = ({
                                         </select>
                                     </div>
 
-                                    <div className="form-group half">
+                                   <div className="form-group">
                                         <label>Monto total</label>
                                         <input
                                             type="number"
@@ -110,7 +110,7 @@ export const CuotaForm = ({
                                             value={formData.monto}
                                             onChange={(e) => handleChange('monto', e.target.value)}
                                         />
-                                    </div>
+                                   
                                 </div>
 
                                 <div className="form-group">
@@ -139,11 +139,11 @@ export const CuotaForm = ({
                                             )}
                                     </select>
                                 </div>
-                            </div>
 
+                                
                             <div className="task-modal-actions">
                                 <button
-                                    className="task-btn task-btn-primary"
+                                     className="task-btn task-btn-primary"
                                     onClick={handleSubmit}
                                     disabled={isLoading}
                                 >
@@ -156,6 +156,8 @@ export const CuotaForm = ({
                                     Cancelar
                                 </button>
                             </div>
+                            </div>
+
                         </motion.div>
                     </motion.div>
                 )}

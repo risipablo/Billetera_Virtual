@@ -79,13 +79,15 @@ export const MetaCard = ({ meta, onAportar, onEliminar, onEditar }: MetaCardProp
                         )}
                     </div>
                 </div>
+ 
+                <span className={`meta-card__estado meta-card__estado--${meta.categoria}`}>
+                    {meta.categoria}
+                </span>
+
                 <span className={`meta-card__estado meta-card__estado--${meta.estado}`}>
                     {meta.estado}
                 </span>
 
-                <span className={`meta-card__estado meta-card__estado--${meta.categoria}`}>
-                    {meta.categoria}
-                </span>
             </div>
 
             <div className="meta-card__montos">
@@ -137,6 +139,7 @@ export const MetaCard = ({ meta, onAportar, onEliminar, onEditar }: MetaCardProp
                     Eliminar
                 </button>
             </div>
+
 
             
             {showModal && ModalConfirm && (

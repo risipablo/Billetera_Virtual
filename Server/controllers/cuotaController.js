@@ -18,12 +18,7 @@ exports.addNotes = async (req, res) => {
     
     const { titulo, cuotas, monto, fecha, categoria } = req.body;
 
-    console.log('=== DATOS COMPLETOS RECIBIDOS ===');
-    console.log('titulo:', titulo);
-    console.log('cuotas:', cuotas);
-    console.log('monto:', monto);
-    console.log('fecha:', fecha);
-    console.log('categoria:', categoria);
+
 
     
     if (!titulo || !cuotas || !monto || !fecha || !categoria) {

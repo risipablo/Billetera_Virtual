@@ -1,0 +1,225 @@
+.about-app {
+    margin-left: 250px;
+    padding: 24px;
+    max-width: 1400px;
+    transition: margin-left 0.3s ease;
+}
+
+@media (min-width: 851px) {
+    body.open .about-app {
+        margin-left: var(--sidebar-width-collapsed);
+    }
+}
+
+/* Hero */
+.about-app__hero {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.about-app__hero-icon {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #e9eef5;
+    color: #0a0a0a;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.about-app__hero-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.about-app__hero h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.about-app__tagline {
+    margin: .9rem 0;
+    font-size: .95rem;
+    color: #576271;
+}
+
+/* Intro */
+.about-app__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: .95rem;
+    line-height: 1.6;
+    color: #334155;
+}
+
+.about-app__intro p {
+    margin: .7rem 0;
+}
+
+/* Secciones */
+.about-app__secciones h2 {
+    font-size: 18px;
+    margin: 1.5rem 0;
+    color: #1e293b;
+}
+
+.about-app__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+.about-app__card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.about-app__card:hover {
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.about-app__card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.about-app__card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.about-app__card-body h3 {
+    margin: 0 0 2px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.about-app__card-body p {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.about-app__card-arrow {
+    font-size: 22px;
+    color: #cbd5e1;
+    flex-shrink: 0;
+}
+
+/* Contacto */
+.about-app__contact {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px;
+    margin: 1rem 0;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #334155;
+}
+
+.about-app__contact h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    color: #1e293b;
+}
+
+.about-app__contact p {
+    margin: 0;
+    font-size: 14px;
+    color: #475569;
+}
+
+.about-app__contact a {
+    color: #1d4ed8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.about-app__contact a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   Responsive — mismos breakpoints que usás en el resto de la app
+   (850px: colapso del sidebar, 480px: celulares chicos)
+   ============================================================ */
+@media (max-width: 850px) {
+    .about-app {
+        margin-left: 0;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-app__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-app {
+        margin: 1rem 0;
+        padding: 12px;
+    }
+
+    .about-app__hero-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .about-app__hero h2 {
+        font-size: 1.4rem;
+    }
+
+    .about-app__tagline {
+        font-size: .88rem;
+    }
+
+    .about-app__secciones h2 {
+        margin: 1.1rem 0;
+    }
+
+    .about-app__card {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .about-app__card-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .about-app__contact {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 16px;
+    }
+}

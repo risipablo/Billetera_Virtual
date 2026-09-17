@@ -1,18 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import './style/metas.css';
 import { useMetas } from './hooks/useMetas';
-
 import { MetaForm } from './ui/metaForm';
 import { AporteModal } from './ui/aporteModal';
-
+import { MetaCard } from './components/metaCard';
+import { PaginationComponent } from '../../../components/ui/pagination/pagination';
+import { useConfirmModal } from '../../hooks/useModalConfirm';
+import { ModalConfirm } from '../../../components/ui/modalConfirm';
+import { Spinner } from '../../../components/ui/spinner/spinner';
+import { Tooltip } from '@mui/material';
+import { FilterX, Trash2 } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 import type {
     IMeta,
     CrearMetaPayload,
     EditarMetaPayload,
     EstadoMeta
 } from './types/type.meta';
-import { PaginationComponent } from '../../../components/ui/pagination/pagination';
-import { MetaCard } from './components/metaCard';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -32,6 +36,14 @@ const FORM_VACIO: IMeta = {
     updatedAt: ''
 };
 
+const ESTADOS: { value: EstadoMeta | 'todas'; label: string }[] = [
+    { value: 'todas', label: 'Todos los estados' },
+    { value: 'activa', label: 'Activa' },
+    { value: 'pausada', label: 'Pausada' },
+    { value: 'completada', label: 'Completada' },
+    { value: 'cancelada', label: 'Cancelada' }
+];
+
 export const MetaMaster = () => {
     const {
         metas,
@@ -40,7 +52,9 @@ export const MetaMaster = () => {
         crearMeta,
         editarMeta,
         eliminarMeta,
-        agregarAporte
+        agregarAporte,
+        deleteFilteredMetas,
+        allDeleteMetas
     } = useMetas();
 
     const [filtroEstado, setFiltroEstado] = useState<EstadoMeta | 'todas'>('todas');
@@ -53,6 +67,8 @@ export const MetaMaster = () => {
 
     const [metaAportando, setMetaAportando] = useState<IMeta | null>(null);
     const [guardando, setGuardando] = useState<boolean>(false);
+
+    const { openModal, ModalComponent } = useConfirmModal();
 
     const categoriasDisponibles = useMemo(() => {
         const set = new Set<string>();
@@ -71,14 +87,22 @@ export const MetaMaster = () => {
 
     const pageCount = Math.max(1, Math.ceil(metasFiltradas.length / ITEMS_PER_PAGE));
 
-    const metasPaginadas = useMemo(() => {
-        const start = currentPage * ITEMS_PER_PAGE;
-        return metasFiltradas.slice(start, start + ITEMS_PER_PAGE);
-    }, [metasFiltradas, currentPage]);
+    const offset = currentPage * ITEMS_PER_PAGE;
+    const currentItems = metasFiltradas.slice(offset, offset + ITEMS_PER_PAGE);
+
+    const hasActiveFilters = Boolean(
+        filtroEstado !== 'todas' || filtroCategoria !== 'todas'
+    );
 
     useEffect(() => {
         setCurrentPage(0);
     }, [filtroEstado, filtroCategoria]);
+
+    useEffect(() => {
+        if (metasFiltradas.length > 0 && currentPage >= pageCount) {
+            setCurrentPage(Math.max(0, pageCount - 1));
+        }
+    }, [metasFiltradas.length, pageCount, currentPage]);
 
     const abrirCrear = () => {
         setFormData({ ...FORM_VACIO });
@@ -129,14 +153,7 @@ export const MetaMaster = () => {
     };
 
     const handleEliminar = async (meta: IMeta) => {
-
         await eliminarMeta(meta._id);
-
-        const restantes = metasFiltradas.length - 1;
-        const nuevasPaginas = Math.max(1, Math.ceil(restantes / ITEMS_PER_PAGE));
-        if (currentPage >= nuevasPaginas) {
-            setCurrentPage(nuevasPaginas - 1);
-        }
     };
 
     const handleAporte = async (
@@ -151,12 +168,39 @@ export const MetaMaster = () => {
         }
     };
 
+    const getFilterDescription = () => {
+        const parts: string[] = [];
+        if (filtroEstado !== 'todas') parts.push(`Estado: ${filtroEstado}`);
+        if (filtroCategoria !== 'todas') parts.push(`Categoría: ${filtroCategoria}`);
+        return parts.length > 0 ? parts.join(' - ') : 'sin filtros';
+    };
+
+    const handleDeleteFiltered = async () => {
+        const idsToDelete = metasFiltradas
+            .map(m => m._id)
+            .filter((id): id is string => Boolean(id));
+        if (idsToDelete.length === 0) return;
+
+        await deleteFilteredMetas(idsToDelete);
+        setFiltroEstado('todas');
+        setFiltroCategoria('todas');
+        setCurrentPage(0);
+    };
+
+    if (loading) {
+        return (
+            <div className="notas-loading">
+                <Spinner size="lg" label="Cargando metas..." />
+            </div>
+        );
+    }
+
     return (
         <div className="table-container">
-            <div className="table-container">
+            <div className="table-header">
                 <h2 className="table-title">Mis Metas</h2>
 
-                <div className="headers-actions">
+                <div className="header-actions">
                     <MetaForm
                         formData={formData}
                         setFormData={setFormData}
@@ -167,77 +211,117 @@ export const MetaMaster = () => {
                         onOpen={abrirCrear}
                         isEdit={isEdit}
                     />
+
+                    <Tooltip title="Eliminar todas las metas" arrow>
+                        <button
+                            className="delete-all-btn"
+                            onClick={() => openModal(
+                                allDeleteMetas,
+                                "Confirmar borrado",
+                                `¿Estás seguro que deseas eliminar todas las metas (${metas.length})?`,
+                                "Eliminar Todas"
+                            )}
+                        >
+                            <Trash2 size={18} />
+                            Eliminar Todas ({metas.length})
+                        </button>
+                    </Tooltip>
+
+                    {hasActiveFilters && metasFiltradas.length > 0 && (
+                        <Tooltip
+                            title={`Eliminar solo las metas de: ${getFilterDescription()}`}
+                            arrow
+                        >
+                            <button
+                                className="delete-all-btn"
+                                onClick={() => openModal(
+                                    handleDeleteFiltered,
+                                    "Eliminar metas filtradas",
+                                    `¿Estás seguro que deseas eliminar todas las metas de "${getFilterDescription()}" (${metasFiltradas.length})?`,
+                                    `Eliminar ${metasFiltradas.length} metas`
+                                )}
+                            >
+                                <Trash2 size={18} />
+                                <FilterX size={14} />
+                                <span>Eliminar Filtradas ({metasFiltradas.length})</span>
+                            </button>
+                        </Tooltip>
+                    )}
                 </div>
             </div>
 
             <div className="metas-page__toolbar">
-                <div className="metas-page__filtros">
-                    {(['todas', 'activa', 'pausada', 'completada', 'cancelada'] as const).map(
-                        f => (
-                            <button
-                                key={f}
-                                className={filtroEstado === f ? 'active' : ''}
-                                onClick={() => setFiltroEstado(f)}
-                            >
-                                {f}
-                            </button>
-                        )
-                    )}
-                </div>
-
-                <div className="metas-page__filtros">
-                    <button
-                        className={filtroCategoria === 'todas' ? 'active' : ''}
-                        onClick={() => setFiltroCategoria('todas')}
-                    >
-                        todas
-                    </button>
-                    {categoriasDisponibles.map(cat => (
-                        <button
-                            key={cat}
-                            className={filtroCategoria === cat ? 'active' : ''}
-                            onClick={() => setFiltroCategoria(cat)}
-                        >
-                            {cat}
-                        </button>
+                <select
+                    className="metas-page__filtro-select"
+                    value={filtroEstado}
+                    onChange={(e) => setFiltroEstado(e.target.value as EstadoMeta | 'todas')}
+                    aria-label="Filtrar por estado"
+                >
+                    {ESTADOS.map(({ value, label }) => (
+                        <option key={value} value={value}>
+                            {label}
+                        </option>
                     ))}
-                </div>
+                </select>
 
-                
+                <select
+                    className="metas-page__filtro-select"
+                    value={filtroCategoria}
+                    onChange={(e) => setFiltroCategoria(e.target.value)}
+                    aria-label="Filtrar por categoría"
+                >
+                    <option value="todas">Todas las categorías</option>
+                    {categoriasDisponibles.map(cat => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
             </div>
-
-
 
             {error && <p className="metas-page__error">{error}</p>}
 
-            {loading && <p className="metas-page__loading">Cargando metas...</p>}
-
-            {!loading && metasFiltradas.length === 0 && (
-                <div className="metas-page__empty">
-                    <p>No tenés metas todavía.</p>
-                    <p>Creá una para empezar a ahorrar con un objetivo claro.</p>
+            {currentItems.length === 0 ? (
+                <div className="notas-empty">
+                    <p>
+                        {metas.length === 0
+                            ? 'No hay metas todavía'
+                            : 'No hay metas que coincidan con el filtro seleccionado'}
+                    </p>
                 </div>
+            ) : (
+                <>
+                    <span
+                        className="filter-results-count"
+                        style={{ marginBottom: 10, display: 'block' }}
+                    >
+                        Mostrando {metasFiltradas.length} de {metas.length} metas
+                    </span>
+
+                    <div className="metas-page__grid">
+                        {currentItems.map(meta => (
+                            <MetaCard
+                                key={meta._id}
+                                meta={meta}
+                                onAportar={setMetaAportando}
+                                onEditar={abrirEditar}
+                                onEliminar={handleEliminar}
+                            />
+                        ))}
+                    </div>
+                </>
             )}
 
-            
-
-            <div className="metas-page__grid">
-                {metasPaginadas.map(meta => (
-                    <MetaCard
-                        key={meta._id}
-                        meta={meta}
-                        onAportar={setMetaAportando}
-                        onEditar={abrirEditar}
-                        onEliminar={handleEliminar}
-                    />
-                ))}
-            </div>
-
-            <PaginationComponent
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                pageCount={pageCount} totalItems={0}  
-            />
+            {pageCount > 1 && (
+                <PaginationComponent
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalItems={metasFiltradas.length}
+                    offset={offset}
+                    pageCount={pageCount}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                />
+            )}
 
             <AporteModal
                 meta={metaAportando}
@@ -245,9 +329,9 @@ export const MetaMaster = () => {
                 onSubmit={handleAporte}
                 loading={guardando}
             />
-            
-            
+
+            <ModalComponent />
+            <Toaster />
         </div>
-        
     );
 };

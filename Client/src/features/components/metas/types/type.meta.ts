@@ -68,6 +68,8 @@ export interface UseMetasReturn {
     eliminarMeta: (id: string) => Promise<void>;
     agregarAporte: (metaId: string, payload: AportePayload) => Promise<IMeta>;
     eliminarAporte: (metaId: string, aporteId: string) => Promise<IMeta>;
+    deleteFilteredMetas: (ids: string[]) => Promise<void>;
+    allDeleteMetas: () => void;
     setError: (error: string) => void;
 }
 

@@ -75,6 +75,11 @@ const GastosMaster = () => {
         localStorage.setItem('limiteGasto', String(limite));
         setShowInputs(isMobile);
     }, [limite, isMobile]);
+    
+    // Reseteo de paginas
+    useEffect(() => {
+        setCurrentPage(0)
+    },[filterGastos, activeFilter, monthFilter, yearFilter, conditionsFilter, metodoFilter, estadoFilter, categoriaFilter])
 
 
 

@@ -8,11 +8,11 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import "../../style/navbar.css"
 import { SubMenu } from "./subMenu";
 
-interface NavbarProps {
-    setIsAuthenticated?: (value: boolean) => void;
-}
+// interface NavbarProps {
+//     setIsAuthenticated?: (value: boolean) => void;
+// }
 
-const Navbar = ({setIsAuthenticated}:NavbarProps) => {
+const Navbar = () => {
     const [active,setActive] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
     

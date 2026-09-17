@@ -1,5 +1,6 @@
 const MetaModel = require('../models/metas');
 
+
 exports.crearMeta = async (req, res) => {
     try {
         const { nombre, descripcion, montoObjetivo, fecha, categoria } = req.body;
@@ -199,3 +200,36 @@ exports.eliminarAporte = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// Eliminar todos
+exports.deleteAllMetas = async(req,res) => {
+    try{
+        const result = await MetaModel.deleteMany({
+            userId:req.user.id
+        })
+        res.json(result)
+    } catch(err){
+        res.status(500).json({error:err.message})
+    }
+}
+
+exports.deleteFilterCuotas = async(req,res) => {
+    const { ids } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ error: 'Se requiere un array de ids' });
+    }
+
+        try {
+            const result = await MetaModel.deleteMany({
+                _id: { $in: ids },
+                userId: req.user.id
+            });
+            res.json({
+                message: `${result.deletedCount} metas eliminadas`,
+                deletedCount: result.deletedCount
+            });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+}
