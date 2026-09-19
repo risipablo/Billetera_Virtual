@@ -14,6 +14,7 @@ import ResetPasswordPage from "./auth/changePassword";
 import { SuggestionsComponent } from "../features/components/email/suggestComponent";
 import { MetasPage } from "./components/metasPage";
 import { AboutApp } from "../features/components/aboutApp/about";
+import { DashboardPage } from "./components/dashboardPage";
 
 
 
@@ -24,8 +25,9 @@ export const Home = ({isAuthenticated, setIsAuthenticated}:AuthenticatedProps) =
     
     return(    
             <Routes>
-                <Route path="/" element={isAuthenticated ? <Navigate to="/gastos" replace/> : <LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>}/> 
+                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace/> : <LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>}/> 
                 <Route path="/register" element={isAuthenticated ? <RegisterPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/> : <Navigate to="/" replace/>}/>
+                <Route path="/dashboard" element={isAuthenticated ? <DashboardPage/> : <Navigate to='/' replace />}/>
                 <Route path="/gastos" element={isAuthenticated ? <GastosPage/> : <Navigate to="/" replace/>}/>
                 <Route path="/listado" element={isAuthenticated ? <ListadoPage/> : <Navigate to="/" replace/>}/>
                 <Route path="/estadisticas" element={isAuthenticated ? <EstadisticasPage/> : <Navigate to="/" replace/>}/>
@@ -38,7 +40,7 @@ export const Home = ({isAuthenticated, setIsAuthenticated}:AuthenticatedProps) =
                 <Route path="/change-user" element={isAuthenticated ? <ChangeUserNamePage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
                 <Route path="/change-password" element={isAuthenticated ? <ResetPasswordPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
                 <Route path="/send-email" element={isAuthenticated ? <SuggestionsComponent /> : <Navigate to="/" replace/>}/>
-                <Route path="*" element={<Navigate to={isAuthenticated ? "/gastos" : "/"} replace/>}/>
+                <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace/>}/>
             </Routes>
         
         

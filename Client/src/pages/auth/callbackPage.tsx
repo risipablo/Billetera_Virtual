@@ -8,15 +8,13 @@ const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
     const location = useLocation();
 
     useEffect(() => {
-        console.log('🟢 CallbackPage montado');
-        console.log('📍 location.search:', location.search);
+        
 
         const params = new URLSearchParams(location.search);
         const token = params.get('token');
         const error = params.get('error');
 
-        console.log('🔑 token:', token ? 'existe' : 'no existe');
-        console.log('❌ error:', error);
+        
 
         if (error) {
             localStorage.removeItem('token');
@@ -27,11 +25,11 @@ const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
 
         if (token) {
             localStorage.setItem('token', token);
-            console.log('✅ Token guardado, autenticando...');
+        
             setIsAuthenticated(true);
-            navigate('/gastos', { replace: true });
+            navigate('/dashboard', { replace: true });
         } else {
-            console.log('⚠️ No hay token, redirigiendo a login');
+        
             navigate('/login', { replace: true });
         }
     }, [location.search, navigate, setIsAuthenticated]);

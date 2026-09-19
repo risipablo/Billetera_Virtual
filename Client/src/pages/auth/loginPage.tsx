@@ -38,7 +38,7 @@ export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
             await login(formData)
             setIsAuthenticated(true)
             console.log(navigate + "=> navigate")
-            navigate('/gastos', { replace: true })
+            navigate('/dashboard', { replace: true })
         } catch (err){
             console.error('Error during login:', err)
         }

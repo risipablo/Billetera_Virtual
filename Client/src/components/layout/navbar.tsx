@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Tooltip} from "@mui/material";
-import { ChartNoAxesColumn, CircleDollarSign, Wallet } from 'lucide-react'
+import { ChartNoAxesColumn, CircleDollarSign, User, Wallet } from 'lucide-react'
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -45,6 +45,16 @@ const Navbar = () => {
             
             <div className={`icons ${isOpen ? 'open' : ''}`} onClick={closeMenu}>
                 <div className={`menu ${isOpen ? 'open' : ''}`}> 
+
+                    <NavLink to="/dashboard" onMouseEnter={() => open('dashboard')} onMouseLeave={close} onClick={closeMenu}>
+                        <Tooltip title={active === 'dashboard' ? "Dashboard" : " "}>
+                            <div className="icon gasto-icon">
+                                <User/>
+                                <span className="text">Dashboard</span> 
+                            </div>
+                        </Tooltip>
+                    </NavLink>
+
                     <NavLink to="/gastos" onMouseEnter={() => open('gastos')} onMouseLeave={close} onClick={closeMenu}>
                         <Tooltip title={active === 'gastos' ? "Gastos" : " "}>
                             <div className="icon gasto-icon">

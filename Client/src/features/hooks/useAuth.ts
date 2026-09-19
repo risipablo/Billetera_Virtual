@@ -41,7 +41,7 @@ export const UseAuth = (): UseAuthReturn => {
             setSuccess(data.message || 'Login exitoso');
             await fetchUserData();
             setTimeout(() => {
-                navigate('/gastos');
+                navigate('/dashboard');
             }, 1000);
         } catch (err) {
             setError((err as Error).message);
