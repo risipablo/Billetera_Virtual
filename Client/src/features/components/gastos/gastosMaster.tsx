@@ -36,7 +36,7 @@ const GastosMaster = () => {
         estado: ''
     });
 
-    const isMobile = useMediaQuery('(max-width:500px)');
+    // const isMobile = useMediaQuery('(max-width:500px)');
     const [showInputs, setShowInputs] = useState(true);
 
     const [showModalFilter, setShowModalFilter] = useState(false);
@@ -73,8 +73,7 @@ const GastosMaster = () => {
 
     useEffect(() => {
         localStorage.setItem('limiteGasto', String(limite));
-        setShowInputs(isMobile);
-    }, [limite, isMobile]);
+    }, [limite]);
     
     // Reseteo de paginas
     useEffect(() => {
@@ -297,7 +296,7 @@ const GastosMaster = () => {
             />
 
             <TransitionGroup>
-                {!showInputs && (
+                {showInputs && (
                     <Collapse>
                         <GastosStats
                             lastSpend={lastSpend}

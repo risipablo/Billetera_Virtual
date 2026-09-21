@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import type { CuotaCardProps } from "../types/type.cuotas";
 import { Check, ChevronDown, ChevronUp, Delete, Edit, MoreVertical, Plus, Save, Undo, X } from "lucide-react";
@@ -6,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CuotaItem } from "./cuotaItem";
 import { formatDate } from "../../gastos/utils/dateutils";
 import { Menu, MenuItem, Tooltip } from "@mui/material";
+import { useVencimiento } from "../hooks/useVencimiento";
 
 export const CuotaCard = ({
     cuota,
@@ -26,17 +26,19 @@ export const CuotaCard = ({
         cuotas: cuota.cuotas,
         montoTotal: cuota.montoTotal,
         fecha: cuota.fechaCompra || '',
-        categoria:cuota.categoria
+        fechaPrimeraCuota: cuota.fecha?.[0] ? new Date(cuota.fecha[0]).toISOString().split('T')[0] : '',
+        categoria: cuota.categoria
     });
     const [newItem, setNewItem] = useState({
         descripcion: '',
         fecha: '',
         precio: '',
-        categoria:''
+        categoria: ''
     });
     const [showEditModal, setShowEditModal] = useState(false);
 
-    
+    const vencimiento = useVencimiento(cuota);
+
     const totalCuotas = cuota.cuotas || 0;
     const montoTotal = cuota.montoTotal || 0;
 
@@ -45,9 +47,7 @@ export const CuotaCard = ({
         return montoTotal / totalCuotas;
     }, [totalCuotas, montoTotal]);
 
-
     const cuotasPagadas = cuota.descripcion?.filter((_, idx) => cuota.completedItems?.[idx])?.length || 0;
-
 
     const progresoPct = totalCuotas > 0 ? Math.min(100, Math.round((cuotasPagadas / totalCuotas) * 100)) : 0;
 
@@ -61,11 +61,7 @@ export const CuotaCard = ({
         return sum;
     }, [cuota.precio, cuota.completedItems]);
 
-
     const restantePorPagar = montoTotal - totalPagado;
-
-
-    // const proximoVencimiento = cuota.fecha?.find((_, idx) => !cuota.completedItems?.[idx]) || cuota.fecha?.[0] || '';
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -77,15 +73,12 @@ export const CuotaCard = ({
 
     const handleAddItem = () => {
         if (newItem.descripcion.trim() && newItem.fecha && Number(newItem.precio) > 0) {
-            
-              console.log('Agregando item con fecha:', newItem.fecha);
-            
             onAddItem(cuota._id!, {
                 descripcion: newItem.descripcion.trim(),
                 fecha: newItem.fecha,
                 precio: Number(newItem.precio),
             });
-            setNewItem({ descripcion: '', fecha: '', precio: '' , categoria:''});
+            setNewItem({ descripcion: '', fecha: '', precio: '', categoria: '' });
             setIsExpanded(false);
         } else {
             alert('Todos los campos son requeridos');
@@ -94,26 +87,32 @@ export const CuotaCard = ({
 
     const handleSaveEdit = () => {
         if (editData.titulo.trim() && editData.cuotas > 0) {
-            onEdit(cuota._id!,
-                 { 
-                    titulo: editData.titulo, 
-                    cuotas: editData.cuotas,
-                    montoTotal: editData.montoTotal,
-                    fecha: editData.fecha || cuota.fechaCompra || new Date().toISOString().split('T')[0],
-                    categoria:editData.categoria
-                 });
+            onEdit(cuota._id!, {
+                titulo: editData.titulo,
+                cuotas: editData.cuotas,
+                montoTotal: editData.montoTotal,
+                fecha: editData.fecha || cuota.fechaCompra || new Date().toISOString().split('T')[0],
+                fechaPrimeraCuota: editData.fechaPrimeraCuota,
+                categoria: editData.categoria
+            });
             setIsEditing(false);
             setShowEditModal(false);
         }
     };
 
     const handleEditClick = () => {
-        setEditData({ titulo: cuota.titulo, cuotas: cuota.cuotas, montoTotal: cuota.montoTotal, fecha: cuota.fecha?.[0] || '', categoria:cuota.categoria });
+        setEditData({
+            titulo: cuota.titulo,
+            cuotas: cuota.cuotas,
+            montoTotal: cuota.montoTotal,
+            fecha: cuota.fechaCompra || '',
+            fechaPrimeraCuota: cuota.fecha?.[0] ? new Date(cuota.fecha[0]).toISOString().split('T')[0] : '',
+            categoria: cuota.categoria
+        });
         setIsEditing(true);
         setShowEditModal(true);
         handleMenuClose();
     };
-
 
     const handleToggleCompleteCard = () => {
         onToggleComplete(cuota._id!);
@@ -127,14 +126,13 @@ export const CuotaCard = ({
                 whileHover={{ scale: 1.01 }}
             >
                 <div className={`nota-card ${cuota.completed ? 'completed' : 'active'}`}>
-                    
                     <div className="nota-card-header">
                         <div className="nota-card-title">
                             <h3 className={cuota.completed ? 'completed' : ''}>
                                 {cuota.titulo}
                             </h3>
                             <p className="categoria-cuota"> {cuota.categoria || 0} </p>
-                            
+
                             <div className="nota-card-meta">
                                 <span className="nota-card-cuotas">
                                     {cuotasPagadas} de {totalCuotas} cuotas pagadas
@@ -171,11 +169,9 @@ export const CuotaCard = ({
                         </Menu>
                     </div>
 
-
                     <div className="nota-progress-track">
                         <div className="nota-progress-fill" style={{ width: `${progresoPct}%` }} />
                     </div>
-
 
                     <div className="nota-card-stats">
                         <div className="nota-stat-row">
@@ -207,12 +203,20 @@ export const CuotaCard = ({
                         </div>
                     </div>
 
-
                     <div className="nota-card-footer">
                         <span className="nota-footer-vencimiento">
                             {cuota.fechaCompra
                                 ? `Comprado el ${formatDate(cuota.fechaCompra)}`
                                 : 'Sin cuotas pendientes'}
+                        </span>
+                        <span
+                            className="nota-footer-vencimiento"
+                            style={{
+                                color: vencimiento.color,
+                                fontWeight: vencimiento.estado === 'vencida' || vencimiento.estado === 'vence-hoy' ? 600 : 500
+                            }}
+                        >
+                            {vencimiento.texto}
                         </span>
                         <button
                             className="nota-btn-expand"
@@ -222,7 +226,6 @@ export const CuotaCard = ({
                             {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                         </button>
                     </div>
-
 
                     <AnimatePresence>
                         {isOpen && (
@@ -261,7 +264,7 @@ export const CuotaCard = ({
                                     </button>
 
                                     {isExpanded && (
-                                        <div className="nota-add-item-form" >
+                                        <div className="nota-add-item-form">
                                             <input
                                                 type="text"
                                                 className="nota-input-small"
@@ -273,9 +276,7 @@ export const CuotaCard = ({
                                                 type="date"
                                                 className="nota-input-small"
                                                 value={newItem.fecha}
-                                                onChange={(e) => {
-                                                        console.log('Fecha seleccionada:', e.target.value)
-                                                    setNewItem({ ...newItem, fecha: e.target.value })}}
+                                                onChange={(e) => setNewItem({ ...newItem, fecha: e.target.value })}
                                             />
                                             <input
                                                 type="number"
@@ -300,7 +301,6 @@ export const CuotaCard = ({
                     </AnimatePresence>
                 </div>
             </motion.div>
-
 
             {showEditModal && (
                 <div className="form-modal-overlay" onClick={() => setShowEditModal(false)}>
@@ -347,7 +347,7 @@ export const CuotaCard = ({
                             </div>
 
                             <div className="form-group">
-                                <label>Fecha de compra </label>
+                                <label>Fecha de compra</label>
                                 <input
                                     type="date"
                                     className="nota-input"
@@ -356,24 +356,32 @@ export const CuotaCard = ({
                                 />
                             </div>
 
-            
+                            <div className="form-group">
+                                <label>Primera cuota vence</label>
+                                <input
+                                    type="date"
+                                    className="nota-input"
+                                    value={editData.fechaPrimeraCuota}
+                                    onChange={(e) => setEditData({ ...editData, fechaPrimeraCuota: e.target.value })}
+                                />
+                            </div>
+
                             <div className="form-group">
                                 <label>Categoría</label>
-                                <select 
+                                <select
                                     className="task-input"
-                                    value={editData.categoria} 
+                                    value={editData.categoria}
                                     onChange={(e) => setEditData({ ...editData, categoria: e.target.value })}
                                 >
                                     <option value="">Seleccionar Categoria</option>
                                     {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
                                     "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
-                                    'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro","Supermercado","Salidas", "Otro"  
-                                    ].map(categoria => 
+                                    'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro", "Supermercado", "Salidas", "Otro"
+                                    ].map(categoria =>
                                         <option key={categoria} value={categoria}>{categoria}</option>
                                     )}
                                 </select>
                             </div>
-
                         </div>
 
                         <div className="task-modal-actions">

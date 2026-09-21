@@ -30,13 +30,21 @@ export interface ResumenFinanciero {
 }
 
 export interface FiltrosEstadisticasProps {
-    onFilterChange: (filters: {
+    filtros: {
         mes: string;
         año: string;
         producto: string;
         metodo: string;
         condicion: string;
-        categoria:string
+        categoria: string;
+    };
+    onFilterChange: (filtros: {
+        mes: string;
+        año: string;
+        producto: string;
+        metodo: string;
+        condicion: string;
+        categoria: string;
     }) => void;
     onReset: () => void;
     onMesActual: () => void;
@@ -70,3 +78,4 @@ export interface GraficoDonutProps {
     maxSlices?: number; 
     colorOverrides?: Record<string, string>;
 }
+

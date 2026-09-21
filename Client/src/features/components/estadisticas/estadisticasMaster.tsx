@@ -8,7 +8,6 @@ import { ResumenFinanciero } from "./components/resumenFinanciero";
 import { GraficoBarras } from "./components/graficoBarras";
 import { GraficoDonut } from "./components/graficoDonut";
 
-
 const COLORES_CONDICION = {
     Fijo: '#E8CD05',
     Necesario: '#1E5FA8',
@@ -26,6 +25,7 @@ export const EstadisticasMaster = () => {
         datosPorAño,
         datosPorInversion,
         datosPorCategoria,
+        filtros,
         aplicarFiltros,
         resetFiltros,
         mesActual,
@@ -47,6 +47,7 @@ export const EstadisticasMaster = () => {
             </div>
 
             <FiltrosEstadisticas
+                filtros={filtros}
                 onFilterChange={aplicarFiltros}
                 onReset={resetFiltros}
                 onMesActual={mesActual}
@@ -57,7 +58,6 @@ export const EstadisticasMaster = () => {
 
             <div className="estadisticas-grid">
 
-                
                 <GraficoBarras
                     data={datosPorMes}
                     title="Gastos por Mes"
@@ -72,7 +72,6 @@ export const EstadisticasMaster = () => {
                     height={280}
                 />
 
-                
                 <GraficoDonut
                     data={{
                         ...datosPorCategoria,
@@ -95,7 +94,6 @@ export const EstadisticasMaster = () => {
                     size={220}
                 />
 
-                
                 <GraficoDonut
                     data={{
                         ...datosPorCondicion,
@@ -120,7 +118,6 @@ export const EstadisticasMaster = () => {
                     maxSlices={10}
                 />
 
-                
                 <div className="grafico-span-2">
                     <GraficoBarras
                         data={datosPorInversion}

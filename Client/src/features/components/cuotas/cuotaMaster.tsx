@@ -36,6 +36,7 @@ export const CuotasMaster = () => {
         cuotas: '',
         monto: '',
         fecha: '',
+        fechaPrimeraCuota:'',
         categoria:''
     });
 
@@ -72,6 +73,7 @@ export const CuotasMaster = () => {
             cuotas: Number(formData.cuotas),
             monto: Number(formData.monto),
             fecha: formData.fecha,
+            fechaPrimeraCuota:formData.fechaPrimeraCuota,
             categoria:formData.categoria
         });
 
@@ -80,6 +82,7 @@ export const CuotasMaster = () => {
             cuotas: '',
             monto: '',
             fecha: '',
+            fechaPrimeraCuota: '',
             categoria:''
         });
     };

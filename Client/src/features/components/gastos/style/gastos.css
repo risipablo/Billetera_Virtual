@@ -216,7 +216,8 @@
 
     .btn-add,
     .delete-all-btn {
-        width: 80%;
+        width: 100%;
+        margin: .2rem 0;
         justify-content: center;
     }
 

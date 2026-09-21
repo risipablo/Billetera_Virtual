@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import type { ICuota } from "../types/type.cuotas";
 import toast from "react-hot-toast";
@@ -18,10 +17,16 @@ export const useCuotas = () => {
     const [filteredCuotas, setFilteredCuotas] = useState<ICuota[]>([])
     const [loading, setLoading] = useState(true);
 
+    
+    const actualizarNotaEnAmbos = useCallback((id: string, nota: ICuota) => {
+        setCuotas(prev => prev.map(n => n._id === id ? nota : n));
+        setFilteredCuotas(prev => prev.map(n => n._id === id ? nota : n));
+    }, []);
+
+
     const loadCuotas = useCallback(async () => {
         try {
             const response = await axiosInstance.get('/api/note');
-            console.log(response.data)
             setCuotas(Array.isArray(response.data) ? response.data : []);
             setFilteredCuotas(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
@@ -36,35 +41,30 @@ export const useCuotas = () => {
         loadCuotas();
     }, [loadCuotas]);
 
-    
-
-
     const addCuotas = useCallback(async (data: {
         titulo: string;
         cuotas: number;
         monto: number;
         fecha: string;
+        fechaPrimeraCuota:string;
         categoria:string;
     }) => {
-        console.log('Enviando categoría:', data.categoria);
-        if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha ||!data.categoria) {
+        
+        if (!data.titulo.trim() || !data.cuotas || !data.monto || !data.fecha|| !data.fechaPrimeraCuota ||!data.categoria) {
 
             toast.error('Todos los campos son requeridos', TOAST_CONFIG);
             return;
         }
 
         try {
-        
-
             const response = await axiosInstance.post('/api/note', {
                 titulo: data.titulo.trim(),
                 cuotas: data.cuotas,
                 monto: data.monto,
                 fecha: data.fecha,
+                fechaPrimeraCuota: data.fechaPrimeraCuota,
                 categoria:data.categoria
             });
-
-            console.log(data.categoria)
 
             setCuotas(prev => [...prev, response.data]);
             setFilteredCuotas(prev => [...prev, response.data]);
@@ -79,23 +79,30 @@ export const useCuotas = () => {
     }, []);
 
         
-    const editCuota = useCallback(async (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string, categoria:string }) => {
+    const editCuota = useCallback(async (id: string, data: {
+        titulo: string;
+        cuotas: number;
+        montoTotal: number;
+        fecha: string;
+        fechaPrimeraCuota: string;
+        categoria: string;
+    }) => {
         try {
             const response = await axiosInstance.patch(`/api/note/${id}`, data);
-            setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
+            actualizarNotaEnAmbos(id, response.data);
             toast.success('Nota actualizada', TOAST_CONFIG);
             return response.data;
         } catch (error) {
             console.error('Error al editar nota:', error);
             toast.error('Error al editar nota', TOAST_CONFIG);
         }
-    }, []);
-
+    }, [actualizarNotaEnAmbos]);
     
     const deleteCuota = useCallback(async (id: string) => {
         try {
             await axiosInstance.delete(`/api/note/${id}`);
             setCuotas(prev => prev.filter(n => n._id !== id));
+            setFilteredCuotas(prev => prev.filter(n => n._id !== id));
             toast.success('Nota eliminada', TOAST_CONFIG);
         } catch (error) {
             console.error('Error al eliminar nota:', error);
@@ -107,13 +114,13 @@ export const useCuotas = () => {
     const toggleCompleteCuota = useCallback(async (id: string) => {
         try {
             const response = await axiosInstance.patch(`/api/note/${id}/toggle`);
-            setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
+            actualizarNotaEnAmbos(id, response.data);
             return response.data;
         } catch (error) {
             console.error('Error al completar nota:', error);
             toast.error('Error al completar nota', TOAST_CONFIG);
         }
-    }, []);
+    }, [actualizarNotaEnAmbos]);
 
     
     const addCuotaItem = useCallback(async (id: string, data: {
@@ -121,7 +128,6 @@ export const useCuotas = () => {
         fecha: string;
         precio: number;
     }) => {
-        console.log('Enviando item con fecha:', data.fecha);
         if (!data.descripcion.trim() || !data.fecha || !data.precio) {
             toast.error('Todos los campos son requeridos', TOAST_CONFIG);
             return;
@@ -133,31 +139,32 @@ export const useCuotas = () => {
                 fecha: data.fecha,
                 precio: data.precio,
             });
-            setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
+            actualizarNotaEnAmbos(id, response.data);
             toast.success('Cuota agregada', TOAST_CONFIG);
             return response.data;
         } catch (error) {
             console.error('Error al agregar cuota:', error);
             toast.error('Error al agregar cuota', TOAST_CONFIG);
         }
-    }, []);
+    }, [actualizarNotaEnAmbos]);
 
     
     const deleteCuotaItem = useCallback(async (id: string, index: number) => {
         try {
             const response = await axiosInstance.delete(`/api/note/${id}/item/${index}`);
-            setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
+            actualizarNotaEnAmbos(id, response.data);
             toast.success('Cuota eliminada', TOAST_CONFIG);
         } catch (error) {
             console.error('Error al eliminar cuota:', error);
             toast.error('Error al eliminar cuota', TOAST_CONFIG);
         }
-    }, []);
+    }, [actualizarNotaEnAmbos]);
 
     const allDeleteCuotas = useCallback(() => {
         axiosInstance.delete('/api/note')
         .then(response => {
             setCuotas([])
+            setFilteredCuotas([])
             toast.success('Todos las cuotas han sido eliminados', TOAST_CONFIG)
             console.debug(response.data)   
         }) 
@@ -165,7 +172,7 @@ export const useCuotas = () => {
             console.error(err)
             toast.error('Error al eliminar las cuotas', TOAST_CONFIG)
         })
-    },[setCuotas])
+    },[])
 
     
     const deleteFilteredCuotas = useCallback(async (ids: string[]) => {
@@ -187,29 +194,30 @@ export const useCuotas = () => {
         descripcion: string;
         fecha: string;
         precio: number;
+        fechaPrimeraCuota:string
     }) => {
         try {
             const response = await axiosInstance.patch(`/api/note/${id}/item/${index}`, data);
-            setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
+            actualizarNotaEnAmbos(id, response.data);
             toast.success('Cuota actualizada', TOAST_CONFIG);
             return response.data;
         } catch (error) {
             console.error('Error al editar cuota:', error);
             toast.error('Error al editar cuota', TOAST_CONFIG);
         }
-    }, []);
+    }, [actualizarNotaEnAmbos]);
 
     
     const toggleCompleteItem = useCallback(async (id: string, index: number) => {
         try {
             const response = await axiosInstance.patch(`/api/note/${id}/item/${index}/toggle`);
-            setCuotas(prev => prev.map(n => n._id === id ? response.data : n));
+            actualizarNotaEnAmbos(id, response.data);
             return response.data;
         } catch (error) {
             console.error('Error al completar cuota:', error);
             toast.error('Error al completar cuota', TOAST_CONFIG);
         }
-    }, []);
+    }, [actualizarNotaEnAmbos]);
 
     return {
         cuotas,

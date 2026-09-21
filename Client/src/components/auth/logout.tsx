@@ -15,19 +15,17 @@ export const LogOutComponent = ({
     const navigate = useNavigate();
     const { logout } = UseAuth();
 
-    const handleLogout = async () => {
-        window.dispatchEvent(new Event("app:logout-start")); 
+    const handleLogout = () => {
+        window.dispatchEvent(new Event("app:logout-start"));
         onLogoutStart?.();
 
-        try {
-            await logout();
-        } catch (error) {
-            console.error("Error en logout:", error);
-        } finally {
-            localStorage.removeItem("token");
-            setIsAuthenticated(false);
-            navigate("/login", { replace: true });
-        }
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        navigate("/login", { replace: true });
+
+        logout().catch((error) => {
+            console.error("Logout backend falló (ignorado):", error);
+        });
     };
 
     return (

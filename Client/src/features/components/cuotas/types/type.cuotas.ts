@@ -21,6 +21,7 @@ export interface CuotaFormData {
     cuotas: string;
     monto: string;
     fecha: string;
+    fechaPrimeraCuota: string;
     categoria:string
 }
 
@@ -35,7 +36,14 @@ export interface CuotaCardProps {
     cuota: ICuota;
     onToggleComplete: (id: string) => void;
     onDelete: (id: string) => void;
-    onEdit: (id: string, data: { titulo: string; cuotas: number, montoTotal: number, fecha: string, categoria:string }) => void;
+    onEdit: (id: string, data: {
+        titulo: string;
+        cuotas: number;
+        montoTotal: number;
+        fecha: string;
+        fechaPrimeraCuota: string;
+        categoria: string;
+    }) => void;
     onAddItem: (id: string, data: { descripcion: string; fecha: string; precio: number }) => void;
     onToggleItem: (id: string, index: number) => void;
     onDeleteItem: (id: string, index: number) => void;
@@ -53,4 +61,15 @@ export interface CuotaItemProps {
     onToggle: (notaId: string, index: number) => void;
     onDelete: (notaId: string, index: number) => void;
     onEdit: (notaId: string, index: number, data: { descripcion: string; fecha: string; precio: number }) => void;
+}
+
+export type EstadoVencimiento = 'completada' | 'vencida' | 'vence-hoy' | 'por-vencer' | 'normal';
+
+export interface InfoVencimiento {
+    estado: EstadoVencimiento;
+    fecha: Date | null;
+    diasRestantes: number;
+    texto: string;
+    color: string;
+    icono: string;
 }

@@ -1,4 +1,3 @@
-
 :root {
     --bg-page: #ffffff;
     --bg-surface: #f7f7f7;
@@ -174,6 +173,84 @@
 
 
 /* ============================================
+   Vista previa de cuotas (CuotaForm)
+   Ocupa el ancho completo del grid, como .task-modal-actions,
+   y usa la misma paleta blanco/negro del resto del form.
+   ============================================ */
+.cuota-preview {
+    grid-column: 1 / -1;
+
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem;
+
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.cuota-preview-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.cuota-preview-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cuota-preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+
+    font-size: 0.8rem;
+}
+
+.cuota-preview-num {
+    color: var(--text-primary);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.cuota-preview-fecha {
+    color: var(--text-secondary);
+    flex: 1;
+    text-align: center;
+}
+
+.cuota-preview-precio {
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Scrollbar discreta para la lista de vista previa */
+.cuota-preview::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cuota-preview::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 999px;
+}
+
+
+/* ============================================
    Acciones
    ============================================ */
 .task-modal-actions {
@@ -273,6 +350,14 @@
 
         border-radius: 16px 16px 0 0;
         border-bottom: none;
+    }
+
+    .cuota-preview-item {
+        flex-wrap: wrap;
+    }
+
+    .cuota-preview-fecha {
+        text-align: left;
     }
 }
 

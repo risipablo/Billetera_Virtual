@@ -99,7 +99,7 @@ export function DashboardPage() {
                                     <span className={`dashboard-trend dashboard-trend--${comparacion.tendencia}`}>
                                         <TrendIcon size={13} />
                                         {comparacion.diferencia > 0 ? '+' : ''}
-                                        ${Math.abs(comparacion.diferencia).toLocaleString('es-AR')}
+                                        ${(comparacion.diferencia).toLocaleString('es-AR')}
                                         {' '}({comparacion.variacion > 0 ? '+' : ''}
                                         {comparacion.variacion.toFixed(0)}%) vs. {comparacion.mesAnteriorNombre}
                                     </span>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Calendar, RotateCcw } from "lucide-react";
 import { motion } from "framer-motion";
 import type { FiltrosEstadisticasProps } from "../types/type.estadisticas";
@@ -7,28 +6,20 @@ const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
                'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
 export const FiltrosEstadisticas = ({
+    filtros,
     onFilterChange,
     onReset,
     onMesActual,
     loading = false,
 }: FiltrosEstadisticasProps) => {
-    const [filtros, setFiltros] = useState({
-        mes: '',
-        año: '',
-        producto: '',
-        metodo: '',
-        condicion: '',
-        categoria: ''
-    });
+    const mesActualNombre = meses[new Date().getMonth()];
 
     const handleChange = (field: keyof typeof filtros, value: string) => {
         const nuevos = { ...filtros, [field]: value };
-        setFiltros(nuevos);
         onFilterChange(nuevos);
     };
 
     const handleReset = () => {
-        setFiltros({ mes: '', año: '', producto: '', metodo: '', condicion: '', categoria: '' });
         onReset();
     };
 
@@ -50,7 +41,7 @@ export const FiltrosEstadisticas = ({
                     disabled={loading}
                 >
                     <Calendar size={18} />
-                    <span>Mes actual</span>
+                    <span>{filtros.mes === '' ? 'Mes actual' : mesActualNombre}</span>
                 </button>
 
                 <button
@@ -63,7 +54,6 @@ export const FiltrosEstadisticas = ({
                 </button>
             </div>
 
-            {/* Sección 1: período de tiempo */}
             <p className="filtros-section-label">Período</p>
             <div className="filtros-grid">
                 <motion.div
@@ -110,7 +100,6 @@ export const FiltrosEstadisticas = ({
                 </motion.div>
             </div>
 
-            {/* Sección 2: clasificación */}
             <p className="filtros-section-label">Clasificación</p>
             <div className="filtros-grid">
                 <motion.div

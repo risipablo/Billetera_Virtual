@@ -333,7 +333,7 @@ export const GastosProvider: React.FC<GastosProviderProps> = ({ children, isAuth
         const diasAnterior = new Date(añoAnterior, mesAnterior,0).getDate()
         const totalAnteriorproyect = (totalAnterior * diaActual) / diasAnterior
 
-        const diferencia = totalActual - totalAnteriorproyect
+        const diferencia = totalActual - totalAnterior
         const variacion = (diferencia / totalAnteriorproyect) * 100
 
         let tendencia: 'up' | 'down' | 'equal' = 'equal';

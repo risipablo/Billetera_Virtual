@@ -31,6 +31,10 @@ const noteSchema = new mongoose.Schema({
         type: [Date],
         default: []  
     },
+    fechaPrimeraCuota:{
+        type: String,
+        required: true
+    },
     completedItems: {
         type: [Boolean],
         default: []

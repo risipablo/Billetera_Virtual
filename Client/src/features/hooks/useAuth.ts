@@ -117,16 +117,15 @@ export const UseAuth = (): UseAuthReturn => {
 
     const logout = async (): Promise<void> => {
         setLoading(true);
-
         try {
             await authService.logout();
             setUser(null);
-            navigate('/login');
+            navigate('/login');           
         } catch (err) {
             console.error('error en logout', err);
             localStorage.removeItem('token');
             setUser(null);
-            navigate('/login');
+            navigate('/login');           
         } finally {
             setLoading(false);
         }
