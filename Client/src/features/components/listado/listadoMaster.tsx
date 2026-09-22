@@ -12,6 +12,7 @@ import { Spinner } from "../../../components/ui/spinner/spinner";
 import { useConfirmModal } from "../../hooks/useModalConfirm";
 import "./style/listado.css";
 import { ListadoCard } from "./ui/listadoCard";
+import { InfoLista } from "../../../components/ui/info/listaInfo";
 
 export const Listado = () => {
     const {
@@ -57,10 +58,10 @@ export const Listado = () => {
         setFormData({ titulo: '', fecha: '', descripcion: [] });
     };
 
-    const handleDeleteAll = () => {
-        deleteAllList();
-        setShowDeleteModal(false);
-    };
+    // const handleDeleteAll = () => {
+    //     deleteAllList();
+    //     setShowDeleteModal(false);
+    // };
 
     if (loading) {
         return (
@@ -73,7 +74,13 @@ export const Listado = () => {
     return (
         <div className="table-container">
             <div className="table-header">
-                <h2 className="table-title">Listado de compras</h2>
+                <h2 className="table-title">
+                    <Tooltip title="Info gasto" arrow >
+                        <InfoLista />
+                    </Tooltip>
+                                    
+                    Listado de compras
+                </h2>
 
                 <div className="header-actions">
                     <ListadoForm

@@ -375,7 +375,7 @@ export const CuotaCard = ({
                                 >
                                     <option value="">Seleccionar Categoria</option>
                                     {["Comida", "Automovil", "Transporte", "Vivienda", 'Servicios',
-                                    "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota",
+                                    "Salud", "Deporte", "Educacion", 'Accesorios', "Mascota","Regalo",
                                     'Tecnologia', "Donacion", "Ocio", "Viajes", "Ahorro", "Supermercado", "Salidas", "Otro"
                                     ].map(categoria =>
                                         <option key={categoria} value={categoria}>{categoria}</option>

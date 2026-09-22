@@ -17,6 +17,8 @@ import { useGastos } from "../../context/gastosContext";
 import { useUser } from "../../features/hooks/useUser";
 import "../../style/dashboard.css"
 import { Spinner } from "../../components/ui/spinner/spinner";
+import { Tooltip } from "@mui/material";
+import { InfoDashboard } from "../../components/ui/info/dashboardInfo";
 
 const PODIO_ICONOS = [
     <Trophy size={16} className="dashboard-top__medal dashboard-top__medal--oro" />,
@@ -76,8 +78,15 @@ export function DashboardPage() {
     return (
         <div className="table-container">
             <div className="dashboard-header">
-                <h2 className="table-title">Hola, {user?.name || '?'}</h2>
+                
+                <h2 className="table-title">
+                    <Tooltip title="Info gasto" arrow >
+                        <InfoDashboard />
+                    </Tooltip>
+                    Hola, {user?.name || '?'}</h2>
                 <p className="dashboard-subtitle">Aquí están tus registros de lo que va del mes</p>
+                            
+                                    
             </div>
 
             

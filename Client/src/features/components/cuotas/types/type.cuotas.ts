@@ -47,7 +47,7 @@ export interface CuotaCardProps {
     onAddItem: (id: string, data: { descripcion: string; fecha: string; precio: number }) => void;
     onToggleItem: (id: string, index: number) => void;
     onDeleteItem: (id: string, index: number) => void;
-    onEditItem: (id: string, index: number, data: { descripcion: string; fecha: string; precio: number }) => void;
+    onEditItem: (id: string, index: number, data: { descripcion: string; fecha: string; precio: number,  fechaPrimeraCuota: string;}) => void;
 }
 
 export interface CuotaItemProps {
@@ -60,7 +60,7 @@ export interface CuotaItemProps {
     isCompleted?: boolean;
     onToggle: (notaId: string, index: number) => void;
     onDelete: (notaId: string, index: number) => void;
-    onEdit: (notaId: string, index: number, data: { descripcion: string; fecha: string; precio: number }) => void;
+    onEdit: (notaId: string, index: number, data: { descripcion: string; fecha: string; precio: number, fechaPrimeraCuota: string; }) => void;
 }
 
 export type EstadoVencimiento = 'completada' | 'vencida' | 'vence-hoy' | 'por-vencer' | 'normal';

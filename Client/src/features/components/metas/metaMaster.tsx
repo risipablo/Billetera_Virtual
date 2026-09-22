@@ -17,6 +17,7 @@ import type {
     EditarMetaPayload,
     EstadoMeta
 } from './types/type.meta';
+import { InfoMetas } from '../../../components/ui/info/metasInfo';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -198,7 +199,10 @@ export const MetaMaster = () => {
     return (
         <div className="table-container">
             <div className="table-header">
-                <h2 className="table-title">Mis Metas</h2>
+                <h2 className="table-title"> 
+                    <Tooltip title="Info gasto" arrow >
+                            <InfoMetas />
+                        </Tooltip>Mis Metas</h2>
 
                 <div className="header-actions">
                     <MetaForm

@@ -1,0 +1,421 @@
+:root {
+    --border: #E9EBEF;
+    --text: #26262A;
+    --text-muted: #8A8A90;
+    --header-bg: #0C447C;
+    --danger: #A22E2E;
+    --success: #2E7D32;
+    --overlay-bg: rgba(11, 18, 32, 0.5);
+}
+
+
+.info-container {
+    display: inline-flex;
+    margin: 0 .3rem;
+    
+}
+
+.info-container__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.info-container__trigger:hover {
+    background: #F7F9FC;
+    color: var(--header-bg);
+}
+
+/* ============================================================
+   Overlay + Modal
+   ============================================================ */
+.custom-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.custom-modal {
+    background: #fff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.info-gastos__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.info-gastos__header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--header-bg);
+}
+
+.info-gastos__header-title h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.info-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.info-modal-close:hover {
+    background: #F7F9FC;
+    color: var(--text);
+}
+
+/* ============================================================
+   Body (scrollable)
+   ============================================================ */
+.info-gastos__body {
+    padding: 1.3rem 1.4rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.info-gastos__intro {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+}
+
+
+.info-gastos__features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.info-gastos__feature {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    background: #F7F9FC;
+    border-radius: 10px;
+}
+
+.info-gastos__feature svg {
+    flex-shrink: 0;
+    color: var(--header-bg);
+    margin-top: 2px;
+}
+
+.info-gastos__feature strong {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.info-gastos__feature p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Sección "siempre vas a tener a mano" */
+.info-gastos__section h3 {
+    margin: 0 0 8px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.info-gastos__section ul {
+    list-style: none;
+    margin: 0 0 10px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info-gastos__section li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+}
+
+.info-gastos__section li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--header-bg);
+}
+
+.info-gastos__section li strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.info-gastos__hint {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--header-bg);
+    background: #E5EFFB;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+/* Nota / campanita */
+.info-gastos__note {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px;
+    background: #FCEFDA;
+    border-radius: 10px;
+    color: #9A5B0B;
+}
+
+.info-gastos__note svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-gastos__note p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--text);
+}
+
+.info-gastos__note strong {
+    color: #9A5B0B;
+}
+
+/* Ejemplo rápido */
+.info-gastos__example {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.info-gastos__example h3 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.info-gastos__example h3 svg {
+    color: #9A5B0B;
+}
+
+.info-gastos__example > p {
+    margin: 0 0 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.info-gastos__example-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 12px;
+    padding: 10px 12px;
+    background: #F7F9FC;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.info-gastos__example-grid span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.info-gastos__example-grid strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.info-gastos__example-result {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--success);
+    line-height: 1.45;
+}
+
+/* Alerta de estados */
+.info-gastos__alert {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 14px;
+    background: #FBE9E9;
+    border-radius: 10px;
+}
+
+.info-gastos__alert > svg {
+    flex-shrink: 0;
+    color: var(--danger);
+    margin-top: 2px;
+}
+
+.info-gastos__alert h3 {
+    margin: 0 0 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--danger);
+}
+
+.info-gastos__alert > div > p {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    color: var(--text);
+}
+
+.info-gastos__states {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-gastos__states li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--text);
+}
+
+.info-gastos__states li.ok svg {
+    color: var(--success);
+    flex-shrink: 0;
+}
+
+.info-gastos__states li.no svg {
+    color: var(--danger);
+    flex-shrink: 0;
+}
+
+/* Footer informativo */
+.info-gastos__footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+
+.info-modal-actions {
+    flex-shrink: 0;
+    padding: 14px 1.4rem;
+    border-top: 1px solid var(--border);
+}
+
+.info-modal-btn {
+    margin: 0 auto;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: var(--header-bg);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.info-modal-btn:hover {
+    background: #0A3A6A;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 680px) {
+    .custom-modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .custom-modal {
+        max-width: 100%;
+        max-height: 88vh;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .info-gastos__features,
+    .info-gastos__example-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 400px) {
+    .info-gastos__header {
+        padding: 1rem;
+    }
+
+    .info-gastos__body {
+        padding: 1rem;
+    }
+
+    .info-modal-actions {
+        padding: 12px 1rem;
+    }
+}

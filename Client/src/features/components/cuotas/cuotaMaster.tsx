@@ -11,6 +11,7 @@ import { useCuotas } from "./hooks/useCuota";
 import { FilterX, Trash2 } from "lucide-react";
 import { FilterCuotas } from "./ui/filterCuotas";
 import { ModalConfirm } from "../../../components/ui/modalConfirm";
+import { InfoCuotas } from "../../../components/ui/info/cuotasInfo";
 
 export const CuotasMaster = () => {
     const {
@@ -136,7 +137,13 @@ export const CuotasMaster = () => {
     return (
         <div className="table-container">
             <div className="table-header">
-                <h2 className="table-title">Notas</h2>
+                <h2 className="table-title">
+                    <Tooltip title="Info cuotas" arrow >
+                        <InfoCuotas />
+                    </Tooltip>
+                                        
+                    
+                    Notas</h2>
                 <div className="header-actions">
                     <CuotaForm
                         formData={formData}

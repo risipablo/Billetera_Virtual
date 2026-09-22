@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, FilterX, Trash2 } from "lucide-react";
 import { TransitionGroup } from "react-transition-group";
-import { Button, Collapse, Tooltip, useMediaQuery } from "@mui/material";
+import { Box, Button, Collapse, Tooltip, useMediaQuery } from "@mui/material";
 import { UseGastos } from "./hooks/useGastos";
 import type { IGastos } from "./types/type.gastos";
 import { useGastosStats } from "./hooks/useGastosStats";
@@ -17,6 +17,8 @@ import { Toaster } from "react-hot-toast";
 import { ModalConfirm } from "../../../components/ui/modalConfirm";
 import { useConfirmModal } from "../../hooks/useModalConfirm";
 import { GastosFijosMaster } from "../gastosFijos/gastosFijoMaster";
+import { BlindsClosed } from "@mui/icons-material";
+import { InfoGastos } from "../../../components/ui/info/gastoInfo";
 
 const GastosMaster = () => {
     const { gastos, setGastos, addGastos, deleteGastos, editGastos, loading, filterGastos, setFilterGastos, deleteFilteredGastos, allDeleteGastos } = UseGastos();
@@ -217,8 +219,18 @@ const GastosMaster = () => {
     return (
         <div className="table-container">
             <div className="table-header">
-                <h2 className="table-title">Gastos Mensuales</h2>
 
+                <h2 className="table-title">
+                    
+                        <Tooltip title="Info gasto" arrow >
+                        <InfoGastos />
+                        </Tooltip>
+                    
+                    
+                        Gastos Mensuales
+                </h2>
+
+                
                 <div className="header-actions">
                     <GastosForm
                         formData={formData}
@@ -262,7 +274,9 @@ const GastosMaster = () => {
                 </div>
             </div>
 
+
             <GastosFijosMaster />
+            
             <FilterGastos
                 gastos={gastos}
                 setFilterGastos={setFilterGastos}

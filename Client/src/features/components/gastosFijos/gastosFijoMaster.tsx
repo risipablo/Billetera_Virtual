@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Wallet, X } from "lucide-react";
+import { Bell, Plus, Wallet, X } from "lucide-react";
 import "./style/fijo.css";
 import { UseFijo } from "./hooks/useFijo";
 import { GastoFijoItem } from "./ui/itemFijo";
@@ -71,7 +71,7 @@ export const GastosFijosMaster = () => {
                 onClick={() => setIsOpen(true)}
                 type="button"
             >
-                <Wallet size={18} />
+                <Bell size={18} />
                 <span>Gastos Fijos</span>
                 <span className="gastos-fijos-total">
                     ${totalFijos.toLocaleString('es-AR')}
