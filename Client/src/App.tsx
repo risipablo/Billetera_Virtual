@@ -10,6 +10,7 @@ import RegisterPage from "./pages/auth/registerPage";
 import { SplashLoader } from "./components/ui/spinner/loader";
 import CallbackPage from "./pages/auth/callbackPage";
 import { GastosProvider } from "./context/gastosContext";
+import { CuotasProvider } from "./context/useCuotasContext";
 
 const serverFront = config.Api;
 const MIN_SPLASH = 1200;
@@ -93,13 +94,18 @@ function App() {
                     {isAuthenticated === null || loading ? (
                         <SplashLoader mode={splashMode} />
                     ) : isAuthenticated ? (
+                        
                         <GastosProvider isAuthenticated={isAuthenticated}>
+                            <CuotasProvider isAuthenticated={isAuthenticated}>
                             <Navbar />
                             <Home
                                 isAuthenticated={isAuthenticated}
                                 setIsAuthenticated={setIsAuthenticated}
                             />
+                            </CuotasProvider>
                         </GastosProvider>
+                        
+                        
                     ) : (
                         <Routes>
                             <Route

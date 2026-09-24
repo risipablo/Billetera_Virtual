@@ -1,0 +1,275 @@
+.welcome-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 9999;
+    overflow-y: auto;
+}
+
+.welcome-modal {
+    position: relative;
+    background: #ffffff;
+    border-radius: 20px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 32px 28px 24px;
+    box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.28),
+        0 0 0 1px rgba(15, 23, 42, 0.04);
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.welcome-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.welcome-modal::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.welcome-modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: #f1f5f9;
+    color: #64748b;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    z-index: 2;
+}
+
+.welcome-modal__close:hover {
+    background: #e2e8f0;
+    color: #334155;
+    transform: rotate(90deg);
+}
+
+/* ===== Header ===== */
+.welcome-modal__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    margin-bottom: 26px;
+}
+
+.welcome-modal__badge {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    box-shadow:
+        0 8px 20px rgba(30, 58, 138, 0.32),
+        0 0 0 8px rgba(59, 130, 246, 0.08);
+    margin-bottom: 6px;
+}
+
+.welcome-modal__header h2 {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.welcome-modal__header p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+    max-width: 500px;
+}
+
+.welcome-modal__header strong {
+    color: #1e3a8a;
+    font-weight: 700;
+}
+
+/* ===== Grid de secciones ===== */
+.welcome-modal__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.welcome-modal__card {
+    display: flex;
+    gap: 12px;
+    padding: 13px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+    cursor: default;
+}
+
+.welcome-modal__card:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+.welcome-modal__card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.welcome-modal__card-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.welcome-modal__card-body h3 {
+    margin: 0 0 3px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+}
+
+.welcome-modal__card-body p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #64748b;
+}
+
+/* ===== Tip ===== */
+.welcome-modal__tip {
+    display: flex;
+    gap: 10px;
+    padding: 13px 15px;
+    background: linear-gradient(90deg, #fef9e7 0%, #fffbeb 100%);
+    border-left: 3px solid #d4af37;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.welcome-modal__tip svg {
+    color: #b45309;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.welcome-modal__tip p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #78350f;
+}
+
+.welcome-modal__tip strong {
+    color: #92400e;
+    font-weight: 700;
+}
+
+/* ===== Footer ===== */
+.welcome-modal__footer {
+    display: flex;
+    justify-content: center;
+}
+
+.welcome-modal__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        filter 0.15s ease;
+    box-shadow: 0 6px 18px rgba(30, 58, 138, 0.3);
+    letter-spacing: -0.01em;
+}
+
+.welcome-modal__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(30, 58, 138, 0.38);
+    filter: brightness(1.05);
+}
+
+.welcome-modal__btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.28);
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+    .welcome-overlay {
+        padding: 12px;
+        align-items: flex-start;
+    }
+
+    .welcome-modal {
+        padding: 26px 20px 20px;
+        border-radius: 16px;
+        max-height: 94vh;
+        margin-top: 12px;
+    }
+
+    .welcome-modal__header h2 {
+        font-size: 20px;
+    }
+
+    .welcome-modal__header p {
+        font-size: 13px;
+    }
+
+    .welcome-modal__grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .welcome-modal__card {
+        padding: 11px 12px;
+    }
+
+    .welcome-modal__btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+
+    .welcome-modal__badge {
+        width: 52px;
+        height: 52px;
+    }
+}

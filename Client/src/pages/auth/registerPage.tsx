@@ -50,8 +50,7 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
                 password: formData.password,
                 name: formData.name
             })
-            setIsAuthenticated(true)
-            navigate('/dashboard')
+            navigate('/login', { state: { registered: true } })
         } catch(err){
             console.error(err)
         }

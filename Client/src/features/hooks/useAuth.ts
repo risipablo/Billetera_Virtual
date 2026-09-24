@@ -115,6 +115,23 @@ export const UseAuth = (): UseAuthReturn => {
         }
     }
 
+    const deleteAccount = async (): Promise<void> => {
+        setLoading(true);
+        setError('');
+
+        try {
+            await authService.deleteAccount();
+            setUser(null);
+            localStorage.removeItem('token');
+            navigate('/login', { replace: true });
+        } catch (err) {
+            setError((err as Error).message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const logout = async (): Promise<void> => {
         setLoading(true);
         try {
@@ -140,6 +157,7 @@ export const UseAuth = (): UseAuthReturn => {
         changeName,
         changePassword,
         verifyEmail,
+        deleteAccount,
         logout,
         setError,
         setSuccess,

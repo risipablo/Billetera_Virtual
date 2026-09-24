@@ -6,6 +6,11 @@ const rateLimit = require('express-rate-limit')
 const {passport} = require('../config/passport')
 require('dotenv').config();
 
+const noteModel = require('../models/Cuotas');
+const gastoModel = require('../models/Gastos');
+const fijoModel = require('../models/Fijo');
+const MetaModel = require('../models/metas');
+
 
 
 exports.registerUser = async (req, res) => {
@@ -257,16 +262,21 @@ exports.resetPassword = async (req, res) => {
 
 exports.userName = async (req, res) => {
     try {
-        const user = await UserModel.findById(req.user.id).select('name');
+        const user = await UserModel.findById(req.user.id).select('name email');
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
-        res.status(200).json({ user: { name: user.name } });
+        res.status(200).json({
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-}
-
+};
 
 // Passport para google
 exports.googleLogin = (req,res,next) => {
@@ -311,4 +321,50 @@ exports.validateToken = async (req, res) => {
             email: req.user.email
         }
     });
+};
+
+
+
+// ELimnar cuenta
+
+
+exports.deleteAccount = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const [notas, gastos, fijos, metas] = await Promise.all([
+            noteModel.deleteMany({ userId }),
+            gastoModel.deleteMany({ userId }),
+            fijoModel.deleteMany({ userId }),
+            MetaModel.deleteMany({ userId })
+        ]);
+
+        await UserModel.findByIdAndDelete(userId);
+
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/',
+        });
+
+        res.status(200).json({
+            message: 'Cuenta eliminada exitosamente',
+            deleted: {
+                user: 1,
+                notas: notas.deletedCount,
+                gastos: gastos.deletedCount,
+                fijos: fijos.deletedCount,
+                metas: metas.deletedCount
+            }
+        });
+    } catch (err) {
+        console.error('Error al eliminar cuenta:', err);
+        res.status(500).json({ error: err.message });
+    }
 };

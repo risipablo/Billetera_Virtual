@@ -85,7 +85,7 @@ export const SubMenu = ({ setIsAuthenticated }: SubMenuProps) => {
                 <div className="perfil-avatar-2">
                     {user?.name?.charAt(0).toUpperCase() || "?"}
                 </div>
-                <p>Hola, {user?.name || "Cargando..."}</p>
+                <p>{user?.name || "Cargando..."}</p>
             </div>
 
             <Menu

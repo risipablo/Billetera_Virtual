@@ -48,14 +48,16 @@ export const FilterCuotas = ({
             if (cuota.fechaCompra) {
                 const month = new Date(cuota.fechaCompra).getMonth()
                 months.add(monthNames[month])
-            }
+            } //  Solo se obtiene la fecha de compra 
+            
         
-            cuota.fecha?.forEach(date => {
-                if (date) {
-                    const month = new Date(date).getMonth()
-                    months.add(monthNames[month])
-                }
-            })
+            // Aca obtenemos las fechas por cuotas 
+            // cuota.fecha?.forEach(date => {
+            //     if (date) {
+            //         const month = new Date(date).getMonth()
+            //         months.add(monthNames[month])
+            //     }
+            // })
         })
         return Array.from(months)
     }, [cuotas])

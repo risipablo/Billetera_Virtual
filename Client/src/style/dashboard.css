@@ -156,6 +156,10 @@
     color: var(--header-bg);
 }
 
+.dashboard-panel__header--danger {
+    color: var(--danger);
+}
+
 .dashboard-panel__header h3 {
     margin: 0;
     font-size: 14.5px;
@@ -172,6 +176,8 @@
 
 .dashboard-chip {
     display: inline-flex;
+    align-items: center;
+    gap: 5px;
     align-self: flex-start;
     padding: 3px 10px;
     border-radius: 999px;
@@ -181,11 +187,80 @@
 
 .dashboard-chip--ok   { background: #E8F3E4; color: var(--success); }
 .dashboard-chip--warn { background: #FCEFDA; color: var(--warning); }
+.dashboard-chip--danger { background: #FBE9E9; color: var(--danger); }
+
+/* Panel de cuotas por vencer: ocupa todo el ancho del grid */
+.dashboard-panel--full {
+    grid-column: 1 / -1;
+}
+
+.dashboard-cuotas-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Caja de la "próxima cuota" — mismo lenguaje visual que .dashboard-pendiente,
+   en tono ámbar (es una advertencia suave, no un error) */
+.dashboard-cuota-proxima {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #FCEFDA;
+    color: var(--warning);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.dashboard-cuota-proxima__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.dashboard-cuota-proxima__info strong {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dashboard-cuota-proxima__meta {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.dashboard-cuota-proxima__monto {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--warning);
+}
+
+.dashboard-empty-ok {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    color: var(--success);
+    font-size: 13.5px;
+    font-weight: 600;
+}
 
 .dashboard-panel__list {
     margin-top: 4px;
     border-top: 1px solid var(--border);
     padding-top: 10px;
+}
+
+.dashboard-panel__list--no-border {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
 }
 
 .dashboard-panel__list-title {
@@ -222,6 +297,144 @@
     white-space: nowrap;
     color: var(--text);
     font-weight: 500;
+}
+
+/* Cajas de "cuotas vencidas" — mismas cajas rojas, con línea de
+   fecha de vencimiento debajo del título */
+
+.dashboard-pendiente--vencida {
+    align-items: flex-start;
+    border-left: 3px solid var(--danger);
+    padding-left: 8px;
+}
+
+.dashboard-pendiente__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.dashboard-pendiente__body strong {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dashboard-pendiente__meta {
+    font-size: 11.5px;
+    color: var(--danger);
+    opacity: 0.85;
+}
+
+.dashboard-pendiente__monto {
+    flex-shrink: 0;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--danger);
+}
+
+/* Cajas de "cuotas pagadas del mes" — mismo patrón, en verde */
+.dashboard-pagadas {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dashboard-pagadas--extra {
+    overflow: hidden;
+}
+
+.dashboard-pagada {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #E8F3E4;
+    border-radius: 8px;
+}
+
+.dashboard-pagada__icon {
+    flex-shrink: 0;
+    color: var(--success);
+}
+
+.dashboard-pagada__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.dashboard-pagada__info strong {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dashboard-pagada__meta {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.dashboard-pagada__monto {
+    flex-shrink: 0;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--success);
+}
+
+/* Botón desplegar/contraer (acordeón de "pagadas", con IconButton de MUI) */
+.dashboard-panel__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0px;
+    margin-top: 8px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 6px;
+}
+
+.dashboard-panel__toggle span {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--active-text);
+}
+
+.dashboard-panel__toggle:hover span {
+    text-decoration: underline;
+}
+
+.dashboard-panel__toggle:focus-visible {
+    outline: 2px solid var(--active-text);
+    outline-offset: 2px;
+}
+
+/* IconButton de MUI: achicamos el padding por defecto y giramos la
+   flecha 180° cuando está desplegado, con transición suave */
+.dashboard-panel__toggle-icon.MuiIconButton-root {
+    padding: 2px;
+    margin-left: 2px;
+    color: var(--active-text);
+}
+
+.dashboard-panel__toggle-icon svg {
+    transition: transform 0.2s ease;
+}
+
+.dashboard-panel__toggle-icon--open svg {
+    transform: rotate(180deg);
 }
 
 .dashboard-panel__link {
@@ -316,5 +529,18 @@
 
     .dashboard-panel {
         padding: 14px;
+    }
+
+    .dashboard-pendiente,
+    .dashboard-pagada,
+    .dashboard-cuota-proxima {
+        flex-wrap: wrap;
+    }
+
+    .dashboard-pendiente strong,
+    .dashboard-pendiente__body strong,
+    .dashboard-pagada__info,
+    .dashboard-cuota-proxima__info {
+        white-space: normal;
     }
 }

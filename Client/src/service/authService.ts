@@ -116,6 +116,23 @@ class AuthService {
         }
     }
 
+    async deleteAccount(): Promise<{ message: string }> {
+        try {
+            const token = this.getToken();
+            const response = await axios.delete<{ message: string }>(
+                `${serverFront}/api/auth/delete-account`,
+                {
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    withCredentials: true
+                }
+            );
+            localStorage.removeItem('token');
+            return response.data;
+        } catch (error) {
+            throw this.handleError(error as AxiosError<ApiError>);
+        }
+    }
+
     async logout(): Promise<void> {
         const token = this.getToken();
         try {
