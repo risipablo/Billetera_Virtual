@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize';
+import mongoSanitize from '@exortek/express-mongo-sanitize';
 import { env } from './config/env';
 import './config/passport';
 import authRoutes from './routes/auth.routes';
@@ -69,6 +69,7 @@ class App {
     this.app.use(express.json({ limit: '10mb' }));
     this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
     this.app.use(cookieParser());
+    this.app.use(mongoSanitize());
 
     this.app.use(helmet({
       crossOriginOpenerPolicy: false,
