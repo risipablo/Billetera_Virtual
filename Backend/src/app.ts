@@ -26,12 +26,15 @@ class App {
   }
 
   private middlewares(): void {
-    this.app.use(helmet())
+    this.app.use(helmet({
+      crossOriginOpenerPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' } 
+    }));
     this.app.use(mongoSanitize())
 
     const globalLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: 100,
+      max: env.NODE_ENV === 'production' ? 30 : 1000, 
       standardHeaders: true,
       legacyHeaders: false,
       message: {
@@ -41,7 +44,7 @@ class App {
 
      const authLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: 10,
+      max: (req) => req.path.includes('/google') ? 30 : 10,
       standardHeaders: true,
       legacyHeaders: false,
       message: {
