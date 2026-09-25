@@ -143,7 +143,7 @@ export const CuotasMaster = () => {
                     </Tooltip>
                                         
                     
-                    Notas</h2>
+                    Cuotas</h2>
                 <div className="header-actions">
                     <CuotaForm
                         formData={formData}
