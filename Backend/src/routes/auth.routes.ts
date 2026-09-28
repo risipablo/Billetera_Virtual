@@ -17,4 +17,7 @@ router.get('/name', protect, authController.userName);
 router.post('/send-email', EmailComment);
 router.delete('/delete-account', protect, authController.deleteAccount);
 
+router.get('/google', authController.googleLogin);
+router.get('/google/callback', authController.googleCallback);
+
 export default router;

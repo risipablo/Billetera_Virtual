@@ -1,8 +1,10 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { IAuthRequest, IChangeNameData, IForgotPasswordData, IJwtPayload, ILoginData, IRegisterData, IResetPasswordData, IResetPasswordTokenData, IVerifyEmailData } from '../types/index.types';
-import { UserModel } from '../models/user.model';
+import { IUser, UserModel } from '../models/user.model';
+import { passport } from '../config/passport';
+
 
 
 const generateToken = (user: {
@@ -383,4 +385,52 @@ export const deleteAccount = async (
     console.error('Error al eliminar cuenta:', err);
     res.status(500).json({ error: (err as Error).message });
   }
+};
+
+// Passport Google
+
+export const googleLogin = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  console.log('GOOGLE CALLBACK URL CONFIGURADA:', process.env.GOOGLE_CALLBACK_URL);
+  console.log('Iniciando autenticación con Google...');
+  console.log('Scope:', ['profile', 'email']);
+
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false,
+    accessType: 'offline',
+    prompt: 'consent'
+  })(req, res, next);
+};
+
+export const googleCallback = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  passport.authenticate(
+    'google',
+    { session: false },
+    (err: Error | null, user: IUser | false | null) => {
+      if (err || !user) {
+        res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+        return;
+      }
+
+      const token = jwt.sign(
+        {
+          id: user._id,
+          role: user.role,
+          tokenVersion: user.tokenVersion
+        },
+        process.env.JWT_SECRET as string,
+        { expiresIn: '7d' }
+      );
+
+      res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
+    }
+  )(req, res, next);
 };
