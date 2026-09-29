@@ -278,39 +278,7 @@ exports.userName = async (req, res) => {
     }
 };
 
-// Passport para google
-exports.googleLogin = (req,res,next) => {
-    console.log(' GOOGLE CALLBACK URL CONFIGURADA:', process.env.GOOGLE_CALLBACK_URL);
-    console.log('Iniciando autenticación con Google...');
-    console.log('Scope:', ['profile', 'email']);
 
-    passport.authenticate('google',{
-        scope: ['profile','email'],
-        session:false,
-        accessType: 'offline',
-        prompt: 'consent'
-    })(req,res,next)
-}
-
-exports.googleCallback = (req, res, next) => {
-    passport.authenticate('google', { session: false }, (err, user, info) => {
-        if (err || !user) {
-            return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
-        }
-
-        const token = jwt.sign(
-            { 
-                id: user._id, 
-                role: user.role, 
-                tokenVersion: user.tokenVersion  
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: '7d' }
-        );
-
-        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
-    })(req, res, next);
-};
 
 exports.validateToken = async (req, res) => {
     res.status(200).json({

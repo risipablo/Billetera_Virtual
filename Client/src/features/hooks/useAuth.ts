@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import authService from "../../service/authService";
 import type { ChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../types/type.user";
 
+
 export const UseAuth = (): UseAuthReturn => {
     const { fetchUserData, setUser } = useUser();
     const [loading, setLoading] = useState<boolean>(false);
@@ -115,6 +116,40 @@ export const UseAuth = (): UseAuthReturn => {
         }
     }
 
+    const forgotPassword = async (email: string): Promise<void> => {
+        setLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const data = await authService.forgotPassword(email);
+            setSuccess(data.message || 'Revisa tu correo para continuar');
+        } catch (err) {
+            setError((err as Error).message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const resetPassword = async (token: string, newPassword: string): Promise<void> => {
+        setLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const data = await authService.resetPassword(token, newPassword);
+            setSuccess(data.message || 'Contraseña actualizada correctamente');
+            setTimeout(() => navigate('/login'), 2000);
+        } catch (err) {
+            setError((err as Error).message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     const deleteAccount = async (): Promise<void> => {
         setLoading(true);
         setError('');
@@ -150,13 +185,15 @@ export const UseAuth = (): UseAuthReturn => {
 
     return {
         register,
-        login,
+        login, 
         loading,
         setLoading,
         error,
         changeName,
         changePassword,
         verifyEmail,
+        forgotPassword,
+        resetPassword,
         deleteAccount,
         logout,
         setError,

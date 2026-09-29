@@ -16,6 +16,8 @@ export interface UseAuthReturn{
     changeName:(credentials: ChangeUserName) => Promise<void>
     changePassword:(credentials:ResetPasswordData) => Promise<void>
     verifyEmail: (credentials: VerifyEmailData) => Promise<void>
+    forgotPassword: (email: string) => Promise<void>;
+resetPassword: (token: string, newPassword: string) => Promise<void>;
     deleteAccount: () => Promise<void>;
     login:(credentials: LoginData) => Promise<void>
     logout: () => Promise<void>

@@ -11,6 +11,8 @@ import { SplashLoader } from "./components/ui/spinner/loader";
 import CallbackPage from "./pages/auth/callbackPage";
 import { GastosProvider } from "./context/gastosContext";
 import { CuotasProvider } from "./context/useCuotasContext";
+import ForgotPasswordPage from "./pages/auth/forgotPasswordPage";
+import ResetPasswordPage from "./pages/auth/changePassword";
 
 const serverFront = config.Api;
 const MIN_SPLASH = 1200;
@@ -125,6 +127,11 @@ function App() {
                                         isAuthenticated={null}
                                     />
                                 }
+                            />
+                            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                            <Route
+                                path="/reset-password"
+                                element={<ResetPasswordPage setIsAuthenticated={setIsAuthenticated} />}
                             />
                             <Route path="*" element={<Navigate to="/login" replace />} />
                         </Routes>

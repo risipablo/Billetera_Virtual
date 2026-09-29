@@ -116,6 +116,30 @@ class AuthService {
         }
     }
 
+    async forgotPassword(email: string): Promise<{ message: string }> {
+        try {
+            const response = await axios.post<{ message: string }>(
+                `${serverFront}/api/auth/forgot-password`,
+                { email }
+            );
+            return response.data;
+        } catch (error) {
+            throw this.handleError(error as AxiosError<ApiError>);
+        }
+    }
+
+    async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+        try {
+            const response = await axios.post<{ message: string }>(
+                `${serverFront}/api/auth/reset-password`,
+                { token, newPassword }
+            );
+            return response.data;
+        } catch (error) {
+            throw this.handleError(error as AxiosError<ApiError>);
+        }
+    }
+
     async deleteAccount(): Promise<{ message: string }> {
         try {
             const token = this.getToken();

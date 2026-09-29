@@ -4,6 +4,8 @@ import crypto from 'crypto';
 import { IAuthRequest, IChangeNameData, IForgotPasswordData, IJwtPayload, ILoginData, IRegisterData, IResetPasswordData, IResetPasswordTokenData, IVerifyEmailData } from '../types/index.types';
 import { IUser, UserModel } from '../models/user.model';
 import { passport } from '../config/passport';
+import { sendPasswordResetEmail } from '../service/emailService';
+import { env } from '../config/env';
 
 
 
@@ -255,70 +257,6 @@ export const changePassword = async (
   }
 };
 
-export const forgotPassword = async (
-  req: Request<{}, {}, IForgotPasswordData>,
-  res: Response
-): Promise<void> => {
-  const { email } = req.body;
-
-  try {
-    const user = await UserModel.findOne({ email });
-
-    if (!user) {
-      res.status(404).json({ message: 'Usuario no encontrado' });
-      return;
-    }
-
-    const token = crypto.randomBytes(20).toString('hex');
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = new Date(Date.now() + 360000);
-    await user.save();
-
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-
-    console.log(`Enlace de restablecimiento: ${resetLink}`);
-
-    res.json({ message: 'Correo de restablecimiento enviado' });
-  } catch (error) {
-    res.status(500).json({
-      message: 'error del servidor',
-      error: (error as Error).message
-    });
-  }
-};
-
-export const resetPassword = async (
-  req: Request<{}, {}, IResetPasswordTokenData>,
-  res: Response
-): Promise<void> => {
-  const { token, newPassword } = req.body;
-
-  try {
-    const user = await UserModel.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
-
-    if (!user) {
-      res.status(400).json({ message: 'Token inválido o expirado' });
-      return;
-    }
-
-    user.password = newPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-
-    await user.save();
-
-    res.json({ message: 'Contraseña actualizada correctamente' });
-  } catch (error) {
-    res.status(500).json({
-      message: 'Error del servidor',
-      error: (error as Error).message
-    });
-  }
-};
-
 export const userName = async (
   req: IAuthRequest,
   res: Response
@@ -384,6 +322,85 @@ export const deleteAccount = async (
   } catch (err) {
     console.error('Error al eliminar cuenta:', err);
     res.status(500).json({ error: (err as Error).message });
+  }
+};
+
+
+// Recuperacion de contraseña
+export const forgotPassword = async (
+  req: Request<{}, {}, { email: string }>,
+  res: Response
+): Promise<void> => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400).json({ error: 'El email es requerido' });
+    return;
+  }
+
+  try {
+    const user = await UserModel.findOne({ email });
+
+    // Seguridad: responder igual exista o no el email, para evitar enumeración de usuarios
+    if (!user) {
+      res.json({ message: 'Si el correo está registrado, recibirás un enlace de restablecimiento.' });
+      return;
+    }
+
+    // Generar token (64 hex, imposible de adivinar)
+    const token = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hora
+    await user.save();
+
+    // Enviar correo (el link apunta al frontend, no al backend)
+    const resetLink = `${env.FRONTEND_URL}/reset-password?token=${token}`;
+    await sendPasswordResetEmail(user.email, resetLink);
+
+    res.json({ message: 'Si el correo está registrado, recibirás un enlace de restablecimiento.' });
+  } catch (error) {
+    console.error('Error en forgotPassword:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+
+export const resetPassword = async (
+  req: Request<{}, {}, { token: string; newPassword: string }>,
+  res: Response
+): Promise<void> => {
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+    res.status(400).json({ error: 'Token y nueva contraseña son requeridos' });
+    return;
+  }
+
+  if (newPassword.length < 8) {
+    res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
+    return;
+  }
+
+  try {
+    const user = await UserModel.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() }  // Verificar que no esté expirado
+    });
+
+    if (!user) {
+      res.status(400).json({ error: 'Token inválido o expirado' });
+      return;
+    }
+
+    // Actualizar contraseña (el hook pre('save') se encarga del bcrypt)
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error('Error en resetPassword:', error);
+    res.status(500).json({ error: 'Error del servidor' });
   }
 };
 
