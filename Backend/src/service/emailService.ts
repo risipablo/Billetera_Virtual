@@ -20,7 +20,7 @@ export const sendUserChangeName = async (
 
   try {
     await resend.emails.send({
-      from: `${env.APP_NAME} <${env.FROM_EMAIL}>`,
+      from: `"${env.APP_NAME}" <${env.FROM_EMAIL}>`,
       to: email,
       subject: `Nombre de usuario actualizado - ${env.APP_NAME}`,
       html: `
@@ -50,7 +50,6 @@ export const sendUserChangeName = async (
   }
 };
 
-
 export const sendPasswordResetEmail = async (
   email: string,
   resetLink: string
@@ -67,8 +66,8 @@ export const sendPasswordResetEmail = async (
   }
 
   try {
-    await resend.emails.send({
-      from: `${env.APP_NAME} <${env.FROM_EMAIL}>`,
+    const { data, error } = await resend.emails.send({
+      from: `"${env.APP_NAME}" <${env.FROM_EMAIL}>`,
       to: email,
       subject: `Restablece tu contraseña - ${env.APP_NAME}`,
       html: `
@@ -96,7 +95,14 @@ export const sendPasswordResetEmail = async (
         </div>
       `
     });
+
+    if (error) {
+      console.error('[Resend API Error]:', error);
+      return;
+    }
+
     console.log('Email de reset enviado a:', email);
+    console.log('ID del mensaje:', data?.id);
   } catch (error) {
     console.error('Error enviando email de reset:', error);
   }
