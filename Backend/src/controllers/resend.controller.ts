@@ -152,7 +152,7 @@ export const EmailComment = async (req: Request, res: Response): Promise<void> =
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'onboarding@resend.dev', 
       to: [YOUR_RESEND_EMAIL],
       subject: `${subject} - De: ${name}`,
       html: `
