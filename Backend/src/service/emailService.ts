@@ -65,45 +65,30 @@ export const sendPasswordResetEmail = async (
     return;
   }
 
+  console.log('[sendPasswordResetEmail] Enviando...');
+  console.log('  FROM:', `"${env.APP_NAME}" <${env.FROM_EMAIL}>`);
+  console.log('  TO:', email);
+
   try {
     const { data, error } = await resend.emails.send({
       from: `"${env.APP_NAME}" <${env.FROM_EMAIL}>`,
       to: email,
       subject: `Restablece tu contraseña - ${env.APP_NAME}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">Restablecer contraseña</h2>
-          <p>Recibimos una solicitud para restablecer la contraseña de tu cuenta.</p>
-
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetLink}" 
-               style="background: #667eea; color: white; padding: 12px 24px; 
-                      text-decoration: none; border-radius: 6px; font-weight: bold;">
-              Restablecer contraseña
-            </a>
-          </div>
-
-          <p style="color: #666; font-size: 14px;">
-            Este enlace expira en <strong>1 hora</strong>.
-          </p>
-
-          <div style="margin-top: 25px; padding: 15px; background: #fff8e1; border-radius: 5px;">
-            <p style="margin: 0; font-size: 14px; color: #856404;">
-              Si no solicitaste este cambio, ignora este correo. Tu contraseña no será modificada.
-            </p>
-          </div>
-        </div>
-      `
+      html: `...` // el mismo HTML
     });
 
     if (error) {
-      console.error('[Resend API Error]:', error);
+      console.error('════════════════════════════════════════');
+      console.error('[sendPasswordResetEmail] ERROR DE RESEND');
+      console.error('  message:', error.message);
+      console.error('  name:', error.name);
+      console.error('  statusCode:', (error as { statusCode?: number }).statusCode);
+      console.error('════════════════════════════════════════');
       return;
     }
 
-    console.log('Email de reset enviado a:', email);
-    console.log('ID del mensaje:', data?.id);
+    console.log('[sendPasswordResetEmail] Email enviado. ID:', data?.id);
   } catch (error) {
-    console.error('Error enviando email de reset:', error);
+    console.error('[sendPasswordResetEmail] Excepción:', error);
   }
 };

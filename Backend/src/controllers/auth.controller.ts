@@ -341,25 +341,33 @@ export const forgotPassword = async (
   try {
     const user = await UserModel.findOne({ email });
 
-    // Seguridad: responder igual exista o no el email, para evitar enumeración de usuarios
+    // responder igual exista o no el email, para evitar enumeración
     if (!user) {
       res.json({ message: 'Si el correo está registrado, recibirás un enlace de restablecimiento.' });
       return;
     }
 
-    // Generar token (64 hex, imposible de adivinar)
+    // Generar token (64 hex)
     const token = crypto.randomBytes(32).toString('hex');
     user.resetPasswordToken = token;
     user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hora
     await user.save();
 
-    // Enviar correo (el link apunta al frontend, no al backend)
+    // El link apunta al frontend con el token en query string
     const resetLink = `${env.FRONTEND_URL}/reset-password?token=${token}`;
+
+    console.log('════════════════════════════════════════');
+    console.log('[forgotPassword] Generando reset para:', user.email);
+    console.log('  Token:', token.substring(0, 10) + '...');
+    console.log('  Link:', resetLink);
+    console.log('  Expira:', user.resetPasswordExpires.toISOString());
+    console.log('════════════════════════════════════════');
+
     await sendPasswordResetEmail(user.email, resetLink);
 
     res.json({ message: 'Si el correo está registrado, recibirás un enlace de restablecimiento.' });
   } catch (error) {
-    console.error('Error en forgotPassword:', error);
+    console.error('[forgotPassword] Error:', error);
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
