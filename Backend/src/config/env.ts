@@ -15,7 +15,7 @@ interface EnvConfig {
   EMAIL_HOST?: string;
   EMAIL_PORT?: number;
   RESEND_API_KEY?: string;
-  CLIENT_EMAIL?: string;
+  CONTACT_EMAIL: string;
   APP_NAME: string;
   FROM_EMAIL: string;
   GOOGLE_CLIENT_ID?: string;
@@ -46,9 +46,9 @@ export const env: EnvConfig = {
   EMAIL_HOST: process.env.EMAIL_HOST,
   EMAIL_PORT: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT, 10) : undefined,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
-  CLIENT_EMAIL: process.env.CLIENT_EMAIL,
-  APP_NAME: getEnvVar('APP_NAME', false) || 'Billetera Virtual',
-  FROM_EMAIL: getEnvVar('FROM_EMAIL', false) || 'serveraplicacion@gmail.com',
+  CONTACT_EMAIL: getEnvVar('CONTACT_EMAIL', false) || 's05230790@gmail.com',
+  APP_NAME: getEnvVar('APP_NAME', false) || 'Guita',
+  FROM_EMAIL: getEnvVar('FROM_EMAIL', false) || 'onboarding@resend.dev',
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL
