@@ -14,7 +14,7 @@ const startServer = async (): Promise<void> => {
       console.log(`Servidor corriendo en puerto ${env.PORT}`);
       console.log(`Entorno: ${env.NODE_ENV}`);
       console.log(`URL: http://localhost:${env.PORT}`);
-      console.log(`Health: http://localhost:${env.PORT}/health`);
+
       console.log('════════════════════════════════════════');
       console.log('');
     });

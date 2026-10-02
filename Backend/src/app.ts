@@ -28,13 +28,13 @@ class App {
   private middlewares(): void {
     this.app.use(helmet({
       crossOriginOpenerPolicy: false,
-      crossOriginResourcePolicy: { policy: 'cross-origin' } 
+      crossOriginResourcePolicy: { policy: 'cross-origin' }
     }));
-    this.app.use(mongoSanitize())
+    this.app.use(mongoSanitize());
 
     const globalLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: env.NODE_ENV === 'production' ? 30 : 1000, 
+      max: env.NODE_ENV === 'production' ? 30 : 1000,
       standardHeaders: true,
       legacyHeaders: false,
       message: {
@@ -42,7 +42,7 @@ class App {
       }
     });
 
-     const authLimiter = rateLimit({
+    const authLimiter = rateLimit({
       windowMs: 15 * 60 * 1000,
       max: (req) => req.path.includes('/google') ? 30 : 10,
       standardHeaders: true,
@@ -72,24 +72,9 @@ class App {
     this.app.use(express.json({ limit: '10mb' }));
     this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
     this.app.use(cookieParser());
-    this.app.use(mongoSanitize());
-
-    this.app.use(helmet({
-      crossOriginOpenerPolicy: false,
-      crossOriginResourcePolicy: { policy: 'cross-origin' }
-    }));
   }
 
   private routes(): void {
-    this.app.get('/health', (_req: Request, res: Response) => {
-      res.status(200).json({
-        status: 'OK',
-        message: 'Server is running',
-        timestamp: new Date().toISOString(),
-        environment: env.NODE_ENV
-      });
-    });
-
     this.app.use('/api/auth', authRoutes);
     this.app.use('/api/auth', validateRoutes);
     this.app.use('/api', gastosRoutes);
