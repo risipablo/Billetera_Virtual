@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { resend } from '../config/resend';
 import { env } from '../config/env';
 
-const YOUR_RESEND_EMAIL = env.CONTACT_EMAIL || 's05230790@gmail.com';
+const YOUR_RESEND_EMAIL = env.CONTACT_EMAIL || 'serveraplicacion@gmail.com';
 
 interface IContactBody {
   name?: string;
