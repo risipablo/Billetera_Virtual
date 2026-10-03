@@ -7,7 +7,7 @@ import { ConvertidorPage } from "./components/convetidorPage";
 import { ConsejosPage } from './components/consejosPage';
 import { ListadoPage } from "./components/listado";
 import { CuotasPage } from "./components/cuotasPage";
-import EstadisticasPage from "./components/estadisticas";
+const EstadisticasPage = lazy(() => import("./components/estadisticas"));
 import PerfilPage from "./auth/perfilPage";
 import ChangeUserNamePage from "./auth/changeName";
 import ResetPasswordPage from "./auth/changePassword";
@@ -15,6 +15,7 @@ import { SuggestionsComponent } from "../features/components/email/suggestCompon
 import { MetasPage } from "./components/metasPage";
 import { AboutApp } from "../features/components/aboutApp/about";
 import { DashboardPage } from "./components/dashboardPage";
+import { lazy } from "react";
 
 
 

@@ -6,6 +6,8 @@ import { IUser, UserModel } from '../models/user.model';
 import { passport } from '../config/passport';
 import { sendPasswordResetEmail } from '../service/emailService';
 import { env } from '../config/env';
+import { loginSchema, registerSchema } from '../validators/auth.schema';
+import z from 'zod';
 
 
 
@@ -28,15 +30,10 @@ const generateToken = (user: {
 };
 
 export const registerUser = async (
-  req: Request<{}, {}, IRegisterData>,
+  req: Request<{}, {}, z.infer<typeof registerSchema>>,
   res: Response
 ): Promise<void> => {
   const { email, password, name } = req.body;
-
-  if (!email || !password || !name) {
-    res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    return;
-  }
 
   try {
     const userExists = await UserModel.findOne({ email });
@@ -46,7 +43,6 @@ export const registerUser = async (
       res.status(400).json({ error: 'El email ya está registrado' });
       return;
     }
-
     if (nameExists) {
       res.status(400).json({ error: 'El nombre ya está registrado' });
       return;
@@ -54,7 +50,6 @@ export const registerUser = async (
 
     const newUser = new UserModel({ email, password, name });
     await newUser.save();
-
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (err) {
     res.status(500).json({ error: 'Error interno del servidor' });
@@ -62,15 +57,10 @@ export const registerUser = async (
 };
 
 export const loginUser = async (
-  req: Request<{}, {}, ILoginData>,
+  req: Request<{}, {}, z.infer<typeof loginSchema>>,
   res: Response
 ): Promise<void> => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    return;
-  }
 
   try {
     const user = await UserModel.findOne({ email });
