@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import { config } from "../../config";
-
 import {
-    User,
     LogOut,
     UserCog,
     KeyRound,
@@ -12,12 +9,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
 import { useUser } from "../../features/hooks/useUser";
+import { UseAuth } from "../../features/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import type { AuthenticatedProps } from "../../features/types/type.auth";
-
-const serverFront = config.Api;
+import authService from "../../service/authService";
 
 interface SubMenuProps {
     setIsAuthenticated?: AuthenticatedProps["setIsAuthenticated"];
@@ -25,12 +21,11 @@ interface SubMenuProps {
 
 export const SubMenu = ({ setIsAuthenticated }: SubMenuProps) => {
     const { user, fetchUserData } = useUser();
+    const {  loading } = UseAuth();
     const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const userMenuOpen = Boolean(anchorEl);
-    const [loading, setLoading] = useState(false);
-    const [, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchUserData();
@@ -45,29 +40,17 @@ export const SubMenu = ({ setIsAuthenticated }: SubMenuProps) => {
     };
 
     const handleLogout = async () => {
-        window.dispatchEvent(new Event("app:logout-start"));
-        setLoading(true);
         handleUserMenuClose();
 
-        const token = localStorage.getItem("token");
-
-        
-        if (token) {
-            axios.post(
-                `${serverFront}/api/auth/logout`,
-                {},
-                {
-                    withCredentials: true,
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            ).catch((err) => console.log("Error en logout backend:", err));
+        try {
+            await authService.logout();
+        } catch (error) {
+            console.log("Logout falló:", error);
         }
 
-        
         localStorage.removeItem("token");
         setIsAuthenticated?.(false);
-        navigate("/login", { replace: true });
-        setLoading(false);
+        navigate("/login");
     };
 
     const handleNavigate = (path: string) => {

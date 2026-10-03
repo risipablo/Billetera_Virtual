@@ -15,13 +15,9 @@ type SettingItem = {
     onClick: () => void;
 };
 
-interface PerfilPageProps extends AuthenticatedProps {
-    onLogoutStart?: () => void;
-}
-
-const PerfilPage = ({ setIsAuthenticated, onLogoutStart }: PerfilPageProps) => {
+const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
     const { user } = useUser();
-    const { deleteAccount, loading } = UseAuth();
+    const { deleteAccount } = UseAuth();
     const navigate = useNavigate();
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -121,10 +117,7 @@ const PerfilPage = ({ setIsAuthenticated, onLogoutStart }: PerfilPageProps) => {
             <div className="perfil-danger-zone">
                 <div className="perfil-danger-actions">
                     <div className="perfil-logout-wrapper">
-                        <LogOutComponent
-                            setIsAuthenticated={setIsAuthenticated}
-                            onLogoutStart={onLogoutStart}
-                        />
+                        <LogOutComponent setIsAuthenticated={setIsAuthenticated} />
                     </div>
 
                     <button

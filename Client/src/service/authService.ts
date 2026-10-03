@@ -5,6 +5,7 @@ import type { ApiError, AuthResponse, ChangeUserName, LoginData, RegisterData, R
 const serverFront = config.Api;
 
 class AuthService {
+   
     async register(userData: RegisterData): Promise<AuthResponse> {
         try {
             const response = await axios.post<AuthResponse>(`${serverFront}/api/auth/register`, userData);
@@ -164,6 +165,7 @@ class AuthService {
                 await axios.post(`${serverFront}/api/auth/logout`, {}, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
+                    timeout:5000,
                 });
             }
         } catch (error) {

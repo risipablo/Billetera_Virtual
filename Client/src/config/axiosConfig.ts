@@ -4,7 +4,8 @@ import { config } from "../config/index";
 
 const axiosInstance = axios.create({
     baseURL: config.Api,
-    withCredentials:true
+    withCredentials:true,
+    timeout:60000
 })
 
 axiosInstance.interceptors.request.use((requestConfig) => {

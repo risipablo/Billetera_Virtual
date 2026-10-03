@@ -1,56 +1,56 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Tooltip} from "@mui/material";
-import { ChartNoAxesColumn, CircleDollarSign, User, Wallet } from 'lucide-react'
+import { Tooltip } from "@mui/material";
+import { ChartNoAxesColumn, CircleDollarSign, User, Wallet } from 'lucide-react';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import "../../style/navbar.css"
+import "../../style/navbar.css";
 import { SubMenu } from "./subMenu";
+import type { AuthenticatedProps } from "../../features/types/type.auth";
 
-// interface NavbarProps {
-//     setIsAuthenticated?: (value: boolean) => void;
-// }
+interface NavbarProps {
+    setIsAuthenticated: AuthenticatedProps["setIsAuthenticated"];
+}
 
-const Navbar = () => {
-    const [active,setActive] = useState(null)
-    const [isOpen, setIsOpen] = useState(false)
-    
+const Navbar = ({ setIsAuthenticated }: NavbarProps) => {
+    const [active, setActive] = useState<string | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+
     const toggleMenu = () => {
-        setIsOpen(!isOpen)
-        document.body.classList.toggle('open', !isOpen)
-    }
+        setIsOpen(!isOpen);
+        document.body.classList.toggle('open', !isOpen);
+    };
 
     const closeMenu = () => {
-        setIsOpen(false)
-        document.body.classList.remove('open')
-    }
+        setIsOpen(false);
+        document.body.classList.remove('open');
+    };
 
-    const open = (icon:any) => {
-        setActive(icon)
-    }
-
+    const open = (icon: string) => {
+        setActive(icon);
+    };
 
     const close = () => {
-        setActive(null)
-    }
+        setActive(null);
+    };
 
-    return(
+    return (
         <div className={`icon-container ${isOpen ? 'open' : ''}`}>
-            <div onClick={toggleMenu} className={`menu-icon ${isOpen ? 'open' : ''}`}>             
+            <div onClick={toggleMenu} className={`menu-icon ${isOpen ? 'open' : ''}`}>
                 <span></span>
                 <span></span>
-                <span></span>          
+                <span></span>
             </div>
-            
+
             <div className={`icons ${isOpen ? 'open' : ''}`} onClick={closeMenu}>
-                <div className={`menu ${isOpen ? 'open' : ''}`}> 
+                <div className={`menu ${isOpen ? 'open' : ''}`}>
 
                     <NavLink to="/dashboard" onMouseEnter={() => open('dashboard')} onMouseLeave={close} onClick={closeMenu}>
                         <Tooltip title={active === 'dashboard' ? "Dashboard" : " "}>
                             <div className="icon gasto-icon">
-                                <User/>
-                                <span className="text">Dashboard</span> 
+                                <User />
+                                <span className="text">Dashboard</span>
                             </div>
                         </Tooltip>
                     </NavLink>
@@ -59,16 +59,16 @@ const Navbar = () => {
                         <Tooltip title={active === 'gastos' ? "Gastos" : " "}>
                             <div className="icon gasto-icon">
                                 <CircleDollarSign />
-                                <span className="text">Gastos</span> 
+                                <span className="text">Gastos</span>
                             </div>
                         </Tooltip>
                     </NavLink>
-                        
+
                     <NavLink to="/estadisticas" onMouseEnter={() => open('estadisticas')} onMouseLeave={close} onClick={closeMenu}>
                         <Tooltip title={active === 'estadisticas' ? "Estadisticas" : " "}>
                             <div className="icon chart-icon">
-                                <ChartNoAxesColumn  />
-                                <span className="text">Estadisticas</span> 
+                                <ChartNoAxesColumn />
+                                <span className="text">Estadisticas</span>
                             </div>
                         </Tooltip>
                     </NavLink>
@@ -77,55 +77,48 @@ const Navbar = () => {
                         <Tooltip title={active === 'notas' ? 'Notas' : ""}>
                             <div className="icon notas-icon">
                                 <Wallet />
-                                <span className="text">Cuotas</span> 
+                                <span className="text">Cuotas</span>
                             </div>
                         </Tooltip>
                     </NavLink>
 
-
-     
                     <NavLink to="/listado" onMouseEnter={() => open('lista de compras')} onMouseLeave={close}>
                         <Tooltip title={active === 'lista de compras' ? 'Lista de compras' : ""}>
                             <div className="icon notas-icon">
                                 <AddShoppingCartIcon />
-                                <span className="text">Lista de compras </span> 
+                                <span className="text">Lista de compras </span>
                             </div>
                         </Tooltip>
                     </NavLink>
 
-
                     <NavLink to="/convertidor" onMouseEnter={() => open('convertidor')} onMouseLeave={close}>
                         <Tooltip title={active === 'convertidor' ? 'Convertidor' : ""}>
                             <div className="icon change-icon">
-                                <CurrencyExchangeOutlinedIcon/>
+                                <CurrencyExchangeOutlinedIcon />
                                 <span className="text"> Convertidor </span>
                             </div>
                         </Tooltip>
                     </NavLink>
 
-
-
                     <NavLink to="/consejos" onMouseEnter={() => open('consejos')} onMouseLeave={close}>
                         <Tooltip title={active === 'consejos' ? 'Consejos' : ""}>
                             <div className="icon notas-icon">
                                 <TipsAndUpdatesIcon />
-                                <span className="text">Consejos</span> 
+                                <span className="text">Consejos</span>
                             </div>
                         </Tooltip>
                     </NavLink>
 
-                
                 </div>
             </div>
 
-            <SubMenu/>
+            <SubMenu setIsAuthenticated={setIsAuthenticated} />
 
             <div className="span2">
                 <span></span>
             </div>
         </div>
-    )
-}
-
+    );
+};
 
 export default Navbar;

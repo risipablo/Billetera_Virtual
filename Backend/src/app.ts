@@ -2,7 +2,6 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
 import mongoSanitize from '@exortek/express-mongo-sanitize';
 import { env } from './config/env';
 import './config/passport';
@@ -31,29 +30,6 @@ class App {
       crossOriginResourcePolicy: { policy: 'cross-origin' }
     }));
     this.app.use(mongoSanitize());
-
-    const globalLimiter = rateLimit({
-      windowMs: 15 * 60 * 1000,
-      max: env.NODE_ENV === 'production' ? 30 : 1000,
-      standardHeaders: true,
-      legacyHeaders: false,
-      message: {
-        error: 'Demasiadas solicitudes. Intenta nuevamente más tarde.'
-      }
-    });
-
-    const authLimiter = rateLimit({
-      windowMs: 15 * 60 * 1000,
-      max: (req) => req.path.includes('/google') ? 30 : 10,
-      standardHeaders: true,
-      legacyHeaders: false,
-      message: {
-        error: 'Demasiados intentos de autenticación. Intenta nuevamente más tarde.'
-      }
-    });
-
-    this.app.use('/api', globalLimiter);
-    this.app.use('/api/auth', authLimiter);
 
     this.app.use(cors({
       origin: [

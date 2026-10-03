@@ -17,7 +17,7 @@ import ResetPasswordPage from "./pages/auth/changePassword";
 const serverFront = config.Api;
 const MIN_SPLASH = 1200;
 
-type SplashMode = "welcome" | "loading" | "logout";
+type SplashMode = "welcome" | "loading";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -50,7 +50,6 @@ function App() {
     }, []);
 
     useEffect(() => {
-        
         if (window.location.pathname === '/auth/callback') {
             setLoading(false);
             return;
@@ -61,30 +60,21 @@ function App() {
         const handleVisibilityChange = () => {
             if (document.visibilityState === "visible") checkAuth();
         };
-        const handleLogoutStart = () => {
-            setSplashMode("logout");
-            setLoading(true);
-        };
 
         window.addEventListener("popstate", checkAuth);
         document.addEventListener("visibilitychange", handleVisibilityChange);
-        window.addEventListener("app:logout-start", handleLogoutStart);
 
         return () => {
             window.removeEventListener("popstate", checkAuth);
             document.removeEventListener("visibilitychange", handleVisibilityChange);
-            window.removeEventListener("app:logout-start", handleLogoutStart);
         };
     }, [checkAuth]);
 
-  
     const isCallbackPath = window.location.pathname === "/auth/callback";
 
-  
     return (
         <BrowserRouter>
             {isCallbackPath ? (
-  
                 <Routes>
                     <Route
                         path="/auth/callback"
@@ -96,18 +86,15 @@ function App() {
                     {isAuthenticated === null || loading ? (
                         <SplashLoader mode={splashMode} />
                     ) : isAuthenticated ? (
-                        
                         <GastosProvider isAuthenticated={isAuthenticated}>
                             <CuotasProvider isAuthenticated={isAuthenticated}>
-                            <Navbar />
-                            <Home
-                                isAuthenticated={isAuthenticated}
-                                setIsAuthenticated={setIsAuthenticated}
-                            />
+                                <Navbar  setIsAuthenticated={setIsAuthenticated} />
+                                <Home
+                                    isAuthenticated={isAuthenticated}
+                                    setIsAuthenticated={setIsAuthenticated}
+                                />
                             </CuotasProvider>
                         </GastosProvider>
-                        
-                        
                     ) : (
                         <Routes>
                             <Route
