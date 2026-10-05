@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /gastos
+Disallow: /cuotas
+Disallow: /metas
+Disallow: /perfil
+Disallow: /change-user
+Disallow: /change-password
+
+Sitemap: https://billetera-virtual-teal.vercel.app/sitemap.xml

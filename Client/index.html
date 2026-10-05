@@ -1,27 +1,68 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
   <head>
     <meta charset="UTF-8" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="./public/logo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./public/logo.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="./public/logo.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="./public/logo.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./public/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
 
-    <!-- Meta -->
+    <!-- Meta básicos -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#7C3AED" />
-    <meta name="description" content="Guita - Tu billetera virtual personal. Controlá tus gastos, cuotas e inversiones en un solo lugar." />
-    <title>Guita - Tu billetera virtual personal</title>
+    <meta name="theme-color" content="#1e3a8a" />
+    <meta name="author" content="Guita" />
+    <meta name="robots" content="index, follow" />
 
-    
+    <!-- SEO -->
+    <title>Guita - Tu billetera virtual personal | Controlá tus gastos</title>
+    <meta
+      name="description"
+      content="Guita es tu billetera virtual para controlar gastos, cuotas, metas de ahorro e inversiones. Sabé en qué se va tu plata y tomá mejores decisiones financieras."
+    />
+    <meta
+      name="keywords"
+      content="guita, billetera virtual, control de gastos, finanzas personales, ahorro, cuotas, inversiones, app de gastos"
+    />
+    <link rel="canonical" href="https://billetera-virtual-teal.vercel.app/" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content="Guita" />
+    <meta property="og:url" content="https://billetera-virtual-teal.vercel.app/" />
+    <meta property="og:title" content="Guita - Tu billetera virtual personal" />
+    <meta
+      property="og:description"
+      content="Controlá tus gastos, seguí tus cuotas y alcanzá tus metas de ahorro. Todo en un solo lugar."
+    />
+    <meta property="og:image" content="https://billetera-virtual-teal.vercel.app/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Guita - Tu billetera virtual" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Guita - Tu billetera virtual personal" />
+    <meta
+      name="twitter:description"
+      content="Controlá tus gastos, seguí tus cuotas y alcanzá tus metas de ahorro."
+    />
+    <meta name="twitter:image" content="https://billetera-virtual-teal.vercel.app/logo.png" />
+
+    <!-- Preconnect para fonts (si usás Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Splash inicial inline (para que aparezca antes de que cargue React) -->
     <style>
       html, body {
         margin: 0;
         padding: 0;
         background: #ffffff;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       }
 
       #initial-splash {
@@ -34,7 +75,6 @@
         gap: 1.5rem;
         background: #ffffff;
         z-index: 9999;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       }
 
       #initial-splash img {
@@ -42,7 +82,7 @@
         max-width: 60vw;
         height: auto;
         object-fit: contain;
-        filter: drop-shadow(0 8px 24px rgba(124, 58, 237, 0.18));
+        filter: drop-shadow(0 8px 24px rgba(30, 58, 138, 0.18));
         animation: splash-fade-in 0.5s ease-out;
       }
 
@@ -65,7 +105,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #d0de33;
+        background: #1e3a8a;
         animation: initial-bounce 1.2s infinite ease-in-out;
       }
 
@@ -82,7 +122,6 @@
         40%          { transform: scale(1);   opacity: 1; }
       }
 
-      
       #initial-splash.hidden {
         opacity: 0;
         pointer-events: none;
@@ -91,18 +130,19 @@
     </style>
   </head>
   <body>
-    <div id="root">
-      
-      <div id="initial-splash">
-        <img src="./public/logo.png" alt="Guita" />
-        <p class="initial-frase">Cargando...</p>
-        <div class="initial-dots">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+    <!-- Splash inicial FUERA del root (React no lo va a pisar) -->
+    <div id="initial-splash">
+      <img src="/logo.png" alt="Guita" />
+      <p class="initial-frase">Cargando...</p>
+      <div class="initial-dots">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
+
+    <!-- Root de React -->
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

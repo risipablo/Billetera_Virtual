@@ -7,6 +7,7 @@ import { useUser } from "../../features/hooks/useUser";
 import { UseAuth } from "../../features/hooks/useAuth";
 import type { AuthenticatedProps } from "../../features/types/type.auth";
 import "../../style/perfil.css";
+import { Seo } from "../../features/components/seo/seo";
 
 type SettingItem = {
     icon: React.ReactNode;
@@ -85,6 +86,12 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
 
     return (
         <div className="table-container">
+            <Seo
+                title="Mi Perfil"
+                description="Gestioná tu perfil, cambiá tu nombre o contraseña y configurá tu cuenta en Guita."
+                keywords="perfil, configuración, cuenta, cambiar contraseña"
+                url="/perfil"
+            />
             <title>Perfil de {user?.name?.charAt(0).toUpperCase() || '?'}</title>
 
             <div className="perfil-header">

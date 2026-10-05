@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import "./style/about.css"
 import img1 from "../../../../public/logo.png"
+import { Seo } from '../seo/seo';
 
 interface Seccion {
     to: string;
@@ -74,6 +75,12 @@ export const AboutApp = () => {
 
     return (
         <div className="about-app">
+            <Seo
+                title="Acerca de Guita"
+                description="Conocé Guita, la billetera virtual para controlar tus gastos, ahorrar y tomar mejores decisiones financieras."
+                keywords="acerca de, sobre guita, app de finanzas personales"
+                url="/about"
+            />
             <motion.header
                 className="about-app__hero"
                 initial={{ opacity: 0, y: -10 }}

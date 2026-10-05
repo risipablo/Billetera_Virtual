@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { createHead, UnheadProvider } from '@unhead/react/client';
 import axiosInstance from "./config/axiosConfig";
 import { config } from "./config";
 import { UserProvider } from "./context/userProvider";
@@ -16,6 +17,7 @@ import ResetPasswordPage from "./pages/auth/changePassword";
 
 const serverFront = config.Api;
 const MIN_SPLASH = 1200;
+const head = createHead()
 
 type SplashMode = "welcome" | "loading";
 
@@ -73,7 +75,8 @@ function App() {
     const isCallbackPath = window.location.pathname === "/auth/callback";
 
     return (
-        <BrowserRouter>
+        <UnheadProvider head={head}>
+            <BrowserRouter>
             {isCallbackPath ? (
                 <Routes>
                     <Route
@@ -125,7 +128,9 @@ function App() {
                     )}
                 </UserProvider>
             )}
-        </BrowserRouter>
+            </BrowserRouter>
+        </UnheadProvider>
+        
     );
 }
 

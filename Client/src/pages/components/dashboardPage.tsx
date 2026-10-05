@@ -25,6 +25,7 @@ import { Spinner } from "../../components/ui/spinner/spinner";
 import { InfoDashboard } from "../../components/ui/info/dashboardInfo";
 import { UseCuota } from "../../context/useCuotasContext";
 import { WelcomeModal } from "../../components/ui/modalWelcome";
+import { Seo } from "../../features/components/seo/seo";
 
 const PODIO_ICONOS = [
     <Trophy size={16} className="dashboard-top__medal dashboard-top__medal--oro" />,
@@ -107,6 +108,12 @@ export function DashboardPage() {
 
     return (
         <div className="table-container">
+            <Seo
+                title="Dashboard"
+                description="Tu resumen financiero del mes: total gastado, cuotas por vencer, estado de pagos y comparación con el mes anterior."
+                keywords="dashboard financiero, resumen de gastos, control de gastos mensual"
+                url="/dashboard"
+            />
             <WelcomeModal
                 userName={user?.name || ''}
                 userId={user?.id || user?.email || ''}

@@ -9,6 +9,7 @@ import { GoogleLoginButton } from '../../components/auth/googleLogin';
 import { PasswordInput } from '../../components/auth/passwordInput';
 import { AuthButton } from '../../components/auth/authButton';
 import "../../style/auth.css"
+import { Seo } from '../../features/components/seo/seo';
 
 
 
@@ -46,6 +47,12 @@ export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
     return(
         <AuthLayout title='Iniciar Sesión'>
+            <Seo
+                title="Iniciar Sesión"
+                description="Ingresá a Guita y seguí controlando tus gastos, cuotas y metas de ahorro. Accedé con tu email o con Google."
+                keywords="iniciar sesión, login, app de finanzas, control de gastos"
+                url="/login"
+            />
             <title>Inicia Sesión</title>
             <motion.form
                 onSubmit={handleSubmit}

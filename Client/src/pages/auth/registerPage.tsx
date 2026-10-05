@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { AuthButton } from "../../components/auth/authButton"
 import { PasswordInput } from "../../components/auth/passwordInput"
 import { PasswordRequirements } from "../../components/auth/passwordRequirements"
+import { Seo } from "../../features/components/seo/seo"
 
 interface RegisterFromData extends RegisterData{
     confirmPassword:string
@@ -59,6 +60,12 @@ const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
     return (
     <AuthLayout title='Registrarse' >
+        <Seo
+            title="Crear Cuenta"
+            description="Creá tu cuenta gratis en Guita y empezá a controlar tus gastos, cuotas y metas de ahorro. Sin tarjeta de crédito."
+            keywords="registrarse, crear cuenta, app de finanzas gratis"
+            url="/register"
+        />
       <title>Registro</title>
        <motion.form
             onSubmit={handleSubmit}

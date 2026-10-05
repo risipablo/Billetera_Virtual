@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import { UseAuth } from '../../features/hooks/useAuth';
+import { Seo } from '../../features/components/seo/seo';
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
@@ -19,6 +20,12 @@ const ForgotPasswordPage = () => {
 
     return (
         <div className="table-container">
+            <Seo
+                title="Recuperar Contraseña"
+                description="Recuperá el acceso a tu cuenta de Guita. Te enviamos un link para restablecer tu contraseña."
+                keywords="recuperar contraseña, olvidé mi contraseña, resetear"
+                url="/forgot-password"
+            />
             <div className="form-wrapper">
                 <motion.div
                     className="form-header"
