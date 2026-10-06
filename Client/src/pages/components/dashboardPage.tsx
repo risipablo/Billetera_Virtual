@@ -61,6 +61,10 @@ export function DashboardPage() {
 
     const [mostrarTodasPagadas, setMostrarTodasPagadas] = useState(false);
     const [mostrarTodasPorVencer, setMostrarTodasPorVencer] = useState(false);
+    
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [location.pathname]);
 
     if (loading) {
         return (
@@ -112,9 +116,7 @@ export function DashboardPage() {
         : Minus;
 
 
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-    }, [location.pathname]);
+    
 
     return (
         <div className="table-container">
