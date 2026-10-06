@@ -116,7 +116,7 @@ export const UseGastos = () => {
             console.error(err)
             toast.error('Error al guardar el producto', TOAST_CONFIG)
         })
-    },[])
+    },[setFilterGastos])
 
     const deleteFilteredGastos = useCallback(async (ids: string[]) => {
         try {

@@ -20,6 +20,7 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
     useEffect(() => {
             window.scrollTo({ top: 0, behavior: 'instant' });
         }, [location.pathname]);
+        
     const { user } = useUser();
     const { deleteAccount } = UseAuth();
     const navigate = useNavigate();
@@ -224,6 +225,7 @@ const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
         </div>
     );
 };

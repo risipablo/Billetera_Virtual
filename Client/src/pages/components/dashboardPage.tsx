@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Tooltip, Collapse, IconButton } from "@mui/material";
 import {
     Wallet,
@@ -35,8 +35,10 @@ const PODIO_ICONOS = [
 
 const PAGADAS_VISIBLES_INICIAL = 5;
 const POR_VENCER_VISIBLES_INICIAL = 3;
+const IMPAGOS_VISIBLES_INICIAL = 1;
 
 export function DashboardPage() {
+    const location = useLocation();
     const { user } = useUser();
     const {
         top3Gastos,
@@ -61,7 +63,8 @@ export function DashboardPage() {
 
     const [mostrarTodasPagadas, setMostrarTodasPagadas] = useState(false);
     const [mostrarTodasPorVencer, setMostrarTodasPorVencer] = useState(false);
-    
+    const [mostrarTodosImpagos, setMostrarTodosImpagos] = useState(false);
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
     }, [location.pathname]);
@@ -97,8 +100,8 @@ export function DashboardPage() {
     const limite = limiteInfo();
     const comparacion = comparacionMes();
 
-    const impagosVisibles = impagos.slice(0, 3);
-    const restantes = impagos.length - impagosVisibles.length;
+    const impagosVisibles = impagos.slice(0, IMPAGOS_VISIBLES_INICIAL);
+    const impagosExtra = impagos.slice(IMPAGOS_VISIBLES_INICIAL);
 
     const vencidasVisibles = listaVencidas.slice(0, 3);
     const vencidasRestantes = listaVencidas.length - vencidasVisibles.length;
@@ -114,9 +117,6 @@ export function DashboardPage() {
         comparacion.tendencia === 'up' ? TrendingUp
         : comparacion.tendencia === 'down' ? TrendingDown
         : Minus;
-
-
-    
 
     return (
         <div className="table-container">
@@ -267,10 +267,47 @@ export function DashboardPage() {
                                         ))}
                                     </ul>
 
-                                    {restantes > 0 && (
-                                        <Link to="/gastos?estado=impago" className="dashboard-panel__link">
-                                            +{restantes} más <ArrowRight size={14} />
-                                        </Link>
+                                    {impagosExtra.length > 0 && (
+                                        <>
+                                            <Collapse in={mostrarTodosImpagos} timeout="auto" unmountOnExit>
+                                                <ul className="dashboard-pendientes-extra">
+                                                    {impagosExtra.map(g => (
+                                                        <li key={g._id} className="dashboard-pendiente">
+                                                            <AlertTriangle size={14} />
+                                                            <strong>{g.producto}</strong>
+                                                            <span>${g.monto.toLocaleString('es-AR')}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </Collapse>
+
+                                            <div
+                                                className="dashboard-panel__toggle"
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={() => setMostrarTodosImpagos(v => !v)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' || e.key === ' ') {
+                                                        e.preventDefault();
+                                                        setMostrarTodosImpagos(v => !v);
+                                                    }
+                                                }}
+                                            >
+                                                <span>
+                                                    {mostrarTodosImpagos
+                                                        ? 'Ver menos'
+                                                        : `Ver ${impagosExtra.length} más`}
+                                                </span>
+                                                <IconButton
+                                                    size="small"
+                                                    tabIndex={-1}
+                                                    aria-hidden="true"
+                                                    className={`dashboard-panel__toggle-icon${mostrarTodosImpagos ? ' dashboard-panel__toggle-icon--open' : ''}`}
+                                                >
+                                                    <ChevronDown size={16} />
+                                                </IconButton>
+                                            </div>
+                                        </>
                                     )}
                                 </div>
                             )}

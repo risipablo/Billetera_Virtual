@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, FilterX, Trash2 } from "lucide-react";
 import { TransitionGroup } from "react-transition-group";
-import { Box, Button, Collapse, Tooltip, useMediaQuery } from "@mui/material";
+import { Button, Collapse, Tooltip } from "@mui/material";
 import { UseGastos } from "./hooks/useGastos";
 import type { IGastos } from "./types/type.gastos";
 import { useGastosStats } from "./hooks/useGastosStats";
@@ -17,7 +17,6 @@ import { Toaster } from "react-hot-toast";
 import { ModalConfirm } from "../../../components/ui/modalConfirm";
 import { useConfirmModal } from "../../hooks/useModalConfirm";
 import { GastosFijosMaster } from "../gastosFijos/gastosFijoMaster";
-import { BlindsClosed } from "@mui/icons-material";
 import { InfoGastos } from "../../../components/ui/info/gastoInfo";
 
 const GastosMaster = () => {
@@ -77,10 +76,16 @@ const GastosMaster = () => {
         localStorage.setItem('limiteGasto', String(limite));
     }, [limite]);
     
-    // Reseteo de paginas
+    // // Reseteo de paginas
+    // useEffect(() => {
+    //     setCurrentPage(0)
+    // },[filterGastos, activeFilter, monthFilter, yearFilter, conditionsFilter, metodoFilter, estadoFilter, categoriaFilter])
+
     useEffect(() => {
-        setCurrentPage(0)
-    },[filterGastos, activeFilter, monthFilter, yearFilter, conditionsFilter, metodoFilter, estadoFilter, categoriaFilter])
+        if (pageCount > 0 && currentPage >= pageCount) {
+            setCurrentPage(pageCount - 1)
+        }
+    }, [pageCount, currentPage])
 
 
 

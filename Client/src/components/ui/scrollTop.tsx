@@ -33,7 +33,7 @@ export const ScrollTop = () => {
             style={{
                 position: 'fixed',
                 bottom: '2rem',
-                right: '2rem',
+                left: '12rem',
                 zIndex: 1000,
                 padding: '12px',
                 borderRadius: '50%',

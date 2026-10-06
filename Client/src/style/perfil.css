@@ -181,7 +181,8 @@
         align-items: stretch;
     }
 
-    .delete-account-btn {
+    .delete-account-btn, .perfil-logout-wrapper {
+        width: 100%;
         justify-content: center;
     }
 }
