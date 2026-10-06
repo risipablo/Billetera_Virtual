@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import type { AuthenticatedProps } from '../../features/types/type.auth';
 import type { LoginData } from '../../features/types/type.user';
 import { UseAuth } from '../../features/hooks/useAuth';
@@ -14,6 +14,9 @@ import { Seo } from '../../features/components/seo/seo';
 
 
 export const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
+    useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }, [location.pathname]);
 
     const [formData,setFormData] = useState<LoginData>({
         email:'',

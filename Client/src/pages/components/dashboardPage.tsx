@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Tooltip, Collapse, IconButton } from "@mui/material";
 import {
@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useGastos } from "../../context/gastosContext";
 import { useUser } from "../../features/hooks/useUser";
-import "../../style/dashboard.css"
+import "../../style/dashboard.css";
 import { Spinner } from "../../components/ui/spinner/spinner";
 import { InfoDashboard } from "../../components/ui/info/dashboardInfo";
 import { UseCuota } from "../../context/useCuotasContext";
@@ -34,6 +34,7 @@ const PODIO_ICONOS = [
 ];
 
 const PAGADAS_VISIBLES_INICIAL = 5;
+const POR_VENCER_VISIBLES_INICIAL = 3;
 
 export function DashboardPage() {
     const { user } = useUser();
@@ -56,9 +57,10 @@ export function DashboardPage() {
         cuotasPorVencer,
         cuotasVencidas,
         cuotasPagadasDelMes
-    } = UseCuota()
+    } = UseCuota();
 
     const [mostrarTodasPagadas, setMostrarTodasPagadas] = useState(false);
+    const [mostrarTodasPorVencer, setMostrarTodasPorVencer] = useState(false);
 
     if (loading) {
         return (
@@ -69,7 +71,7 @@ export function DashboardPage() {
     }
 
     const proxima = proximaCuota();
-    const porVencer = cuotasPorVencer(7);
+    const porVencer = cuotasPorVencer();
     const listaVencidas = cuotasVencidas();
     const pagadasDelMes = cuotasPagadasDelMes();
 
@@ -77,6 +79,9 @@ export function DashboardPage() {
 
     const pagadasIniciales = pagadasDelMes.slice(0, PAGADAS_VISIBLES_INICIAL);
     const pagadasExtra = pagadasDelMes.slice(PAGADAS_VISIBLES_INICIAL);
+
+    const porVencerIniciales = porVencer.slice(0, POR_VENCER_VISIBLES_INICIAL);
+    const porVencerExtra = porVencer.slice(POR_VENCER_VISIBLES_INICIAL);
 
     const top3 = top3Gastos();
     const top3Categoria = top3Categorias();
@@ -105,6 +110,11 @@ export function DashboardPage() {
         comparacion.tendencia === 'up' ? TrendingUp
         : comparacion.tendencia === 'down' ? TrendingDown
         : Minus;
+
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [location.pathname]);
 
     return (
         <div className="table-container">
@@ -380,29 +390,93 @@ export function DashboardPage() {
                                 </span>
                             )}
 
-                            {proxima && (
-                                <div className="dashboard-cuota-proxima">
-                                    <Clock size={14} />
-                                    <div className="dashboard-cuota-proxima__info">
-                                        <strong>{proxima.titulo}</strong>
-                                        <span className="dashboard-cuota-proxima__meta">
-                                            Cuota {proxima.numeroCuota}/{proxima.totalCuotas}
-                                            {' · '}
-                                            {new Date(proxima.fecha).toLocaleDateString('es-AR', {
-                                                day: '2-digit',
-                                                month: 'short',
-                                                year: 'numeric'
-                                            })}
+                            <ul className="dashboard-por-vencer">
+                                {porVencerIniciales.map((cuota, idx) => (
+                                    <li
+                                        key={`${cuota.cuotaId}-${cuota.numeroCuota}-${idx}`}
+                                        className="dashboard-cuota-proxima"
+                                    >
+                                        <Clock size={14} />
+                                        <div className="dashboard-cuota-proxima__info">
+                                            <strong>{cuota.titulo}</strong>
+                                            <span className="dashboard-cuota-proxima__meta">
+                                                Cuota {cuota.numeroCuota}/{cuota.totalCuotas}
+                                                {' · '}
+                                                {new Date(cuota.fecha).toLocaleDateString('es-AR', {
+                                                    day: '2-digit',
+                                                    month: 'short',
+                                                    year: 'numeric'
+                                                })}
+                                            </span>
+                                        </div>
+                                        <span className="dashboard-cuota-proxima__monto">
+                                            ${cuota.precio.toLocaleString('es-AR')}
                                         </span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {porVencerExtra.length > 0 && (
+                                <>
+                                    <Collapse in={mostrarTodasPorVencer} timeout="auto" unmountOnExit>
+                                        <ul className="dashboard-por-vencer dashboard-por-vencer--extra">
+                                            {porVencerExtra.map((cuota, idx) => (
+                                                <li
+                                                    key={`${cuota.cuotaId}-${cuota.numeroCuota}-extra-${idx}`}
+                                                    className="dashboard-cuota-proxima"
+                                                >
+                                                    <Clock size={14} />
+                                                    <div className="dashboard-cuota-proxima__info">
+                                                        <strong>{cuota.titulo}</strong>
+                                                        <span className="dashboard-cuota-proxima__meta">
+                                                            Cuota {cuota.numeroCuota}/{cuota.totalCuotas}
+                                                            {' · '}
+                                                            {new Date(cuota.fecha).toLocaleDateString('es-AR', {
+                                                                day: '2-digit',
+                                                                month: 'short',
+                                                                year: 'numeric'
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                    <span className="dashboard-cuota-proxima__monto">
+                                                        ${cuota.precio.toLocaleString('es-AR')}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </Collapse>
+
+                                    <div
+                                        className="dashboard-panel__toggle"
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => setMostrarTodasPorVencer(v => !v)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault();
+                                                setMostrarTodasPorVencer(v => !v);
+                                            }
+                                        }}
+                                    >
+                                        <span>
+                                            {mostrarTodasPorVencer
+                                                ? 'Ver menos'
+                                                : `Ver ${porVencerExtra.length} más`}
+                                        </span>
+                                        <IconButton
+                                            size="small"
+                                            tabIndex={-1}
+                                            aria-hidden="true"
+                                            className={`dashboard-panel__toggle-icon${mostrarTodasPorVencer ? ' dashboard-panel__toggle-icon--open' : ''}`}
+                                        >
+                                            <ChevronDown size={16} />
+                                        </IconButton>
                                     </div>
-                                    <span className="dashboard-cuota-proxima__monto">
-                                        ${proxima.precio.toLocaleString('es-AR')}
-                                    </span>
-                                </div>
+                                </>
                             )}
 
                             <Link to="/cuotas" className="dashboard-panel__link">
-                                Ver cuotas <ArrowRight size={14} />
+                                Ver todas las cuotas <ArrowRight size={14} />
                             </Link>
                         </>
                     ) : (

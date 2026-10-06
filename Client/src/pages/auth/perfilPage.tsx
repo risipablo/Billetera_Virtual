@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, KeyRound, Target, MessageSquare, Info, ChevronRight, Trash2, AlertTriangle, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,6 +17,9 @@ type SettingItem = {
 };
 
 const PerfilPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
+    useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }, [location.pathname]);
     const { user } = useUser();
     const { deleteAccount } = UseAuth();
     const navigate = useNavigate();

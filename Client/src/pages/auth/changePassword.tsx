@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Eye, EyeClosed, Lock, CheckCircle, AlertCircle } from "lucide-react"
@@ -14,6 +14,9 @@ interface ShowState {
 }
 
  function ResetPasswordPage({ setIsAuthenticated }: IChangeUserName) {
+  useEffect(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+      }, [location.pathname]);
 
   const [formData, setFormData] = useState<ResetPasswordData>({
     currentPassword: '',

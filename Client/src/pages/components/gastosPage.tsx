@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import GastosMaster from "../../features/components/gastos/gastosMaster"
 import { Seo } from "../../features/components/seo/seo"
 
 
  const GastosPage = () => {
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [location.pathname]);
 
     return(
         <>  

@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import { EstadisticasMaster } from "../../features/components/estadisticas/estadisticasMaster"
 import { Seo } from "../../features/components/seo/seo"
 
 
 const EstadisticasPage = () => {
+  useEffect(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+      }, [location.pathname]);
   return (
     <>
       <title> Estadisticas </title>

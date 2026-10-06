@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import Consejo from "../../components/layout/consejos"
 import { Seo } from "../../features/components/seo/seo"
 
 
 export const ConsejosPage = () => {
+  useEffect(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+      }, [location.pathname]);
   return (
     <div>
       <title> Consejos Financieros </title>

@@ -119,7 +119,7 @@ export const CuotasProvider: React.FC<CuotasProviderProps> = ({
             return vencidas;
         })
         .sort((a, b) => b.diasVencida - a.diasVencida);
-}, [cuotaData.cuotas]);
+    }, [cuotaData.cuotas]);
 
     const cuotasPagadasDelMes = useCallback(() => {
         const hoy = new Date();

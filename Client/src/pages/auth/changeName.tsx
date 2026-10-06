@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import type { ChangeUserName, IChangeUserName } from "../../features/types/type.user";
 import { UseAuth } from "../../features/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,9 @@ import { AlertCircle, CheckCircle, User } from "lucide-react";
 import "../../style/auth-forms.css";
 
 function ChangeUserNamePage({ setIsAuthenticated }: IChangeUserName) {
+    useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }, [location.pathname]);
     const [formData, setFormData] = useState<ChangeUserName>({
         newName: ''
     });

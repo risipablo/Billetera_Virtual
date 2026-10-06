@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import Listado from "../../features/components/listado/listadoMaster"
 import { Seo } from "../../features/components/seo/seo"
 
 export const ListadoPage = () => {
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [location.pathname]);
   return (
     <div>
       <title> Listado de compras </title>

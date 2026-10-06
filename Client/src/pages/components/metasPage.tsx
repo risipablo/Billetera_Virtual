@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import { MetaMaster } from "../../features/components/metas/metaMaster"
 import { Seo } from "../../features/components/seo/seo"
 
 
 export const MetasPage = () => {
+  useEffect(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+      }, [location.pathname]);
   return (
     <div>
         <title> Metas de ahorro</title>

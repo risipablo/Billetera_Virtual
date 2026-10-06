@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
@@ -6,6 +6,9 @@ import { UseAuth } from '../../features/hooks/useAuth';
 import { Seo } from '../../features/components/seo/seo';
 
 const ForgotPasswordPage = () => {
+    useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }, [location.pathname]);
     const [email, setEmail] = useState('');
     const { forgotPassword, loading, error, succes } = UseAuth();
 

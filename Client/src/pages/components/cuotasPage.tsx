@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import { CuotasMaster } from "../../features/components/cuotas/cuotaMaster"
 import { Seo } from "../../features/components/seo/seo"
 
 
 export const CuotasPage = () => {
+  useEffect(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+      }, [location.pathname]);
   return (
     <div>
       <title> Progreso de cuotas </title>

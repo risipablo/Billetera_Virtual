@@ -5,6 +5,7 @@ import { Lock, Eye, EyeClosed, AlertCircle, CheckCircle, ArrowLeft } from 'lucid
 import { UseAuth } from '../../features/hooks/useAuth';
 
 const ResetPasswordPage = () => {
+    
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token') || '';
 
